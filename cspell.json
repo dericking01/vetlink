@@ -1,0 +1,14 @@
+{
+    "version": "0.2",
+    "ignorePaths": ["public", "resources", ".git", ".vscode"],
+    "dictionaryDefinitions": [
+      {
+        "name": "custom",
+        "path": "./path/to/custom-dictionary.txt"
+      }
+    ],
+    "dictionaries": ["en", "custom"],
+    "words": [],
+    "ignoreWords": [],
+    "import": []
+}
