@@ -26,12 +26,26 @@ class GenerateAgentIds extends Command
 
     private function generateUniqueAgentId()
     {
-        $agentId = 'VET-' . date('Y') . '-' . Carbon::now()->format('dhms') . '-' . mt_rand(1000, 9999);
+        $counter = 1;
+        $agentId = 'VET-' . date('Y') . '-' . sprintf('%04d', $counter);
 
         while (Agent::where('agent_id', $agentId)->exists()) {
-            $agentId = 'VET-' . date('Y') . '-' . Carbon::now()->format('dhms') . '-' . mt_rand(1000, 9999);
+            $counter++;
+            $agentId = 'VET-' . date('Y') . '-' . sprintf('%04d', $counter);
         }
 
         return $agentId;
     }
+
+
+    // private function generateUniqueAgentId()
+    // {
+    //     $agentId = 'VET-' . date('Y') . '-' . Carbon::now()->format('dhms') . '-' . mt_rand(1000, 9999);
+
+    //     while (Agent::where('agent_id', $agentId)->exists()) {
+    //         $agentId = 'VET-' . date('Y') . '-' . Carbon::now()->format('dhms') . '-' . mt_rand(1000, 9999);
+    //     }
+
+    //     return $agentId;
+    // }
 }
