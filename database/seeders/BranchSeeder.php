@@ -21,6 +21,7 @@ class BranchSeeder extends Seeder
         for ($i = 0; $i < 8; $i++) {
             DB::table('branches')->insert([
                 'branch_name' => $faker->company,
+                'location' => $faker->city,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

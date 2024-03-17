@@ -58,4 +58,5 @@ class Agent extends Model
     {
         return $this->hasMany(Orders::class);
     }
+
 }

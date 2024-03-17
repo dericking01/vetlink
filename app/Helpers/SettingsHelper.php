@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Admin;
 use App\Models\Agent;
+use App\Models\Branch;
 use App\Models\Seller;
 use App\Models\User;
 use Carbon\Carbon;
@@ -54,7 +55,7 @@ class SettingsHelper
     }
 
     public static function sanitazeAmount($amount)
-    { 
+    {
         $number = (int)str_replace(',', '', $amount);
         // or
         // $number = (int)preg_replace('/[^\d]/', '', $amount);
@@ -65,22 +66,22 @@ class SettingsHelper
     {
         // Remove any non-digit characters from the phone number
         $cleanedNumber = preg_replace('/\D/', '', $mobile);
-    
+
         // If the number starts with '0', replace it with '255'
         if (substr($cleanedNumber, 0, 1) === '0') {
             $cleanedNumber = '255' . substr($cleanedNumber, 1);
         }
-    
+
         // If the number does not start with '0' or '+', and is not already in the format '255', append '255'
         if (substr($cleanedNumber, 0, 1) !== '0' && substr($cleanedNumber, 0, 1) !== '+' && substr($cleanedNumber, 0, 3) !== '255') {
             $cleanedNumber = '255' . $cleanedNumber;
         }
-    
+
         // If the number starts with '+', remove the '+'
         if (substr($cleanedNumber, 0, 1) === '+') {
             $cleanedNumber = substr($cleanedNumber, 1);
         }
-    
+
         return $cleanedNumber;
     }
 
@@ -170,9 +171,9 @@ class SettingsHelper
         } else {
             $initials = strtoupper(substr($names['fname'], 0, 2));
         }
-        
+
         return $initials;
-        
+
     }
 
     public static function getAdminInitials($id)
@@ -201,9 +202,9 @@ class SettingsHelper
         } else {
             $initials = strtoupper(substr($names['fname'], 0, 2));
         }
-        
+
         return $initials;
-        
+
     }
 
     public static function getUserInitials($id)
@@ -232,9 +233,9 @@ class SettingsHelper
         } else {
             $initials = strtoupper(substr($names['fname'], 0, 2));
         }
-        
+
         return $initials;
-        
+
     }
 
     public static function getSellerInitials($id)
@@ -263,9 +264,9 @@ class SettingsHelper
         } else {
             $initials = strtoupper(substr($names['fname'], 0, 2));
         }
-        
+
         return $initials;
-        
+
     }
 
     public static function getAgentInitials($id)
@@ -294,8 +295,39 @@ class SettingsHelper
         } else {
             $initials = strtoupper(substr($names['fname'], 0, 2));
         }
-        
+
         return $initials;
-        
+
+    }
+
+    public static function getBranchInitials($id)
+    {
+        $branch = Branch::find($id);
+        $name = $branch->branch_name;
+        $name_arr = explode(" ", $name);
+        $names = [
+            'fname' => isset($name_arr[0]) ? $name_arr[0] : '',
+            'mname' => isset($name_arr[1]) ? $name_arr[1] : '',
+            'lname' => isset($name_arr[2]) ? $name_arr[2] : '',
+        ];
+
+        if (count($names) > 1) {
+            $firstInitial = strtoupper(substr($names['fname'], 0, 1));
+            $secondInitial = strtoupper(substr($names['mname'], 0, 1));
+            $thirdInitial = strtoupper(substr($names['lname'], 0, 1));
+
+            if (isset($secondInitial)) {
+                $initials = $firstInitial.$secondInitial;
+                return $initials;
+            } else {
+                $initials = $firstInitial.$thirdInitial;
+                return $initials;
+            }
+        } else {
+            $initials = strtoupper(substr($names['fname'], 0, 2));
+        }
+
+        return $initials;
+
     }
 }

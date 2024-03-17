@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Agent;
+use App\Models\Branch;
 use App\Models\MarketProduct;
 use App\Models\OrderItems;
 use App\Models\Orders;
@@ -38,6 +39,71 @@ class UsersController extends Controller
         // dd($agents);
         return view('admin.users.listagents', compact('agents'));
     }
+
+    public function branches()
+    {
+        $branches = Branch::latest()->get();
+        // dd($branches);
+
+        return view('admin.users.listbranches', compact('branches'));
+    }
+
+    public function storeBranch(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required|regex:/^[a-zA-Z\s]+$/',
+            'location' => 'nullable|string',
+        ]);
+
+        // dd($request->all());
+
+        Branch::create([
+            'branch_name' => $request->name,
+            'location' => $request->location,
+            'status' => $request->status,
+        ]);
+
+        Toastr::success('Branch successfully added ✔');
+        return back();
+    }
+
+    public function updateBranch(Request $request, $id)
+    {
+        $branches = Branch::findOrFail($id);
+
+        $validationRules = [
+            'name' => 'required|regex:/^[a-zA-Z\s]+$/',
+            'location' => 'required|regex:/^[a-zA-Z\s]+$/',
+        ];
+
+        $this->validate($request, $validationRules);
+
+        $branches->branch_name = $request->name;
+        $branches->location = $request->location;
+        $branches->status = $request->status;
+        // dd($request);
+        $branches->save();
+
+        Toastr::success('Branch successfully updated!');
+        return back();
+    }
+
+    public function destroyBranch(Request $request)
+    {
+
+        $branches = Branch::find($request->id);
+
+        if($branches->status == 'Active'){
+            Toastr::error('You cannot delete an active branch');
+            return back();
+        }
+        // dd($branches);
+
+        $branches->delete();
+        Toastr::success('Branch successfully deleted!');
+        return back();
+    }
+
 
     // public function storeAgent(Request $request)
     // {
@@ -90,12 +156,12 @@ class UsersController extends Controller
         // }
 
         // Generate a unique agent ID
-    $agentId = 'VET-' . date('Y') . '-' . Carbon::now()->format('dhms') . '-' . mt_rand(1000, 9999);
+        $agentId = 'VET-' . date('Y') . '-' . Carbon::now()->format('dhms') . '-' . mt_rand(1000, 9999);
 
     // Ensure the generated agent ID is unique
-    while (Agent::where('agent_id', $agentId)->exists()) {
-        $agentId = 'VET-' . date('Y') . '-' . Carbon::now()->format('dhms') . '-' . mt_rand(1000, 9999);
-    }
+        while (Agent::where('agent_id', $agentId)->exists()) {
+            $agentId = 'VET-' . date('Y') . '-' . Carbon::now()->format('dhms') . '-' . mt_rand(1000, 9999);
+        }
 
         // dd($request);
         // Create the agent with the unique agent ID

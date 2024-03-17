@@ -83,13 +83,13 @@
         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
             class="fas fa-users"></span></span><span
         class="nav-link-text ps-1">SAB Buyers</span></div>
-    </a><!-- more inner pages-->
+    </a><!-- more inner pages--> --}}
 
-    <a class="nav-link @if(request()->routeIs('admin.listsellers')) active @endif"  href="{{ route('admin.listsellers') }}">
+    <a class="nav-link @if(request()->routeIs('admin.listbranches')) active @endif"  href="{{ route('admin.listbranches') }}">
         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
-            class="fas fa-user-plus"></span></span><span
-        class="nav-link-text ps-1">SAB Sellers</span></div>
-    </a> --}}
+            class="fas fa-university"></span></span><span
+        class="nav-link-text ps-1">Our Branches</span></div>
+    </a>
 
     <a class="nav-link @if(request()->routeIs('admin.listagents')) active @endif"  href="{{ route('admin.listagents') }}">
         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
