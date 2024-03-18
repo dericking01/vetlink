@@ -44,7 +44,7 @@
 
                 <div class="mb-3">
                     <label for="organizerSingle2">Branch Name</label>
-                    <select class="form-select js-choice" id="organizerSingle2" size="1" required="required" name="branch_id" data-options='{"removeItemButton":true,"placeholder":true}'>
+                    <select class="form-select js-choice" id="organizerSingle2" size="1" required="required" name="branch" data-options='{"removeItemButton":true,"placeholder":true}'>
                         <option value="">Select branch...</option>
                         @foreach ($branches as $branch)
                             <option value="{{ $branch->id }}" {{ old('branch_id') == $branch->id ? 'selected' : '' }}>{{ $branch->branch_name }}</option>

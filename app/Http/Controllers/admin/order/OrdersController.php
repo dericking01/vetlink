@@ -21,31 +21,53 @@ class OrdersController extends Controller
     public function pendingOrderindex()
     {
         // $orders = Orders::where('status', 'Pending')->get();
-        $orders = Orders::with('orderItems')->where('status', 'Pending')->get();
+        $orders = Orders::with('orderItems')->where('status', 'Pending')->latest()->get();
+        $branches = Branch::latest()->where('status','active')->get();
+        // dd($orders);
+        $selectedBranchIds = [];
 
-        return view('admin.order.pending-orders', compact('orders'));
+        foreach ($orders as $order) {
+            $selectedBranchIds[$order->id] = $order->branch_id;
+        }
+        // dd($selectedBranchIds);
+
+        return view('admin.order.pending-orders', compact('orders','branches','selectedBranchIds'));
     }
 
     public function completedOrderindex()
     {
         // $orders = Orders::where('status', 'Completed')->get();
-        $orders = Orders::with('orderItems')->where('status', 'Completed')->get();
+        $orders = Orders::with('orderItems')->where('status', 'Completed')->latest()->get();
+        $branches = Branch::latest()->where('status','active')->latest()->get();
+        $selectedBranchIds = [];
 
-        return view('admin.order.completed-orders', compact('orders'));
+        foreach ($orders as $order) {
+            $selectedBranchIds[$order->id] = $order->branch_id;
+        }
+        // dd($selectedBranchIds);
+
+        return view('admin.order.completed-orders', compact('orders','branches','selectedBranchIds'));
     }
 
     public function rejectedOrderindex()
     {
         // $orders = Orders::where('status', 'Cancelled')->get();
-        $orders = Orders::with('orderItems')->where('status', 'Cancelled')->get();
+        $orders = Orders::with('orderItems')->where('status', 'Cancelled')->latest()->get();
+        $branches = Branch::latest()->where('status','active')->latest()->get();
+        $selectedBranchIds = [];
 
-        return view('admin.order.rejected-orders', compact('orders'));
+        foreach ($orders as $order) {
+            $selectedBranchIds[$order->id] = $order->branch_id;
+        }
+        // dd($selectedBranchIds);
+
+        return view('admin.order.rejected-orders', compact('orders','branches','selectedBranchIds'));
     }
 
     public function viewOrder($id)
     {
         $order = Orders::where('id', $id)->first();
-        $orderItems = OrderItems::where('order_id', $order->id)->get();
+        $orderItems = OrderItems::where('order_id', $order->id)->latest()->get();
         $products = $orderItems->pluck('productable');
         // dd($products);
 
@@ -56,7 +78,7 @@ class OrdersController extends Controller
     {
         $agents = Agent::latest()->get();
         $products = AdminProduct::latest()->get();
-        $branches = Branch::latest()->get();
+        $branches = Branch::latest()->where('status','active')->get();
 
         // dd('here');
 
@@ -99,7 +121,7 @@ class OrdersController extends Controller
 
         $order->agent_id = $request->id;
         $order->status = $request->status;
-        $order->branch_id = $request->branch_id;
+        $order->branch_id = $request->branch;
         $order->isDelivered = false;
         // dd($order);
         $order->save();
@@ -141,15 +163,18 @@ class OrdersController extends Controller
 
     public function updateOrder(Request $request, $id)
     {
-        // Find the existing ProductCategory record
+        // // Find the existing ProductCategory record
         $order = Orders::where('id', $id)->first();
+        // Find the existing Order record
+        // $order = Orders::findOrFail($id);
+        // dd($order);
 
         // Update the record with the new data
-        $order->branch_id = $request->branch;
         $order->isDelivered = $request->isDelivered;
         $order->status = $request->status;
-        // dd($request);
-
+        $order->branch_id = $request->branch;
+        dd($order);
+        // dd($request->input('branch'));
         $order->save();
 
         Toastr::success('Order successfully updated! ✔');
