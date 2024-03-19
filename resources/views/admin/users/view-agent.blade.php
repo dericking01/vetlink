@@ -24,8 +24,9 @@
         <div class="col-md-6 col-lg-4 mb-4 mb-lg-0">
           <h5 class="mb-3 fs-0">Points Details</h5>
           <h4 class="mb-2">{{ $agent->points }}</h4>
-          <h5 class="mb-0 fs--1"> <strong>Promo Code:</strong><small class="badge fw-semi-bold rounded-pill badge-subtle-primary">{{ $agent->promo_code }}</small></h5>
-          <p class="mb-0 fs--1"> <strong>Status</strong>
+          <p class="mb-0 fs--1"> <strong>Promo Code: </strong><small class="badge fw-semi-bold rounded-pill badge-subtle-primary">{{ $agent->promo_code }}</small></p>
+          <p class="mb-0 fs--1"> <strong>Joined Date: </strong><small class="badge fw-semi-bold rounded-pill badge-subtle-primary">{{ $agent->created_at }}</small></p>
+          <p class="mb-0 fs--1"> <strong>Status:</strong>
             @if($agent->status)
                 <small class="badge fw-semi-bold rounded-pill badge-subtle-success">ACTIVE</small>
             @else
@@ -41,7 +42,9 @@
           <div class="d-flex"><img class="me-3" src="../../../assets/img/icons/visa.png" width="70" height="70" alt="">
             <div class="flex-1">
               <h6 class="mb-0">{{$agent->name}}</h6>
-              <p class="mb-2 fs--1"> {{$agent->agent_id}} </p>
+              <a href="{{ route('agent.view-agent_card', $agent->id) }}">
+                <p class="mb-2 fs--1"> {{$agent->agent_id}} </p>
+              </a>
               <h4 class="mb-2 text-success">Tsh {{ number_format($cash) }}/=</h4>
             </div>
           </div>

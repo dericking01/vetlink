@@ -90,6 +90,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::put('update/{id}', [UsersController::class, 'updateAgent'])->name('agent.update');
             Route::delete('destroy', [UsersController::class, 'destroy'])->name('agent.destroyagent');
             Route::get('view-agent/{id}', [UsersController::class, 'viewAgent'])->name('agent.view-agent');
+            Route::get('view-agentcard/{id}', [UsersController::class, 'viewAgentCard'])->name('agent.view-agent_card');
             Route::get('view-user/{id}', [UsersController::class, 'viewUser'])->name('admin.view-user');
             Route::get('branches', [UsersController::class, 'branches'])->name('admin.listbranches');
             Route::post('storebranch', [UsersController::class, 'storeBranch'])->name('admin.storebranch');

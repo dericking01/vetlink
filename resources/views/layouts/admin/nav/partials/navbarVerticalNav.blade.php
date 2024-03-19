@@ -7,13 +7,13 @@
                 class="nav-link-text ps-1">Dashboard</span></div>
     </a>
     <ul class="nav collapse show" id="dashboard">
-        {{-- <li class="nav-item">
+        <li class="nav-item">
             <a class="nav-link @if(request()->routeIs('admin.dashboard.home')) active @endif" href="{{ route('admin.dashboard.home') }}">
                 <div class="d-flex align-items-center"><span class="nav-link-icon"><span
             class="fas fa-home"></span></span><span
                         class="nav-link-text ps-1">Home</span></div>
             </a><!-- more inner pages-->
-        </li> --}}
+        </li>
         {{-- <li class="nav-item">
             <a class="nav-link @if(request()->routeIs('admin.dashboard.analytics')) active @endif" href="{{ route('admin.dashboard.analytics') }}">
                 <div class="d-flex align-items-center"><span
@@ -189,7 +189,7 @@
 
 </li>
 
-<li class="nav-item">
+{{-- <li class="nav-item">
     <!-- label-->
     <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
         <div class="col-auto navbar-vertical-label">Manage Transactions</div>
@@ -215,12 +215,12 @@
         class="nav-link-text ps-1">OverDue Invoices</span></div>
     </a><!-- more inner pages-->
 
-    {{-- <a class="nav-link @if(request()->routeIs('admin.withdrawalReq')) active @endif" href="{{ route('admin.withdrawalReq') }}">
+    <a class="nav-link @if(request()->routeIs('admin.withdrawalReq')) active @endif" href="{{ route('admin.withdrawalReq') }}">
         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
             class="fas fa-list"></span></span><span
         class="nav-link-text ps-1">Withdrawals</span></div>
-    </a> --}}
-</li>
+    </a>
+</li> --}}
 
 <li class="nav-item">
         <!-- label-->

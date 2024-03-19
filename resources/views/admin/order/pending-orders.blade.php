@@ -171,7 +171,7 @@
 
                                         <div class="col-md-6">
                                             <label for="organizerSingle2">Branch Name</label>
-                                            <select class="form-select js-choice" id="organizerSingle2" size="1" required="required" name="branch" data-options='{"removeItemButton":true,"placeholder":true}'>
+                                            <select class="form-control select2" id="status" name="branch">
                                                 <option value="">Select branch...</option>
                                                 @foreach ($branches as $branch)
                                                     <option value= "{{$branch->id}}"  {{ old('branch', $selectedBranchIds[$order->id] ?? null) == $branch->id ? 'selected' : '' }} >
@@ -179,7 +179,6 @@
                                                     </option>
                                                 @endforeach
                                             </select>
-
                                         </div>
 
                                         <div class="col-md-6">

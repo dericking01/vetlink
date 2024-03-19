@@ -77,7 +77,7 @@ class OrdersController extends Controller
     public function orderForm()
     {
         $agents = Agent::latest()->get();
-        $products = AdminProduct::latest()->get();
+        $products = AdminProduct::where('status','active')->latest()->get();
         $branches = Branch::latest()->where('status','active')->get();
 
         // dd('here');
@@ -165,6 +165,8 @@ class OrdersController extends Controller
     {
         // // Find the existing ProductCategory record
         $order = Orders::where('id', $id)->first();
+        // $order = Orders::find($request->id);
+
         // Find the existing Order record
         // $order = Orders::findOrFail($id);
         // dd($order);
@@ -173,7 +175,7 @@ class OrdersController extends Controller
         $order->isDelivered = $request->isDelivered;
         $order->status = $request->status;
         $order->branch_id = $request->branch;
-        dd($order);
+        // dd($order);
         // dd($request->input('branch'));
         $order->save();
 
@@ -206,6 +208,7 @@ class OrdersController extends Controller
         $orderId = $request->input('id'); // Assuming 'orderId' is the name of the input field containing the order ID
 
         $order = Orders::find($orderId); // Use 'Order' instead of 'Orders'
+        // dd($order);
 
         if ($order) {
             if ($order->isDelivered) {

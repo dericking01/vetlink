@@ -286,6 +286,16 @@ class UsersController extends Controller
         return view('admin.users.view-agent', compact('agent', 'orders'));
     }
 
+    public function viewAgentCard($id)
+    {
+        $agent = Agent::whereId($id)->first();
+
+        $orders = Orders::where('agent_id', $id)->where('status', 'Completed')->with('orderItems')->get();
+
+        // dd($orders);
+        return view('admin.users.view-agent-card', compact('agent', 'orders'));
+    }
+
     // public function viewSeller($id)
     public function viewSeller($id)
     {

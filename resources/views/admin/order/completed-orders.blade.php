@@ -157,6 +157,18 @@
                                         </div>
 
                                         <div class="col-md-6">
+                                            <label for="organizerSingle2">Branch Name</label>
+                                            <select class="form-control select2" id="status" name="branch">
+                                                <option value="">Select branch...</option>
+                                                @foreach ($branches as $branch)
+                                                    <option value= "{{$branch->id}}"  {{ old('branch', $selectedBranchIds[$order->id] ?? null) == $branch->id ? 'selected' : '' }} >
+                                                        {{ $branch->branch_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-6">
                                           {{-- <div class="mb-3"> --}}
                                               <label for="status">Order Status <span class="text-danger">*</span> </label>
                                               <select class="form-select" id="organizerSingle2" size="1" name="status">
