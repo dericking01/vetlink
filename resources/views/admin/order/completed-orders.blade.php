@@ -48,7 +48,7 @@
                 @endforeach
               </td> --}}
               {{-- <td class="quantity">{{ $order->orderItems->quantity }}</td> --}}
-              <td class="amount">{{ number_format ($order->total_amount, 2) }}</td>
+              <td class="amount">{{ number_format ($order->total_amount, 2) }}</td> 
               @if ($order->isDelivered)
               <td class="status text-center">
                 <span class="badge badge-subtle-success">YES</span>

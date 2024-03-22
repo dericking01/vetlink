@@ -60,7 +60,7 @@
                         <option value="Completed" {{ old('status', $prod->status) === 'Completed' ? 'selected' : '' }}>COMPLETED</option>
                         <option value="Pending" {{ old('status', $prod->status) === 'Pending' ? 'selected' : '' }}>PENDING</option>
                     </select>
-                </div>
+                </div> 
 
                 <button class="btn btn-primary" type="submit">Confirm</button>
             </form>
