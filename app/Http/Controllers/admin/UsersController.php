@@ -277,7 +277,7 @@ class UsersController extends Controller
     }
 
     public function viewAgent($id)
-    {
+    { 
         $agent = Agent::whereId($id)->first();
 
         $orders = Orders::where('agent_id', $id)->where('status', 'Completed')->with('orderItems')->get();

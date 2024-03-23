@@ -81,7 +81,7 @@
               </td>
             </tr>
 
-            {{-- Delete Pending Orders Modal --}}
+            {{-- Delete Pending Orders Modal --}} 
             <div class="modal fade" id="deletePendingOrder{{ $order->id }}" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
                     <div class="modal-content">

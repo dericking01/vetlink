@@ -11,7 +11,7 @@
     </a>
     <ul class="navbar-nav align-items-center d-none d-lg-block">
         <li class="nav-item">
-            @include('layouts.admin.nav.partials.search-box')
+            @include('layouts.admin.nav.partials.search-box') 
         </li>
     </ul>
     <ul class="navbar-nav navbar-nav-icons ms-auto flex-row align-items-center">

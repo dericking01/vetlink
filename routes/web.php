@@ -78,7 +78,7 @@ Route::group(['prefix' => 'admin'], function () {
          });
 
          //sab-users routes
-        Route::group(['prefix' => 'vetinfo'], function () {
+        Route::group(['prefix' => 'vetinfo'], function () { 
             Route::get('users', [UsersController::class, 'index'])->name('admin.listusers');
             Route::delete('destroy-buyer', [UsersController::class, 'destroyBuyer'])->name('agent.destroybuyer');
             Route::get('sellers', [UsersController::class, 'sellers'])->name('admin.listsellers');

@@ -39,7 +39,7 @@
             </tr>
           </thead>
           <tbody class="list">
-            @foreach($agents as $key => $agent)
+            @foreach($agents as $key => $agent) 
               <tr class="btn-reveal-trigger">
                 <td class="sn">{{ ++$key }}</td>
                 <td class="name align-middle white-space-nowrap py-2">

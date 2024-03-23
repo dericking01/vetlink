@@ -51,7 +51,7 @@
               <td class="amount">{{ number_format ($order->total_amount, 2) }}</td> 
               @if ($order->isDelivered)
               <td class="status text-center">
-                <span class="badge badge-subtle-success">YES</span>
+                <span class="badge badge-subtle-success">YES</span> 
               </td>
               @else
               <td class="status text-center">

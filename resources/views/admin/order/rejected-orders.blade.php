@@ -137,9 +137,9 @@
 
                                         </div>
                                         <div class="col-md-6">
+ 
 
-
-                                            <div class="mb-3">
+                                            <div class="mb-3"> 
                                                 <label class="col-form-label" for="amount">Amount <span class="text-danger"></span></label>
                                                 <input class="form-control " name="amount" id="amount"
                                                        type="number" placeholder="Total amount" value="{{ $order->total_amount }}" readonly/>

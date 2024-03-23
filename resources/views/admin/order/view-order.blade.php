@@ -53,7 +53,7 @@
             <div class="flex-1">
               <h6 class="mb-0">VETLINK CARD</h6>
               <p class="mb-0 fs--1"> {{$order->agent->agent_id}} </p>
-            </div>
+            </div> 
           </div>
         </div>
       </div>

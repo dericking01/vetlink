@@ -56,7 +56,7 @@ class OrdersController extends Controller
         $branches = Branch::latest()->where('status','active')->latest()->get();
         $selectedBranchIds = [];
 
-        foreach ($orders as $order) {
+        foreach ($orders as $order) { 
             $selectedBranchIds[$order->id] = $order->branch_id;
         }
         // dd($selectedBranchIds);

@@ -150,7 +150,7 @@
                         <img class="me-2"
                 src="{{ asset('/') }}assets/img/icons/spot-illustrations/vet-partial.png" alt=""
                 width="60" height="60"/> <h8><strong>VETLINK CARD</strong></h8>
-                        <h5><strong> {{$agent->name}} </strong></h5> 
+                        <h5><strong> {{$agent->name}} </strong></h5>  
                         {{-- <h5>CREATIVE GRAPHIC DESIGNER</h5> --}}
                     </div>
                     <div class="addr"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

@@ -7,7 +7,7 @@
 
 <head>
     
-    @include('layouts.common.styles')
+    @include('layouts.common.styles') 
 </head>
 
 <body>
