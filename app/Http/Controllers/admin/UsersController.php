@@ -12,11 +12,13 @@ use App\Models\Product;
 use App\Models\Seller;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
-use Carbon\Carbon;
+// use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Spatie\Browsershot\Browsershot;
 
 class UsersController extends Controller
 {
@@ -277,7 +279,7 @@ class UsersController extends Controller
     }
 
     public function viewAgent($id)
-    { 
+    {
         $agent = Agent::whereId($id)->first();
 
         $orders = Orders::where('agent_id', $id)->where('status', 'Completed')->with('orderItems')->get();
@@ -294,6 +296,7 @@ class UsersController extends Controller
 
         // dd($orders);
         return view('admin.users.view-agent-card', compact('agent', 'orders'));
+        // return view('admin.users.vd', compact('agent', 'orders'));
     }
 
     // public function viewSeller($id)
@@ -334,5 +337,23 @@ class UsersController extends Controller
         // dd($orders);
         return view('admin.users.view-user', compact('user', 'orders'));
     }
+
+
+    public function downloadBusinessCardImage()
+    {
+        // HTML content of the div
+        $html = '<div class="card p-3 mb-2">...</div>';
+
+        // Set the path where you want to save the image
+        $imagePath = public_path('images/business_card.jpg');
+
+        // Use Browsershot to convert HTML to image
+        Browsershot::html($html)->debug()->save($imagePath);
+
+        // Browsershot::html($html)->save($imagePath);
+
+        // Return a response or redirect to download the image
+    }
+
 
 }

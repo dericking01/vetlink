@@ -6,8 +6,9 @@
 <!-- /Added by HTTrack -->
 
 <head>
-    
-    @include('layouts.common.styles') 
+
+    @include('layouts.common.styles')
+    @include('layouts.common.bcard')
 </head>
 
 <body>
@@ -16,33 +17,33 @@
     <!-- ===============================================-->
     <main class="main" id="top">
         <div class="container" data-layout="container">
-            
+
             @include('layouts.admin.nav.navside')
 
             <div class="content">
                 @include('layouts.admin.nav.navtop')
                 @yield('content')
-                
+
                 @include('layouts.admin.footer')
             </div>
             @include('layouts.admin.modal')
 
-            
+
         </div>
     </main><!-- ===============================================-->
     <!--    End of Main Content-->
     <!-- ===============================================-->
 
-   
+
     @include('layouts.common.offcanvas')
     {{-- @include('layouts.common.customize') --}}
-    
+
 
     <!-- ===============================================-->
     <!--    JavaScripts-->
     <!-- ===============================================-->
     @include('layouts.common.scripts')
-    
+
 </body>
 
 </html>

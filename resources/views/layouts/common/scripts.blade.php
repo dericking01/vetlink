@@ -52,6 +52,43 @@
       </script>
   @endif
 
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+        jQuery("#download").click(function(){
+            screenshot("photo1");
+            screenshot("photo2");
+        });
+    });
+
+    function screenshot(id){
+        html2canvas(document.getElementById(id)).then(function(canvas){
+           downloadImage(canvas.toDataURL(),"UsersInformation_" + id + ".png");
+        });
+    }
+
+    function downloadImage(uri, filename){
+        var link = document.createElement('a');
+        if(typeof link.download !== 'string'){
+            window.open(uri);
+        }
+        else{
+            link.href = uri;
+            link.download = filename;
+            accountForFirefox(clickLink, link);
+        }
+    }
+
+    function clickLink(link){
+        link.click();
+    }
+
+    function accountForFirefox(click){
+        var link = arguments[1];
+        document.body.appendChild(link);
+        click(link);
+        document.body.removeChild(link);
+    }
+</script>
 
 
   <script>

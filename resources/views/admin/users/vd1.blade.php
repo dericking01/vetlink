@@ -1,135 +1,32 @@
-@extends('layouts.admin.base')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
 
-@section('content')
+    <style>
 
-<style>
-    html {
-            font-size: 17px;
-            color: rgb(255, 255, 255);
-            font-family: 'Heebo', sans-serif;
-            /* font-family: "Source Sans Pro", sans-serif; */
-            background-color: #ffffff;
-        }
-        .front-side,
-        .back-side {
-            width: 390px;
-            height: 220px;
-            display: grid;
-            grid-template-columns: 2% 96% 2%;
-            grid-template-rows: 4% 92% 4%;
-            position: relative;
-            margin: 20px auto;
-            overflow: hidden;
-            box-shadow: 2px 5px 15px 0px #17161694;
-            background: linear-gradient(45deg, #ffa500, #ffd700, #ffa500, #ffd700);
-        }
-        .color-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 150px);
-            grid-template-rows: repeat(8, 50px);
-            grid-gap: 8px;
-            width: 150px;
-            height: 400px;
-            transform: rotate(-45deg);
-        }
-        .black {
-            /* background-color: #343536; */
-            grid-column: 2 / span 2;
-            grid-row: 1 / span 3;
-        }
-        .red1 {
-            /* background-color: #e45e4f; */
-            grid-row: 2 / span 5;
-        }
-        .red2 {
-            /* background-color: #e45e4f; */
-            grid-column: 2 / span 2;
-            grid-row: 4/7;
-        }
-        .green {
-            background-color: #007e67;
-            grid-column: 2/4;
-            grid-row: 7/9;
-        }
+    </style>
 
-        .info-grid {
-            grid-column: 2/3;
-            grid-row: 2/3;
-            z-index: 2;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.363);
-            box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.432);
-            border-radius: 6px;
-            font-size: 0.7rem; /*12px;*/
-            display: grid;
-            grid-template-columns: 15px repeat(3, 1fr) 15px;
-            grid-template-rows: repeat(3, 1fr);
-            line-height: 1px;
-        }
-        .info-grid .name {
-            grid-column: 2 / span 2;
-            grid-row: 1 / span 1;
-            font-size: 1.2em;
-            letter-spacing: .1rem;
-            margin-top: 8px;
-        }
-        .info-grid .name h5{
-            font-weight: unset;
-        }
-        .info-grid .addr {
-            grid-column: 2 / span 2;
-            grid-row: 3;
-        }
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.esm.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.js"></script>
+    {{-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.esm.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.esm.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.js"></script> --}}
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.esm.js" integrity="sha512-PydZDtPfuZPA8f5RT52IUcWsFH/49uu7p8+lp4C3K2SBB0I9CxoOlk/qzanLFpVvEuASBL0LKi2CKw4VidQOeQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
 
-        .info-grid .phoneNo {
-            grid-column: 3 / span 2;
-            grid-row: 2;
-            text-align: end;
-        }
-        .info-grid .emailId {
-            grid-column: 3 / span 2;
-            grid-row: 3;
-            text-align: end;
-            font-size: 1.1em;
-        }
-
-        .back-side .name-tag {
-            grid-column: 1 / span 4;
-            grid-row: 2 / span 1;
-            align-self: center;
-            z-index: 2;
-            width: 100%;
-            height: 40%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            background-color: rgba(255, 255, 255, 0.363);
-            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.288);
-            font-size: 0.6rem; /*12px;*/
-            letter-spacing: .1rem;
-            text-align: center;
-        }
-        .name-tag h1,h3{
-            margin: 2px;
-            font-weight: unset;
-        }
-        .name h8{
-            font-size: 19px;
-            width: calc(100% - 0% /*adjust the width of the element to stretch*/);
-            text-align: right;
-        }
-        .credits{
-            margin-top:40px;
-            text-align: center;
-            color: #343536;
-        }
-
-</style>
+</head>
+<body>
 
     {{-- <div class="col-md-6"> --}}
-        <div class="card p-3 mb-2">
-            <div id="photo1" class="front-side">
+        <div class="card p-3 mb-2" id="photo">
+            <div class="front-side">
                 <div class="color-grid">
                     <div class="black"></div>
                     <div class="red1"></div>
@@ -168,13 +65,6 @@
                             </g>
                         </svg>
                         <h3></h3>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
                         <p>
                             <strong> {{$agent->location}} </strong>
                         </p>
@@ -218,7 +108,7 @@
                     </div>
                 </div>
             </div>
-            <div id="photo2" class="back-side">
+            <div class="back-side">
                 <!-- Content for the back side of the card can be added here -->
                 <div class="color-grid">
                     <div class="black"></div>
@@ -235,12 +125,7 @@
             </div>
         </div>
     {{-- </div> --}}
-
-<button id="download" class="btn btn-primary">Download Card</button>
-
-@endsection
-
-{{-- @section('scripts')
+    <button id="download">download</button>
     <script type="text/javascript">
 
         jQuery(document).ready(function(){
@@ -251,20 +136,20 @@
 
         function screenshot(){
             html2canvas(document.getElementById("photo")).then(function(canvas){
-            downloadImage(canvas.toDataURL(),"UsersInformation.png");
+               downloadImage(canvas.toDataURL(),"UsersInformation.png");
             });
         }
 
         function downloadImage(uri, filename){
-        var link = document.createElement('a');
-        if(typeof link.download !== 'string'){
-            window.open(uri);
-        }
-        else{
-            link.href = uri;
-            link.download = filename;
-            accountForFirefox(clickLink, link);
-        }
+          var link = document.createElement('a');
+          if(typeof link.download !== 'string'){
+             window.open(uri);
+          }
+          else{
+              link.href = uri;
+              link.download = filename;
+              accountForFirefox(clickLink, link);
+          }
         }
 
         function clickLink(link){
@@ -278,10 +163,8 @@
             document.body.removeChild(link);
         }
 
-    </script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.esm.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.js"></script>
-@endsection --}}
+    </script>
+</body>
+</html>
+drive.google.com/file/d/1-ROqoZFxT1wF15UdfTrNjkacMYBtEbOw/view
