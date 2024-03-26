@@ -48,8 +48,8 @@
         }
         .green {
             background-color: #007e67;
-            grid-column: 2/4;
-            grid-row: 7/9;
+            /* grid-column: 2/4;
+            grid-row: 7/9; */
         }
 
         .info-grid {
@@ -145,7 +145,7 @@
                         {{-- <h5>CREATIVE GRAPHIC DESIGNER</h5> --}}
                     </div>
                     <div class="addr"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px"
+                        {{-- <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px"
                             viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve" width="30px" height="30px">
                             <!-- SVG Path for address icon -->
                             <g>
@@ -166,7 +166,7 @@
                                         fill="#FFFFFF" />
                                 </g>
                             </g>
-                        </svg>
+                        </svg> --}}
                         <h3></h3>
                         <br>
                         <br>
@@ -176,11 +176,11 @@
                         <br>
                         <br>
                         <p>
-                            <strong> {{$agent->location}} </strong>
+                            {{-- <strong> {{$agent->location}} </strong> --}}
                         </p>
                     </div>
                     <div class="phoneNo">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 472.811 472.811"
+                        {{-- <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 472.811 472.811"
                             enable-background="new 0 0 472.811 472.811" width="30px" height="30px">
                             <!-- SVG Path for phone icon -->
                             <g>
@@ -192,12 +192,12 @@
                                 <path d="m184.409,47.645c1.31,0 2.6-0.53 3.53-1.46 0.93-0.94 1.47-2.22 1.47-3.54s-0.54-2.6-1.47-3.54c-0.931-0.93-2.221-1.46-3.53-1.46-1.32,0-2.601,0.53-3.54,1.46-0.93,0.93-1.46,2.22-1.46,3.54s0.53,2.6 1.46,3.54c0.93,0.93 2.22,1.46 3.54,1.46z"
                                     fill="#FFFFFF" />
                             </g>
-                        </svg>
+                        </svg> --}}
                         <h4></h4>
-                        <p>Phone:<strong> +{{$agent->phone}} </strong></p>
+                        {{-- <p>Phone:<strong> +{{$agent->phone}} </strong></p> --}}
                     </div>
                     <div class="emailId">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 467.211 467.211"
+                        {{-- <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 467.211 467.211"
                             enable-background="new 0 0 467.211 467.211" width="30px" height="30px">
                             <!-- SVG Path for email icon -->
                             <g>
@@ -206,10 +206,10 @@
                                 <path d="m459.711,340.558h-11.744v-237.715c0-15.752-12.815-28.568-28.568-28.568h-371.586c-15.753,0-28.568,12.815-28.568,28.568v237.714h-11.745c-4.143,0-7.5,3.358-7.5,7.5v20.605c0,13.384 10.889,24.272 24.272,24.272h418.666c13.384,0 24.272-10.889 24.272-24.272v-20.605c0.001-4.141-3.356-7.499-7.499-7.499zm-425.467-237.715c-2.84217e-14-7.481 6.087-13.568 13.568-13.568h371.586c7.481,0 13.568,6.086 13.568,13.568v237.714h-398.722v-237.714zm177.361,252.715h44v3.922c0,1.755-1.428,3.184-3.184,3.184h-37.633c-1.756,0-3.184-1.428-3.184-3.184v-3.922zm240.607,13.105c0,5.113-4.159,9.272-9.272,9.272h-418.667c-5.113,0-9.272-4.16-9.272-9.272v-13.105h11.744 174.861v3.922c0,7.27 5.914,13.184 13.184,13.184h37.633c7.27,0 13.184-5.914 13.184-13.184v-3.922h174.861 11.744v13.105z"
                                     fill="#FFFFFF" />
                             </g>
-                        </svg>
+                        </svg> --}}
                         <h4></h4>
                         <p class="email">
-                            <strong> {{$agent->email}} </strong>
+                            {{-- <strong> {{$agent->email}} </strong> --}}
                         </p>
                         {{-- <p class="web">
                             <strong>www</strong>.yourwebsite.

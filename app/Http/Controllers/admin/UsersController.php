@@ -344,15 +344,10 @@ class UsersController extends Controller
         // HTML content of the div
         $html = '<div class="card p-3 mb-2">...</div>';
 
-        // Set the path where you want to save the image
         $imagePath = public_path('images/business_card.jpg');
 
-        // Use Browsershot to convert HTML to image
         Browsershot::html($html)->debug()->save($imagePath);
 
-        // Browsershot::html($html)->save($imagePath);
-
-        // Return a response or redirect to download the image
     }
 
 

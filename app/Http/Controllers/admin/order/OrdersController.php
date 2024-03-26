@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin\order;
 
+use App\Events\OrderCompleted;
 use App\Helpers\FileHelper;
 use App\Http\Controllers\Controller;
 use App\Models\AdminProduct;
@@ -76,7 +77,7 @@ class OrdersController extends Controller
 
     public function orderForm()
     {
-        $agents = Agent::latest()->get();
+        $agents = Agent::where('status','active')->latest()->get();
         $products = AdminProduct::where('status','active')->latest()->get();
         $branches = Branch::latest()->where('status','active')->get();
 
@@ -154,6 +155,9 @@ class OrdersController extends Controller
         $order->total_amount = $totalAmount;
         // dd($request);
 
+        // Dispatch the OrderCompleted event
+        event(new OrderCompleted($order));
+
         $order->save();
 
         Toastr::success('Order saved successfully!');
@@ -178,6 +182,9 @@ class OrdersController extends Controller
         // dd($order);
         // dd($request->input('branch'));
         $order->save();
+
+         // Dispatch the OrderCompleted event
+         event(new OrderCompleted($order));
 
         Toastr::success('Order successfully updated! ✔');
         return back();

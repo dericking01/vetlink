@@ -13,8 +13,12 @@ use App\Observers\OrderObserver;
 
 class EventServiceProvider extends ServiceProvider
 {
-    protected $listen = [];
-
+    // protected $listen = [];
+    protected $listen = [
+        'App\Events\OrderCompleted' => [
+            'App\Listeners\UpdateAgentPoints',
+        ],
+    ];
     /**
      * Register any events for your application.
      */
