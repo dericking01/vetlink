@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             // $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('agent_id');
+            $table->unsignedBigInteger('branch_id');
             $table->decimal('total_amount', 10, 2)->nullable();
             $table->enum('status', ['Pending','Completed','Cancelled'] )->default('Pending');
             $table->boolean('isDelivered')->default(true);
@@ -22,6 +23,8 @@ return new class extends Migration
             $table->softDeletes();
             // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('agent_id')->references('id')->on('agents')->onDelete('cascade')->onUpdate('cascade');
+            // $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
+
         });
     }
 

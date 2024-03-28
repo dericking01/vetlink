@@ -17,13 +17,13 @@ class AgentSeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create();
-    
+
         for ($i = 0; $i < 30; $i++) {
             $name = $faker->name;
             $firstLetter = Str::substr($name, 0, 1);
             $randomNumbers = mt_rand(10000, 99999);
             $promoCode = strtoupper($firstLetter) . $randomNumbers;
-    
+
             Agent::create([
                 'phone' => $faker->unique()->numerify('255#########'),
                 'name' => $name,
@@ -36,5 +36,6 @@ class AgentSeeder extends Seeder
                 'status' => $faker->randomElement(['Active', 'Inactive']),
             ]);
         }
-    }    
+    }
+
 }

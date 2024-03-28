@@ -16,32 +16,42 @@ class OrdersSeeder extends Seeder
 {
     $faker = Faker::create();
 
-    for ($i = 0; $i < 50; $i++) {
-        $agentId = $faker->numberBetween(1, 30);
-        $isDelivered = $faker->randomElement([false, true]);
-        $status = $faker->randomElement(['Pending', 'Completed','Cancelled']);
+    // Retrieve all existing order IDs
+    $orderIds = DB::table('orders')->pluck('id')->toArray();
 
-        // Create the order
-        $orderId = DB::table('orders')->insertGetId([
-            'agent_id' => $agentId,
-            'total_amount' => 0, // Initialize total_amount to 0
-            'isDelivered' => $isDelivered,
-            'status' => $status,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+    // Check if there are any orders available
+    if (count($orderIds) === 0) {
+        // Handle the case when there are no orders available
+        // You may throw an exception, log a message, or handle it according to your application's logic
+        return;
+    }
 
-        // Retrieve related order items for this order ID
-        $orderItems = DB::table('order_items')->where('order_id', $orderId)->get();
-        $totalAmount = 0;
+    foreach ($orderIds as $orderId) {
+        // Generate a random number of order items for each order
+        $numOrderItems = $faker->numberBetween(1, 5);
 
-        // Calculate the total amount based on order items
-        foreach ($orderItems as $orderItem) {
-            $totalAmount += $orderItem->amount;
+        for ($i = 0; $i < $numOrderItems; $i++) {
+            $productableId = $faker->numberBetween(1, 100);
+            $agentId = $faker->numberBetween(1, 30);
+            $quantity = $faker->numberBetween(1, 100);
+            $price = $faker->randomFloat(2, 10, 1000);
+            $amount = $quantity * $price;
+            $sabCommission = $amount * 0.02; // Assuming 2% commission
+
+            // Create the order item
+            DB::table('order_items')->insert([
+                'order_id' => $orderId, // Assign the current order ID
+                'productable_id' => $productableId,
+                'agent_id' => $agentId,
+                'productable_type' => 'App\Models\AdminProduct', // Adjust as needed
+                'quantity' => $quantity,
+                'price' => $price,
+                'amount' => $amount,
+                'sab_commission' => $sabCommission,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
         }
-
-        // Update the total_amount for this order ID
-        DB::table('orders')->where('id', $orderId)->update(['total_amount' => $totalAmount]);
     }
 }
 

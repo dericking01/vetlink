@@ -66,7 +66,8 @@
 </li>
 
 <li class="nav-item">
-    <!-- label--> 
+    <!-- label-->
+    
     <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
         <div class="col-auto navbar-vertical-label">Manage Users</div>
         <div class="col ps-0">

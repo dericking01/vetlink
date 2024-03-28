@@ -156,7 +156,7 @@ class OrdersController extends Controller
         // dd($request);
 
         // Dispatch the OrderCompleted event
-        event(new OrderCompleted($order));
+        // event(new OrderCompleted($order));
 
         $order->save();
 
@@ -165,32 +165,74 @@ class OrdersController extends Controller
 
     }
 
-    public function updateOrder(Request $request, $id)
+    // public function updateOrder(Request $request, $id)
+    // {
+    //     // // Find the existing ProductCategory record
+    //     $order = Orders::where('id', $id)->first();
+    //     // $order = Orders::find($request->id);
+
+    //     // Find the existing Order record
+    //     // $order = Orders::findOrFail($id);
+    //     //  dd($order);
+
+    //     // Update the record with the new data
+    //     $order->isDelivered = $request->isDelivered;
+    //     $order->status = $request->status;
+    //     $order->branch_id = $request->branch;
+    //     // dd($order);
+    //     // dd($request->input('branch'));
+    //     // $agent=Agent::find($order->agent_id);
+    //     // dd($agent);
+    //     $order->save();
+    //     // dd($agent);
+
+
+    //     // $totalAmount = $order->total_amount;
+    //     // $points = 0;
+    //     // // dd($totalAmount);
+    //     // // Calculate points based on total amount
+    //     // if ($totalAmount >= 1 && $totalAmount <= 10000) {
+    //     //     $points = 10;
+    //     // } elseif ($totalAmount >= 11000 && $totalAmount <= 20000) {
+    //     //     $points = 20;
+    //     // } elseif ($totalAmount >= 21000 && $totalAmount <= 30000) {
+    //     //     $points = 30;
+    //     // } elseif ($totalAmount >= 31000 && $totalAmount <= 40000) {
+    //     //     $points = 40;
+    //     // } elseif ($totalAmount >= 41000 && $totalAmount <= 50000) {
+    //     //     $points = 50;
+    //     // } elseif ($totalAmount >= 51000 && $totalAmount <= 100000) {
+    //     //     $points = 60;
+    //     // }
+    //     // // dd($points);
+
+
+    //     // // Update agent's points
+    //     // $agent=Agent::find($order->agent_id);
+    //     // if($agent){
+    //     //     // dd($agent);
+    //     //     $agent->points = $agent->points + $points;
+
+    //     //     $agent->save();
+    //     // }
+
+    //      // Dispatch the OrderCompleted event
+    //     //  event(new OrderCompleted($order));
+
+    //     Toastr::success('Order successfully updated! ✔');
+    //     return back();
+    // }
+
+    public function alterOrder(Request $request, $id)
     {
-        // // Find the existing ProductCategory record
-        $order = Orders::where('id', $id)->first();
-        // $order = Orders::find($request->id);
-
-        // Find the existing Order record
-        // $order = Orders::findOrFail($id);
-        // dd($order);
-
-        // Update the record with the new data
+        $order=Orders::where('id',$id)->first();
         $order->isDelivered = $request->isDelivered;
         $order->status = $request->status;
         $order->branch_id = $request->branch;
-        // dd($order);
-        // dd($request->input('branch'));
         $order->save();
-
-         // Dispatch the OrderCompleted event
-         event(new OrderCompleted($order));
-
-        Toastr::success('Order successfully updated! ✔');
+        Toastr::success('Order yako imehuhishwa / updated! ✔');
         return back();
     }
-
-
 
 
     // public function destroyOrder(Request $request)

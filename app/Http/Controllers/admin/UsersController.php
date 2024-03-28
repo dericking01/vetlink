@@ -92,7 +92,6 @@ class UsersController extends Controller
 
     public function destroyBranch(Request $request)
     {
-
         $branches = Branch::find($request->id);
 
         if($branches->status == 'Active'){
