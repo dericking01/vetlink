@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('location' )->nullable();
             $table->string('promo_code')->unique();
             $table->integer('points')->default(0);
+            $table->string('agent_id')->unique();
             $table->string('password');
             $table->enum('status', ['Active','Inactive'] )->default('Active');
             $table->rememberToken();

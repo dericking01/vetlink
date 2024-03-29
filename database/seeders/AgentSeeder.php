@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Agent;
+use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -24,6 +25,9 @@ class AgentSeeder extends Seeder
             $randomNumbers = mt_rand(10000, 99999);
             $promoCode = strtoupper($firstLetter) . $randomNumbers;
 
+            // Generate a unique agent ID
+            $agentId = 'VET-' . date('Y') . '-' . mt_rand(1000, 9999);
+
             Agent::create([
                 'phone' => $faker->unique()->numerify('255#########'),
                 'name' => $name,
@@ -32,6 +36,7 @@ class AgentSeeder extends Seeder
                 'location' => $faker->address,
                 'promo_code' => $promoCode,
                 'points' => 0,
+                'agent_id' => $agentId,
                 'password' => Hash::make('12345678'),
                 'status' => $faker->randomElement(['Active', 'Inactive']),
             ]);

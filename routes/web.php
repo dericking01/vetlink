@@ -152,7 +152,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('create-order', [OrdersController::class, 'orderForm'])->name('admin.createOrder');
             Route::post('store', [OrdersController::class, 'store'])->name('admin.storeOrder');
             Route::get('pendingorder', [OrdersController::class, 'pendingOrderindex'])->name('admin.pendingOrder');
-            Route::put('update/{id}', [OrdersController::class, 'alterOrder'])->name('admin.pendingOrder.update');
+            Route::put('update/{id}', [OrdersController::class, 'updateOrder'])->name('admin.pendingOrder.update');
             Route::delete('destroy', [OrdersController::class, 'destroyOrder'])->name('admin.order.destroy');
             Route::get('rejectedorder', [OrdersController::class, 'rejectedOrderindex'])->name('admin.rejectedorder');
             Route::get('completedorder', [OrdersController::class, 'completedOrderindex'])->name('admin.completedorder');

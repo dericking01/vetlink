@@ -165,25 +165,25 @@ class OrdersController extends Controller
 
     }
 
-    // public function updateOrder(Request $request, $id)
-    // {
+    public function updateOrder(Request $request, $id)
+    {
     //     // // Find the existing ProductCategory record
-    //     $order = Orders::where('id', $id)->first();
+        $order = Orders::where('id', $id)->first();
     //     // $order = Orders::find($request->id);
 
     //     // Find the existing Order record
     //     // $order = Orders::findOrFail($id);
     //     //  dd($order);
 
-    //     // Update the record with the new data
-    //     $order->isDelivered = $request->isDelivered;
-    //     $order->status = $request->status;
-    //     $order->branch_id = $request->branch;
+        // Update the record with the new data
+        $order->isDelivered = $request->isDelivered;
+        $order->status = $request->status;
+        $order->branch_id = $request->branch;
     //     // dd($order);
     //     // dd($request->input('branch'));
     //     // $agent=Agent::find($order->agent_id);
     //     // dd($agent);
-    //     $order->save();
+        $order->save();
     //     // dd($agent);
 
 
@@ -219,20 +219,10 @@ class OrdersController extends Controller
     //      // Dispatch the OrderCompleted event
     //     //  event(new OrderCompleted($order));
 
-    //     Toastr::success('Order successfully updated! ✔');
-    //     return back();
-    // }
-
-    public function alterOrder(Request $request, $id)
-    {
-        $order=Orders::where('id',$id)->first();
-        $order->isDelivered = $request->isDelivered;
-        $order->status = $request->status;
-        $order->branch_id = $request->branch;
-        $order->save();
-        Toastr::success('Order yako imehuhishwa / updated! ✔');
+        Toastr::success('Order successfully updated! ✔');
         return back();
     }
+
 
 
     // public function destroyOrder(Request $request)

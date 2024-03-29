@@ -26,7 +26,6 @@ class EventServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        Orders::observe(OrderObserver::class);
     }
 
     /**

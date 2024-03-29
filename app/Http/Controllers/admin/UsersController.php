@@ -157,11 +157,11 @@ class UsersController extends Controller
         // }
 
         // Generate a unique agent ID
-        $agentId = 'VET-' . date('Y') . '-' . Carbon::now()->format('dhms') . '-' . mt_rand(1000, 9999);
+        $agentId = 'VET-' . date('Y') . '-' . mt_rand(1000, 9999);
 
     // Ensure the generated agent ID is unique
         while (Agent::where('agent_id', $agentId)->exists()) {
-            $agentId = 'VET-' . date('Y') . '-' . Carbon::now()->format('dhms') . '-' . mt_rand(1000, 9999);
+            $agentId = 'VET-' . date('Y') . '-' . mt_rand(1000, 9999);
         }
 
         // dd($request);
