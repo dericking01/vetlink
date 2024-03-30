@@ -28,6 +28,13 @@ class AgentSeeder extends Seeder
             // Generate a unique agent ID
             $agentId = 'VET-' . date('Y') . '-' . mt_rand(1000, 9999);
 
+            // Check if the agent ID already exists in the database
+            while (Agent::where('agent_id', $agentId)->exists()) {
+                // If it exists, generate a new agent ID
+                $agentId = 'VET-' . date('Y') . '-' . mt_rand(1000, 9999);
+
+            }
+
             Agent::create([
                 'phone' => $faker->unique()->numerify('255#########'),
                 'name' => $name,

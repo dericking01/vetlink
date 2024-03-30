@@ -86,27 +86,6 @@ class OrdersController extends Controller
         return view('admin.order.create-order',compact('agents','products','branches'));
     }
 
-    // public function store(Request $request)
-    // {
-    //     // dd($request);
-    //     $this->validate($request, [
-    //         'id' => 'required|numeric|min:0',
-    //         'name[]' => 'regex:/^[a-zA-Z\s]+$/',
-    //     ]);
-    //     dd($request);
-
-    //     $product = new AdminProduct();
-    //     $product->agent_id = $request->id;
-    //     $product->total_amount = ;
-    //     $product->status = $request->status;
-    //     $product->isDelivered = false;
-    //     dd($request);
-
-    //     $product->save();
-
-    //     Toastr::success('Order saved successfully!');
-    //     return back();
-    // }
 
     public function store(Request $request)
     {
@@ -155,10 +134,10 @@ class OrdersController extends Controller
         $order->total_amount = $totalAmount;
         // dd($request);
 
-        // Dispatch the OrderCompleted event
-        // event(new OrderCompleted($order));
-
         $order->save();
+
+        // Dispatch the OrderCompleted event
+        event(new OrderCompleted($order));
 
         Toastr::success('Order saved successfully!');
         return back();
@@ -167,57 +146,23 @@ class OrdersController extends Controller
 
     public function updateOrder(Request $request, $id)
     {
-    //     // // Find the existing ProductCategory record
+    //  Find the existing ProductCategory record
         $order = Orders::where('id', $id)->first();
-    //     // $order = Orders::find($request->id);
+    // $order = Orders::find($request->id);
 
-    //     // Find the existing Order record
-    //     // $order = Orders::findOrFail($id);
-    //     //  dd($order);
+    // Find the existing Order record
+    // $order = Orders::findOrFail($id);
+    //  dd($order);
 
         // Update the record with the new data
         $order->isDelivered = $request->isDelivered;
         $order->status = $request->status;
         $order->branch_id = $request->branch;
-    //     // dd($order);
-    //     // dd($request->input('branch'));
-    //     // $agent=Agent::find($order->agent_id);
-    //     // dd($agent);
+
         $order->save();
-    //     // dd($agent);
 
-
-    //     // $totalAmount = $order->total_amount;
-    //     // $points = 0;
-    //     // // dd($totalAmount);
-    //     // // Calculate points based on total amount
-    //     // if ($totalAmount >= 1 && $totalAmount <= 10000) {
-    //     //     $points = 10;
-    //     // } elseif ($totalAmount >= 11000 && $totalAmount <= 20000) {
-    //     //     $points = 20;
-    //     // } elseif ($totalAmount >= 21000 && $totalAmount <= 30000) {
-    //     //     $points = 30;
-    //     // } elseif ($totalAmount >= 31000 && $totalAmount <= 40000) {
-    //     //     $points = 40;
-    //     // } elseif ($totalAmount >= 41000 && $totalAmount <= 50000) {
-    //     //     $points = 50;
-    //     // } elseif ($totalAmount >= 51000 && $totalAmount <= 100000) {
-    //     //     $points = 60;
-    //     // }
-    //     // // dd($points);
-
-
-    //     // // Update agent's points
-    //     // $agent=Agent::find($order->agent_id);
-    //     // if($agent){
-    //     //     // dd($agent);
-    //     //     $agent->points = $agent->points + $points;
-
-    //     //     $agent->save();
-    //     // }
-
-    //      // Dispatch the OrderCompleted event
-    //     //  event(new OrderCompleted($order));
+        // Dispatch the OrderCompleted event
+        event(new OrderCompleted($order));
 
         Toastr::success('Order successfully updated! ✔');
         return back();
@@ -225,23 +170,6 @@ class OrdersController extends Controller
 
 
 
-    // public function destroyOrder(Request $request)
-    // {
-    //     $order = Orders::find($request);
-
-    //     if ($order) {
-    //         if ($order->isDelivered) {
-    //             Toastr::error('Cannot delete a delivered order.');
-    //         } else {
-    //             $order->delete();
-    //             Toastr::success('Order successfully deleted!');
-    //         }
-    //     } else {
-    //         Toastr::error('Order not found or already deleted.');
-    //     }
-
-    //     return back();
-    // }
     public function destroyOrder(Request $request)
     {
         $orderId = $request->input('id'); // Assuming 'orderId' is the name of the input field containing the order ID

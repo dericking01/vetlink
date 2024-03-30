@@ -106,35 +106,6 @@ class UsersController extends Controller
     }
 
 
-    // public function storeAgent(Request $request)
-    // {
-    //     $this->validate($request, [
-    //         'name' => 'required|regex:/^[a-zA-Z\s]+$/',
-    //         'phone' => 'required|numeric|regex:/^255\d{9}$/|digits:12|unique:users,phone',
-    //     ]);
-
-    //     // dd($request);
-
-    //     $promo = Str::substr(Str::upper($request->name), 0, 1) . mt_rand(10000, 99999);
-
-    //     // dd($request);
-    //     Agent::create([
-    //         'name' => $request->name,
-    //         'phone' => $request->phone,
-    //         'email' => $request->email,
-    //         'gender' => $request->gender,
-    //         'location' => $request->location,
-    //         'status' => $request->status,
-    //         'promo_code' => $promo,
-    //         'points' => 0,
-    //         'password' => Hash::make('12345678'),
-    //     ]);
-
-
-    //     Toastr::success('Customer successfully added ✔');
-    //     return back();
-    // }
-
     public function storeAgent(Request $request)
     {
         $this->validate($request, [
@@ -148,18 +119,10 @@ class UsersController extends Controller
 
         $promo = Str::substr(Str::upper($request->name), 0, 1) . mt_rand(10000, 99999);
 
-        // // Generate a unique agent ID
-        // $agentId = 'VET-' . now()->format('Y-m') . '-' . Str::random(5);
-
-        // // Ensure the generated agent ID is unique
-        // while (Agent::where('agent_id', $agentId)->exists()) {
-        //     $agentId = 'VET-' . now()->format('Y-m') . '-' . Str::random(5);
-        // }
-
         // Generate a unique agent ID
         $agentId = 'VET-' . date('Y') . '-' . mt_rand(1000, 9999);
 
-    // Ensure the generated agent ID is unique
+        // Ensure the generated agent ID is unique
         while (Agent::where('agent_id', $agentId)->exists()) {
             $agentId = 'VET-' . date('Y') . '-' . mt_rand(1000, 9999);
         }
