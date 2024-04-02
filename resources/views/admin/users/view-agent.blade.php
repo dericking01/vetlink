@@ -11,7 +11,7 @@
           <p class="mb-0 fs--1"> <strong>Phone: </strong><a href="tel:+{{$agent->phone}}">{{$agent->phone}}</a></p>
           <p class="mb-0 fs--1"> <strong>Email: </strong><a href="mailto:{{ $agent->email }}">{{$agent->email}}</a></p>
           <p class="mb-1 fs--1"> <strong>Location:</strong> {{ $agent->location }}</p>
-          <p class="mb-1 fs--1">  
+          <p class="mb-1 fs--1">
             <strong>Gender:</strong>
             @if ($agent->gender == 'M')
                 MALE
@@ -35,7 +35,7 @@
           </p>
         </div>
         @php
-            $cash = $agent->points  * 100;
+            $cash = $agent->points  / 6.5;
         @endphp
         <div class="col-md-6 col-lg-4">
           <h5 class="mb-3 fs-0">Card Details</h5>

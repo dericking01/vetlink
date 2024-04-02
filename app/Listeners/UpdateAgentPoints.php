@@ -43,19 +43,7 @@ class UpdateAgentPoints implements ShouldQueue
         // Ensure that an agent with completed status is found
         if ($agent) {
             // Calculate points based on total amount
-            if ($totalAmount >= 1 && $totalAmount <= 10000) {
-                $points = 10;
-            } elseif ($totalAmount >= 11000 && $totalAmount <= 20000) {
-                $points = 20;
-            } elseif ($totalAmount >= 21000 && $totalAmount <= 30000) {
-                $points = 30;
-            } elseif ($totalAmount >= 31000 && $totalAmount <= 40000) {
-                $points = 40;
-            } elseif ($totalAmount >= 41000 && $totalAmount <= 50000) {
-                $points = 50;
-            } elseif ($totalAmount >= 51000 && $totalAmount <= 60000) {
-                $points = 60;
-            }
+            $points = $totalAmount * 0.1;
 
             // Update agent's points
             $agent->points = $agent->points + $points;

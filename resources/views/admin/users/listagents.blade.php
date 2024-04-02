@@ -32,14 +32,14 @@
               <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Customer's Name</th>
               <th class="sort pe-1 align-middle white-space-nowrap" data-sort="phone">Joined at.</th>
               <th class="sort pe-1 align-middle white-space-nowrap text-center" data-sort="name">Phone</th>
-              <th class="sort pe-1 align-middle white-space-nowrap text-center" data-sort="name">Promo Code</th>
+              <th class="sort pe-1 align-middle white-space-nowrap text-center" data-sort="name">Card ID</th>
               <th class="sort pe-1 align-middle white-space-nowrap text-center" data-sort="name">Points</th>
               <th class="sort pe-1 align-middle white-space-nowrap text-center" data-sort="name">Status</th>
               <th class="align-middle no-sort text-center">Action</th>
             </tr>
           </thead>
           <tbody class="list">
-            @foreach($agents as $key => $agent) 
+            @foreach($agents as $key => $agent)
               <tr class="btn-reveal-trigger">
                 <td class="sn">{{ ++$key }}</td>
                 <td class="name align-middle white-space-nowrap py-2">
@@ -59,7 +59,7 @@
                       {{$agent->phone}}
                   </td>
                   <td class="phone align-middle white-space-nowrap py-2 text-center">
-                    {{ $agent->promo_code }}
+                    {{ $agent->agent_id }}
                 </td>
                 <td class="phone align-middle white-space-nowrap py-2 text-center">
                   {{ $agent->points }}
@@ -74,6 +74,7 @@
                 <td class="align-middle white-space-nowrap py-2 text-center">
                       <div class="dropdown font-sans-serif position-static"><button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal" type="button" id="customer-dropdown-0" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false"><svg class="svg-inline--fa fa-ellipsis-h fa-w-16 fs--1" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="ellipsis-h" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"></path></svg><!-- <span class="fas fa-ellipsis-h fs--1"></span> Font Awesome fontawesome.com --></button>
                       <div class="dropdown-menu dropdown-menu-end border py-0" aria-labelledby="customer-dropdown-0">
+                          <div class="py-2"><a class="dropdown-item text-primary" href="{{ route('agent.view-agent', $agent->id) }}">View</a></div>
                           <div class="py-2"><a class="dropdown-item text-success" href="#!" data-bs-toggle="modal" data-bs-target="#editAgent{{ $agent->id }}">Edit</a></div>
                           <div class="py-2"><a class="dropdown-item text-danger" href="#!" data-bs-toggle="modal" data-bs-target="#deleteAgent{{ $agent->id }}">Delete</a></div>
                       </div>

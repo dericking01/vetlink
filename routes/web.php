@@ -53,13 +53,6 @@ Route::group(['prefix' => 'admin'], function () {
     // dashboard routes
     Route::group(['prefix' => 'dashboard', 'middleware' => ['admin']], function () {
         Route::get('home', [AdminDashboardController::class, 'home'])->name('admin.dashboard.home');
-        Route::get('analytics', [AdminDashboardController::class, 'analytics'])->name('admin.dashboard.analytics');
-        Route::get('crm', [AdminDashboardController::class, 'crm'])->name('admin.dashboard.crm');
-        Route::get('shop', [AdminDashboardController::class, 'shop'])->name('admin.dashboard.shop');
-        Route::get('lms', [AdminDashboardController::class, 'lms'])->name('admin.dashboard.lms');
-        Route::get('management', [AdminDashboardController::class, 'management'])->name('admin.dashboard.management');
-        Route::get('saas', [AdminDashboardController::class, 'saas'])->name('admin.dashboard.saas');
-        Route::get('support', [AdminDashboardController::class, 'support'])->name('admin.dashboard.support');
 
     });
 
