@@ -162,8 +162,8 @@
               <h6 class="pb-1 text-700">Pending Orders</h6>
               <p class="font-sans-serif lh-1 mb-1 fs-2"> {{$PendingOrders}} </p>
               <div class="d-flex align-items-center">
-                <h6 class="fs--1 text-500 mb-0">2 </h6>
-                <h6 class="fs--2 ps-3 mb-0 text-danger"><span class="me-1 fas fa-caret-up"></span>1.8%</h6>
+                <h6 class="fs--1 text-500 mb-0">3 </h6>
+                <h6 class="fs--2 ps-3 mb-0 text-danger"><span class="me-1 fas fa-caret-down"></span>1.8%</h6>
               </div>
             </div>
             <div class="col-6 col-md-4 border-200 border-bottom-md-0 border-end pt-4 pb-md-0 ps-md-3">
