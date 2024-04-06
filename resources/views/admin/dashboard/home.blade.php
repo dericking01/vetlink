@@ -283,24 +283,24 @@
               </thead>
               <tbody>
                 <tr class="border-bottom border-200">
-                  <td>
+                  {{-- <td>
                     <div class="d-flex align-items-center position-relative"><img class="rounded-1 border border-200" src="{{ asset('/') }}assets/img/ecommerce/1.jpg" width="60" alt="" />
                       <div class="flex-1 ms-3">
                         <h6 class="mb-1 fw-semi-bold text-nowrap"><a class="text-900 stretched-link" href="#!">Conor</a></h6>
                         <p class="fw-semi-bold mb-0 text-500">Chakula</p>
                       </div>
                     </div>
-                  </td>
-                  <td class="align-middle text-center fw-semi-bold">10</td>
-                  <td class="align-middle text-center fw-semi-bold">31%</td>
-                  <td class="align-middle text-end fw-semi-bold">$1311</td>
-                  <td class="align-middle pe-x1">
+                  </td> --}}
+                  {{-- <td class="align-middle text-center fw-semi-bold">10</td> --}}
+                  {{-- <td class="align-middle text-center fw-semi-bold">31%</td> --}}
+                  {{-- <td class="align-middle text-end fw-semi-bold">15000</td> --}}
+                  {{-- <td class="align-middle pe-x1">
                     <div class="d-flex align-items-center">
                       <div class="progress me-3 rounded-3 bg-200" style="height: 5px; width:80px" role="progressbar" aria-valuenow="41" aria-valuemin="0" aria-valuemax="100">
                         <div class="progress-bar bg-primary rounded-pill" style="width: 41%;"></div>
                       </div>
                       <div class="fw-semi-bold ms-2">41%</div>
-                    </div>
+                    </div> --}}
                   </td>
                 </tr>
               </tbody>
@@ -309,12 +309,14 @@
         </div>
         <div class="card-footer bg-light py-2">
           <div class="row flex-between-center">
-            <div class="col-auto"><select class="form-select form-select-sm">
-                <option>Last 7 days</option>
-                <option>Last Month</option>
-                <option>Last Year</option>
-              </select></div>
-            <div class="col-auto"><a class="btn btn-sm btn-falcon-default" href="#!">View All</a></div>
+            <div class="col-auto">
+                <select class="form-select form-select-sm">
+                    <option>Last 7 days</option>
+                    <option>Last Month</option>
+                    <option>Last Year</option>
+                </select>
+            </div>
+            <div class="col-auto"><a class="btn btn-sm btn-falcon-default" href="{{route('admin.products.listproducts')}}">View All</a></div>
           </div>
         </div>
       </div>
