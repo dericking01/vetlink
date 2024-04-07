@@ -80,10 +80,12 @@ class OrdersController extends Controller
         $agents = Agent::where('status','active')->latest()->get();
         $products = AdminProduct::where('status','active')->latest()->get();
         $branches = Branch::latest()->where('status','active')->get();
+        $prod = AdminProduct::latest()->get();
+
 
         // dd('here');
 
-        return view('admin.order.create-order',compact('agents','products','branches'));
+        return view('admin.order.create-order',compact('agents','products','branches','prod'));
     }
 
 

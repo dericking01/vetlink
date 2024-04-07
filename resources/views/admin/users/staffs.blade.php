@@ -146,14 +146,14 @@
                                   </div>
                               </div>
 
-                                  <div class="col-md-12">
+                                  {{-- <div class="col-md-12">
                                     <div class="mb-3">
-                                      <label for="validationCustom03" class="form-label">Product Category Status</label>
+                                      <label for="validationCustom03" class="form-label">Role</label>
                                       <select class="form-select" id="organizerSingle2" size="1" name="role">
                                         <option value="admin" {{ old('role', $admin->role) === 'admin' ? 'selected' : '' }}>Admin</option>
                                       </select>
                                     </div>
-                                    </div>
+                                    </div> --}}
 
                               </div>
                             </div>
@@ -220,7 +220,7 @@
                           </div>
                         </div>
 
-                          <div class="col-md-12">
+                          {{-- <div class="col-md-12">
                             <div class="mb-3">
                               <label for="validationCustom06" class="form-label">Select Role</label>
                               <select class="form-select js-choice @error('role') is-invalid @enderror" id="organizerSingle2" size="1" required="required" name="role" aria-label="Default select example" data-options='{"removeItemButton":true,"placeholder":true}'>
@@ -231,7 +231,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                               @enderror
                             </div>
-                        </div>
+                        </div> --}}
 
                       </div>
                   </div>
