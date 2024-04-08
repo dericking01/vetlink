@@ -28,14 +28,14 @@ class StaffsController extends Controller
             'name' => 'required|regex:/^[a-zA-Z\s]+$/',
             'phone' => 'required|numeric|regex:/^255\d{9}$/|digits:12|unique:admins,phone',
             'email' => 'required|email|unique:admins,email',
-            'role' => 'required|in:admin'
+            // 'role' => 'required|in:admin'
         ]);
 
         $admin = new Admin();
         $admin->name = $request->name;
         $admin->phone = $request->phone;
         $admin->email = $request->email;
-        $admin->role = $request->role;
+        $admin->role = 'admin';
         $admin->email_verified_at = now();
         $admin->password = Hash::make('12345678');
         $admin->remember_token = Str::random(10);
@@ -67,7 +67,7 @@ class StaffsController extends Controller
             'name' => 'required|regex:/^[a-zA-Z\s]+$/',
             'phone' => 'required|numeric|regex:/^255\d{9}$/|digits:12',
             'email' => 'required|email',
-            'role' => 'required|in:admin'
+            // 'role' => 'required|in:admin'
         ];
 
         if ($emailChanged) {
@@ -84,7 +84,7 @@ class StaffsController extends Controller
         $admin->name = $request->name;
         $admin->phone = $request->phone;
         $admin->email = $request->email;
-        $admin->role = $request->role;
+        $admin->role = 'admin';
         $admin->save();
 
         Toastr::success('Staff successfully updated!');
