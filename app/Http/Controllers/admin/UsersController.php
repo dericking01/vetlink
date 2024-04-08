@@ -92,15 +92,21 @@ class UsersController extends Controller
 
     public function destroyBranch(Request $request)
     {
-        $branches = Branch::find($request->id);
+        $branch = Branch::find($request->id);
 
-        if($branches->status == 'Active'){
+        // Check if the branch has any associated orders
+        if ($branch->order()->exists()) {
+            Toastr::error('Branch has associated orders. It cannot be deleted!');
+            return back();
+        }
+
+        if($branch->status == 'active'){
             Toastr::error('You cannot delete an active branch');
             return back();
         }
         // dd($branches);
 
-        $branches->delete();
+        $branch->delete();
         Toastr::success('Branch successfully deleted!');
         return back();
     }

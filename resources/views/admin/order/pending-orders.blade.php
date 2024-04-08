@@ -28,7 +28,7 @@
               <th>Date</th>
               {{-- <th>Buyer</th> --}}
               <th>Customer</th>
-              {{-- <th>Amount</th> --}}
+              <th>Branch</th>
               <th>Amount</th>
               <th>Delivery</th>
               <th>Status</th>
@@ -41,6 +41,7 @@
               <td class="sn">{{ ++$key }}</td>
               <td class="date">{{ date_format(date_create($order->created_at), 'd M, Y') }}</td>
               <td class="service_category">{{ $order->agent->name }}</td>
+              <td class="service_category">{{ $order->branch->branch_name }}</td>
 
               {{-- <td class="quantity">
                 @foreach ($order->orderItems as $orderItem)
@@ -81,12 +82,12 @@
               </td>
             </tr>
 
-            {{-- Delete Pending Orders Modal --}} 
+            {{-- Delete Pending Orders Modal --}}
             <div class="modal fade" id="deletePendingOrder{{ $order->id }}" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> 
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <form action="{{ route('admin.order.destroy') }}" method="POST">
                             @csrf

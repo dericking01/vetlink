@@ -33,7 +33,7 @@ class AdminLoginController extends Controller
             $admin = auth('admin')->user()->name;
             Toastr::info($greeting. ' ' .$admin. '!' .' Welcome back!');
             // return redirect()->route('admin.dashboard.home');
-            return redirect()->route('admin.liststaffs');
+            return redirect()->route('admin.dashboard.home');
         }
 
         return redirect()->back()->withInput($request->only('email', 'remember', 'password'))

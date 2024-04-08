@@ -23,6 +23,7 @@ return new class extends Migration
             $table->softDeletes();
             // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('agent_id')->references('id')->on('agents')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade')->onUpdate('cascade');
             // $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
 
         });
