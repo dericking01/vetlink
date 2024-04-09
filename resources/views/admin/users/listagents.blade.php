@@ -55,9 +55,13 @@
                   </a>
               </td>
               <td class="joined align-middle py-2">{{ date_format(date_create($agent->created_at), 'd M, Y') }}</td>
-                  <td class="phone align-middle white-space-nowrap py-2 text-center">
-                      {{$agent->phone}}
-                  </td>
+              <td class="phone align-middle white-space-nowrap py-2 text-center">
+                @php
+                    $formattedPhone = str_replace('255', '0', $agent->phone);
+                @endphp
+                {{ $formattedPhone }}
+              </td>
+
                   <td class="phone align-middle white-space-nowrap py-2 text-center">
                     {{ $agent->agent_id }}
                 </td>

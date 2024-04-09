@@ -47,7 +47,8 @@
                 {{$product->admin->name}}
               </td>
               <td class="name">
-                <div class="d-flex align-items-center position-relative"><img class="rounded-1 border border-200" src="{{ asset('upload/catalog/'.$product->image) }}" width="60" alt="">
+                <div class="d-flex align-items-center position-relative">
+                    {{-- <img class="rounded-1 border border-200" src="{{ asset('upload/catalog/'.$product->image) }}" width="60" alt=""> --}}
                     <div class="flex-1 ms-3">
                         <h6 class="mb-1 fw-semi-bold text-nowrap">{{ $product->name }}</h6>
                     </div>
@@ -173,14 +174,14 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12">
+                                        {{-- <div class="col-md-12">
                                             <div class="mb-3">
                                                 <label class="col-form-label" for="image">Image <span class="text-danger">*</span>
                                                 </label>
                                                 <input class="form-control" name="image"
                                                     id="image" type="file" />
                                             </div>
-                                        </div>
+                                        </div> --}}
 
                                         <div class="col-md-12">
                                             <div class="mb-3">
@@ -269,7 +270,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-12">
+                            {{-- <div class="col-md-12">
                                 <div class="mb-3">
                                     <label class="col-form-label" for="image">Image <span class="text-danger">*</span>
                                     </label>
@@ -279,7 +280,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="col-md-12">
                                 <div class="mb-3">
