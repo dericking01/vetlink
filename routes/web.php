@@ -9,6 +9,7 @@ use App\Http\Controllers\admin\order\OrdersController;
 use App\Http\Controllers\admin\products\MarketProductsController;
 use App\Http\Controllers\admin\products\ProductsController;
 use App\Http\Controllers\admin\products\SabProductsController;
+use App\Http\Controllers\admin\AdminsController;
 use App\Http\Controllers\admin\StaffsController;
 use App\Http\Controllers\admin\transactions\TransactionsController;
 use App\Http\Controllers\admin\UsersController;
@@ -62,13 +63,27 @@ Route::group(['prefix' => 'admin'], function () {
 
         //users routes
 
-        //staff routes
-         Route::group(['prefix' => 'staffs'], function () {
-            Route::get('staffs', [StaffsController::class, 'index'])->name('admin.liststaffs');
+        //admin routes
+         Route::group(['prefix' => 'admin'], function () {
+            Route::get('admin', [AdminsController::class, 'index'])->name('admin.listadmins');
+            Route::post('storeadmin', [AdminsController::class, 'store'])->name('admin.storeadmin');
+            Route::put('update/admin{id}', [AdminsController::class, 'update'])->name('admin.update');
+            Route::delete('destroy/admin', [AdminsController::class, 'destroy'])->name('admin.destroyadmin');
+
+            Route::get('staff', [StaffsController::class, 'index'])->name('admin.liststaffs');
             Route::post('storestaff', [StaffsController::class, 'store'])->name('admin.storestaff');
-            Route::put('update/{id}', [StaffsController::class, 'update'])->name('admin.update');
-            Route::delete('destroy', [StaffsController::class, 'destroy'])->name('admin.destroystaff');
+            Route::put('update/staff{id}', [StaffsController::class, 'update'])->name('admin.updatestaff');
+            Route::delete('destroy/staff', [StaffsController::class, 'destroy'])->name('admin.destroystaff');
+
          });
+
+        //staff routes
+        //  Route::group(['prefix' => 'admin'], function () {
+        //     Route::get('staff', [StaffsController::class, 'index'])->name('admin.liststaffs');
+        //     Route::post('storestaff', [StaffsController::class, 'store'])->name('admin.storestaff');
+        //     Route::put('update/{id}', [StaffsController::class, 'update'])->name('admin.update');
+        //     Route::delete('destroy', [StaffsController::class, 'destroy'])->name('admin.destroystaff');
+        //  });
 
          //sab-users routes
         Route::group(['prefix' => 'vetinfo'], function () {
