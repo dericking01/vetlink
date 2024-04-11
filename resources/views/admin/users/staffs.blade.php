@@ -57,7 +57,7 @@
               <td class="name">
                 <div class="d-flex align-items-center position-relative">
                     <div class="flex-1 ms-3">
-                        <h6 class="mb-1 fw-semi-bold text-nowrap">{{ $staff->admin->admin_name }}</h6>
+                        <h6 class="mb-1 fw-semi-bold text-nowrap">{{ $staff->admin->name }}</h6>
                     </div>
                 </div>
               </td>
@@ -71,7 +71,9 @@
               <td class="name">
                 <div class="d-flex align-items-center position-relative">
                     <div class="flex-1 ms-3">
-                        <h6 class="mb-1 fw-semi-bold text-nowrap">{{ $staff->role }}</h6>
+                        {{-- <h6 class="mb-1 fw-semi-bold text-nowrap">{{ $staff->role }}</h6> --}}
+                  <small class="badge fw-semi-bold rounded-pill badge-subtle-primary">{{ Str::upper($staff->role) }}</small>
+
                     </div>
                 </div>
               </td>
@@ -123,7 +125,7 @@
                                 <div class="modal-text text-center">
                                     <h2 class="text-danger">Confirm Delete</h2>
                                     <p>Are you sure you want to delete?</p>
-                                    <input type="hidden" name="id" value="{{ $product->id }}" />
+                                    <input type="hidden" name="id" value="{{ $staff->id }}" />
                                 </div>
                             </div>
                             <div class="modal-footer text-center">
@@ -160,40 +162,34 @@
                                             </div>
                                         </div>
 
-                                        {{-- <div class="col-md-12">
-                                            <div class="mb-3">
-                                                <label class="col-form-label" for="quantity">Quantity <span class="text-danger">*</span>
-                                                </label>
-                                                <input class="form-control @error('quantity') is-invalid @enderror" name="quantity"
-                                                    id="quantity" type="number" placeholder="Total product quantity" value="{{ $product->quantity }}" />
-                                            </div>
-                                        </div>
                                         <div class="col-md-12">
                                             <div class="mb-3">
-                                                <label class="col-form-label" for="price">Price <span class="text-danger">*</span>
-                                                </label>
-                                                <input class="form-control @error('price') is-invalid @enderror" name="price"
-                                                    id="price" type="number" placeholder="Price of the product" value="{{ $product->price }}" />
+                                              <label for="validationCustom04" class="form-label">Phone Number</label>
+                                              <input class="form-control @error('phone') is-invalid @enderror" id="validationCustom04" value="{{ old('phone', $staff->phone) }}" type="phone" name="phone" autocomplete="on" placeholder="Phone number"/>
+                                              @error('phone')
+                                                  <div class="invalid-feedback">{{ $message }}</div>
+                                              @enderror
                                             </div>
-                                        </div> --}}
+                                        </div>
 
-                                        {{-- <div class="col-md-12">
-                                            <div class="mb-3">
-                                                <label class="col-form-label" for="image">Image <span class="text-danger">*</span>
-                                                </label>
-                                                <input class="form-control" name="image"
-                                                    id="image" type="file" />
-                                            </div>
-                                        </div> --}}
+                                        <div class="col-md-12">
+                                          <div class="mb-3">
+                                            <label for="validationCustom05" class="form-label">Email Address</label>
+                                            <input class="form-control @error('email') is-invalid @enderror" id="validationCustom05" value="{{ old('email', $staff->email) }}" type="text" name="email" autocomplete="on" placeholder="Email address"/>
+                                            @error('email')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                          </div>
+                                        </div>
 
-                                        {{-- <div class="col-md-12">
+                                        <div class="col-md-12">
                                             <div class="mb-3">
-                                                <label class="col-form-label" for="description">Description <span
-                                                        class="text-danger">*</span>
+                                                <label class="col-form-label" for="name">Location<span class="text-danger">*</span>
                                                 </label>
-                                                <textarea name="description" id="description" cols="10" rows="5" class="form-control" maxlength="255">{{ $product->description }}</textarea>
+                                                <input class="form-control @error('name') is-invalid @enderror" name="location"
+                                                    id="name" type="text" placeholder="location" value="{{ $staff->location }}" />
                                             </div>
-                                        </div> --}}
+                                        </div>
 
                                         <div class="col-md-12">
                                             <div class="mb-3">
@@ -244,7 +240,7 @@
                                     <label class="col-form-label" for="name">Staff Name <span class="text-danger">*</span>
                                     </label>
                                     <input class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required=""
-                                        id="name" type="text" placeholder="Name of the product" />
+                                        id="name" type="text" placeholder="Name of Staff" />
                                       @error('name')
                                           <div class="invalid-feedback">{{ $message }}</div>
                                       @enderror
@@ -252,48 +248,36 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="col-form-label" for="name">Quantity <span class="text-danger">*</span>
+                                    <label class="col-form-label" for="name">Email <span class="text-danger">*</span>
                                     </label>
-                                    <input class="form-control @error('name') is-invalid @enderror" name="quantity" value="{{ old('name') }}" required=""
-                                        id="name" type="text" placeholder="Quantity of the product" />
-                                      @error('name')
-                                          <div class="invalid-feedback">{{ $message }}</div>
-                                      @enderror
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label class="col-form-label" for="name">Price <span class="text-danger">*</span>
-                                    </label>
-                                    <input class="form-control @error('name') is-invalid @enderror" name="price" value="{{ old('name') }}" required=""
-                                        id="name" type="number" placeholder="Price of the product" />
+                                    <input class="form-control @error('name') is-invalid @enderror" name="email" value="{{ old('name') }}" required=""
+                                        id="name" type="text" placeholder="staff's Email" />
                                       @error('name')
                                           <div class="invalid-feedback">{{ $message }}</div>
                                       @enderror
                                 </div>
                             </div>
 
-                            {{-- <div class="col-md-12">
+                            <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="col-form-label" for="image">Image <span class="text-danger">*</span>
-                                    </label>
-                                    <input class="form-control @error('image') is-invalid @enderror" name="image" required=""
-                                        id="image" type="file" />
-                                    @error('image')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                  <label for="validationCustom04" class="form-label">Phone Number</label>
+                                  <input class="form-control @error('phone') is-invalid @enderror" id="validationCustom04" value="{{ old('phone', $staff->phone) }}" type="phone" name="phone" autocomplete="on" placeholder="Phone number"/>
+                                  @error('phone')
+                                      <div class="invalid-feedback">{{ $message }}</div>
+                                  @enderror
                                 </div>
-                            </div> --}}
+                            </div>
 
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="col-form-label" for="name">Description <span class="text-danger">*</span></label>
-                                    <textarea class="form-control @error('name') is-invalid @enderror" name="description" required="" id="name" placeholder="Description of the product">{{ old('name') }}</textarea>
-                                    @error('name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <label class="col-form-label" for="name">Location <span class="text-danger">*</span>
+                                    </label>
+                                    <input class="form-control @error('name') is-invalid @enderror" name="location" value="{{ old('name') }}" required=""
+                                        id="name" type="text" placeholder="Name of Staff" />
+                                      @error('name')
+                                          <div class="invalid-feedback">{{ $message }}</div>
+                                      @enderror
                                 </div>
-
                             </div>
 
                         </div>

@@ -21,6 +21,8 @@ use App\Http\Controllers\seller\orders\OrdersManagementController;
 use App\Http\Controllers\seller\products\ProductsManagementController;
 use App\Http\Controllers\seller\SellerDashboardController;
 use App\Http\Controllers\seller\SellerLoginController;
+use App\Http\Controllers\staff\StaffLoginController;
+use App\Http\Controllers\staff\VetStaffController;
 use App\Http\Controllers\WebsiteController;
 use App\Models\ServiceCategory;
 use Illuminate\Support\Facades\Route;
@@ -188,12 +190,31 @@ Route::group(['prefix' => 'admin'], function () {
     });
 });
 
+// staff authentication routes
+Route::group(['prefix' => 'staff'], function () {
+    Route::get('login', [StaffLoginController::class, 'login'])->name('staff.login');
+    Route::post('login/submit', [StaffLoginController::class, 'submit'])->name('staff.submit.login');
+    Route::post('logout', [StaffLoginController::class, 'logout'])->name('staff.logout')->middleware('staff');
+});
+
+Route::group(['middleware' => ['staff']], function () {
+
+    // staff management routes
+    Route::group(['prefix' => 'staff'], function () {
+        Route::get('home', [VetStaffController::class, 'index'])->name('staff.dashboard');
+
+    });
+
+
+});
+
 // seller authentication routes
 Route::group(['prefix' => 'seller'], function () {
     Route::get('login', [SellerLoginController::class, 'login'])->name('seller.login');
     Route::post('login/submit', [SellerLoginController::class, 'submit'])->name('seller.submit.login');
     Route::post('logout', [SellerLoginController::class, 'logout'])->name('seller.logout')->middleware('seller');
 });
+
 
 //seller admin routes
 Route::group(['prefix' => 'seller', 'middleware' => ['seller']], function () {

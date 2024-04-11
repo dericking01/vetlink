@@ -50,6 +50,11 @@ return [
             'driver' => 'session',
             'provider' => 'sellers',
         ],
+
+        'staff' => [
+            'driver' => 'session',
+            'provider' => 'staffs',
+        ],
     ],
 
     /*
@@ -75,7 +80,7 @@ return [
             'model' => App\Models\User::class,
         ],
 
-         
+
         'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
@@ -86,6 +91,10 @@ return [
             'model' => App\Models\Seller::class,
         ],
 
+        'staffs' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Staff::class,
+        ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -124,6 +133,13 @@ return [
 
         'sellers' => [
             'provider' => 'sellers',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'staffs' => [
+            'provider' => 'staffs',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,

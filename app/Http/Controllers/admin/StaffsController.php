@@ -9,6 +9,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class StaffsController extends Controller
 {
@@ -25,7 +26,15 @@ class StaffsController extends Controller
 
         $this->validate($request, [
             'name' => 'required|regex:/^[a-zA-Z\s]+$/',
-            'phone' => 'required|numeric|regex:/^255\d{9}$/|digits:12|unique:admins,phone',
+            'phone' => [
+                'required',
+                'numeric',
+                'regex:/^255\d{9}$/',
+                'digits:12',
+                Rule::unique('staffs')->where(function ($query) use ($request) {
+                    return $query->where('phone', $request->phone);
+                }),
+            ],
             'email' => 'required|email|unique:admins,email',
             // 'role' => 'required|in:admin'
         ]);
@@ -36,13 +45,13 @@ class StaffsController extends Controller
         $staff->email = $request->email;
         $staff->phone = $request->phone;
         $staff->role = 'staff';
-        $staff->status = $request->status;
+        $staff->status = 'active';
         $staff->location = $request->location;
         $staff->email_verified_at = now();
         $staff->password = Hash::make('staff2024');
         $staff->remember_token = Str::random(10);
 
-        dd($staff);
+        // dd($staff);
 
         $staff->save();
 
@@ -72,11 +81,11 @@ class StaffsController extends Controller
         ];
 
         if ($emailChanged) {
-            $validationRules['email'] .= '|unique:stafs,email';
+            $validationRules['email'] .= '|unique:staffs,email';
         }
 
         if ($phoneChanged) {
-            $validationRules['phone'] .= '|unique:stafs,phone';
+            $validationRules['phone'] .= '|unique:staffs,phone';
         }
 
         $this->validate($request, $validationRules);
@@ -89,7 +98,7 @@ class StaffsController extends Controller
         $staff->status = $request->status;
         $staff->location = $request->location;
 
-        dd($staff);
+        // dd($staff);
 
         $staff->save();
 
@@ -99,9 +108,15 @@ class StaffsController extends Controller
 
     public function destroy(Request $request)
     {
-        // dd($request->id);
 
         $staff = Staff::find($request->id);
+        // check if status = active
+        if($staff->status == 'active'){
+        Toastr::error('Cannot delete active Staff!');
+        return back();
+        }
+
+        // dd($staff->id);
         $staff->delete();
         Toastr::success('Staff successfully deleted!');
         return back();
