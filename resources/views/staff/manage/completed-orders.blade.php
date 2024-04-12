@@ -1,4 +1,4 @@
-@extends('layouts.admin.base')
+@extends('layouts.staff.base')
 
 @section('content')
 
@@ -7,7 +7,7 @@
   <div class="card-header bg-light">
     <div class="row align-items-center">
         <div class="col">
-            <h5 class="mb-0" id="followers">Pending Orders
+            <h5 class="mb-0" id="followers">Completed Orders
               <span class="d-none d-sm-inline-block">({{ $orders->count() }})</span>
                   </h5>
         </div>
@@ -28,7 +28,7 @@
               <th>Date</th>
               {{-- <th>Buyer</th> --}}
               <th>Customer</th>
-              <th>Branch</th>
+              {{-- <th>Amount</th> --}}
               <th>Amount</th>
               <th>Delivery</th>
               <th>Status</th>
@@ -41,7 +41,6 @@
               <td class="sn">{{ ++$key }}</td>
               <td class="date">{{ date_format(date_create($order->created_at), 'd M, Y') }}</td>
               <td class="service_category">{{ $order->agent->name }}</td>
-              <td class="service_category">{{ $order->branch->branch_name }}</td>
 
               {{-- <td class="quantity">
                 @foreach ($order->orderItems as $orderItem)
@@ -60,7 +59,7 @@
               </td>
               @endif
               <td class="status text-center">
-                <span class="badge badge-subtle-warning">PENDING</span>
+                <span class="badge badge-subtle-success">COMPLETED</span>
               </td>
               <td class="align-middle white-space-nowrap text-end">
                 <div class="dropstart font-sans-serif position-static d-inline-block">
@@ -72,7 +71,7 @@
                     </button>
                     <div class="dropdown-menu dropdown-menu-end border py-2"
                       aria-labelledby="dropdown-simple-pagination-table-item-1">
-                      <a class="dropdown-item text-primary" href="{{ route('admin.orders.vieworder', $order->id) }}">View</a>
+                      <a class="dropdown-item text-primary" href="{{ route('staff.orders.vieworder', $order->id) }}">View</a>
                       <div class="dropdown-divider"></div>
                       <a class="dropdown-item text-success" href="#!" data-bs-toggle="modal" data-bs-target="#editPendingOrder{{ $order->id }}">Edit</a>
                       <div class="dropdown-divider"></div>
@@ -89,7 +88,7 @@
                         <div class="modal-header">
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form action="{{ route('admin.order.destroy') }}" method="POST">
+                        <form action="{{ route('staff.order.destroy') }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <div class="modal-body">
@@ -114,7 +113,7 @@
             {{-- Edit Pending Orders Modal --}}
             <div class="modal fade" id="editPendingOrder{{ $order->id }}" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                    <form action="{{ route('admin.pendingOrder.update', ['id' => $order->id]) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('staff.pendingOrder.update', ['id' => $order->id]) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="modal-content position-relative">
@@ -135,24 +134,11 @@
                                                 <input class="form-control " name="name"
                                                     id="name" type="text" placeholder="Name of the product" value="{{ $order->agent->name }}" readonly />
                                             </div>
-                                            {{-- <div class="mb-3">
-                                                <label class="col-form-label" for="Agent_name">Product Name <span class="text-danger"></span>
-                                                </label>
-                                                @foreach ($order->orderItems as $orderItem)
-                                                <input class="form-control" name="name"
-                                                    id="name" type="text" placeholder="Name of the product" value="{{ $orderItem->name }}" readonly/>
-                                                @endforeach
-                                            </div> --}}
+
                                         </div>
                                         <div class="col-md-6">
 
-                                            {{-- <div class="mb-3">
-                                                <label class="col-form-label" for="quantity">Quantity <span class="text-danger"></span></label>
-                                                @foreach ($order->orderItems as $orderItem)
-                                                <input class="form-control " name="quantity" id="quantity"
-                                                       type="number" placeholder="Total product quantity" value="{{ $orderItem->quantiy }}" readonly/>
-                                                @endforeach
-                                            </div> --}}
+
                                             <div class="mb-3">
                                                 <label class="col-form-label" for="amount">Amount <span class="text-danger"></span></label>
                                                 <input class="form-control " name="amount" id="amount"

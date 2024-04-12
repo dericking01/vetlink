@@ -18,7 +18,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use Spatie\Browsershot\Browsershot;
 
 class UsersController extends Controller
 {
@@ -92,15 +91,21 @@ class UsersController extends Controller
 
     public function destroyBranch(Request $request)
     {
-        $branches = Branch::find($request->id);
+        $branch = Branch::find($request->id);
 
-        if($branches->status == 'Active'){
+        // Check if the branch has any associated orders
+        if ($branch->order()->exists()) {
+            Toastr::error('Branch has associated orders. It cannot be deleted!');
+            return back();
+        }
+
+        if($branch->status == 'active'){
             Toastr::error('You cannot delete an active branch');
             return back();
         }
         // dd($branches);
 
-        $branches->delete();
+        $branch->delete();
         Toastr::success('Branch successfully deleted!');
         return back();
     }
@@ -299,18 +304,5 @@ class UsersController extends Controller
         // dd($orders);
         return view('admin.users.view-user', compact('user', 'orders'));
     }
-
-
-    public function downloadBusinessCardImage()
-    {
-        // HTML content of the div
-        $html = '<div class="card p-3 mb-2">...</div>';
-
-        $imagePath = public_path('images/business_card.jpg');
-
-        Browsershot::html($html)->debug()->save($imagePath);
-
-    }
-
 
 }

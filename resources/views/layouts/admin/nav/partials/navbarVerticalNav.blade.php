@@ -67,24 +67,24 @@
 
 <li class="nav-item">
     <!-- label-->
-    
+
     <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
         <div class="col-auto navbar-vertical-label">Manage Users</div>
         <div class="col ps-0">
             <hr class="mb-0 navbar-vertical-divider" />
         </div>
     </div><!-- parent pages-->
-    <a class="nav-link @if(request()->routeIs('admin.liststaffs')) active @endif" href="{{ route('admin.liststaffs') }}">
+    <a class="nav-link @if(request()->routeIs('admin.listadmins')) active @endif" href="{{ route('admin.listadmins') }}">
         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
             class="fas fa-user-circle"></span></span><span
-        class="nav-link-text ps-1">Vetlink Staffs</span></div>
+        class="nav-link-text ps-1">Vetlink Admins</span></div>
     </a><!-- more inner pages-->
 
-    {{-- <a class="nav-link @if(request()->routeIs('admin.listusers')) active @endif"  href="{{ route('admin.listusers') }}">
+    <a class="nav-link @if(request()->routeIs('admin.liststaffs')) active @endif"  href="{{ route('admin.liststaffs') }}">
         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
             class="fas fa-users"></span></span><span
-        class="nav-link-text ps-1">SAB Buyers</span></div>
-    </a><!-- more inner pages--> --}}
+        class="nav-link-text ps-1">Staffs</span></div>
+    </a><!-- more inner pages-->
 
     <a class="nav-link @if(request()->routeIs('admin.listbranches')) active @endif"  href="{{ route('admin.listbranches') }}">
         <div class="d-flex align-items-center"><span class="nav-link-icon"><span

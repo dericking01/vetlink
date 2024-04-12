@@ -9,6 +9,7 @@ use App\Http\Controllers\admin\order\OrdersController;
 use App\Http\Controllers\admin\products\MarketProductsController;
 use App\Http\Controllers\admin\products\ProductsController;
 use App\Http\Controllers\admin\products\SabProductsController;
+use App\Http\Controllers\admin\AdminsController;
 use App\Http\Controllers\admin\StaffsController;
 use App\Http\Controllers\admin\transactions\TransactionsController;
 use App\Http\Controllers\admin\UsersController;
@@ -20,6 +21,12 @@ use App\Http\Controllers\seller\orders\OrdersManagementController;
 use App\Http\Controllers\seller\products\ProductsManagementController;
 use App\Http\Controllers\seller\SellerDashboardController;
 use App\Http\Controllers\seller\SellerLoginController;
+use App\Http\Controllers\staff\customer\StaffCustomerController;
+use App\Http\Controllers\staff\order\OrdersController as OrderOrdersController;
+use App\Http\Controllers\staff\order\StaffOrdersController;
+use App\Http\Controllers\staff\products\StaffProductsController;
+use App\Http\Controllers\staff\StaffLoginController;
+use App\Http\Controllers\staff\VetStaffController;
 use App\Http\Controllers\WebsiteController;
 use App\Models\ServiceCategory;
 use Illuminate\Support\Facades\Route;
@@ -62,13 +69,27 @@ Route::group(['prefix' => 'admin'], function () {
 
         //users routes
 
-        //staff routes
-         Route::group(['prefix' => 'staffs'], function () {
-            Route::get('staffs', [StaffsController::class, 'index'])->name('admin.liststaffs');
+        //admin routes
+         Route::group(['prefix' => 'admin'], function () {
+            Route::get('admin', [AdminsController::class, 'index'])->name('admin.listadmins');
+            Route::post('storeadmin', [AdminsController::class, 'store'])->name('admin.storeadmin');
+            Route::put('update/admin{id}', [AdminsController::class, 'update'])->name('admin.update');
+            Route::delete('destroy/admin', [AdminsController::class, 'destroy'])->name('admin.destroyadmin');
+
+            Route::get('staff', [StaffsController::class, 'index'])->name('admin.liststaffs');
             Route::post('storestaff', [StaffsController::class, 'store'])->name('admin.storestaff');
-            Route::put('update/{id}', [StaffsController::class, 'update'])->name('admin.update');
-            Route::delete('destroy', [StaffsController::class, 'destroy'])->name('admin.destroystaff');
+            Route::put('update/staff{id}', [StaffsController::class, 'update'])->name('admin.updatestaff');
+            Route::delete('destroy/staff', [StaffsController::class, 'destroy'])->name('admin.destroystaff');
+
          });
+
+        //staff routes
+        //  Route::group(['prefix' => 'admin'], function () {
+        //     Route::get('staff', [StaffsController::class, 'index'])->name('admin.liststaffs');
+        //     Route::post('storestaff', [StaffsController::class, 'store'])->name('admin.storestaff');
+        //     Route::put('update/{id}', [StaffsController::class, 'update'])->name('admin.update');
+        //     Route::delete('destroy', [StaffsController::class, 'destroy'])->name('admin.destroystaff');
+        //  });
 
          //sab-users routes
         Route::group(['prefix' => 'vetinfo'], function () {
@@ -84,7 +105,6 @@ Route::group(['prefix' => 'admin'], function () {
             Route::delete('destroy', [UsersController::class, 'destroy'])->name('agent.destroyagent');
             Route::get('view-agent/{id}', [UsersController::class, 'viewAgent'])->name('agent.view-agent');
             Route::get('view-agentcard/{id}', [UsersController::class, 'viewAgentCard'])->name('agent.view-agent_card');
-            Route::get('dwnld-agentcard', [UsersController::class, 'downloadBusinessCardImage'])->name('agent.dwnld-agent_card');
             Route::get('view-user/{id}', [UsersController::class, 'viewUser'])->name('admin.view-user');
             Route::get('branches', [UsersController::class, 'branches'])->name('admin.listbranches');
             Route::post('storebranch', [UsersController::class, 'storeBranch'])->name('admin.storebranch');
@@ -173,12 +193,52 @@ Route::group(['prefix' => 'admin'], function () {
     });
 });
 
+// staff authentication routes
+Route::group(['prefix' => 'staff'], function () {
+    Route::get('login', [StaffLoginController::class, 'login'])->name('staff.login');
+    Route::post('login/submit', [StaffLoginController::class, 'submit'])->name('staff.submit.login');
+    Route::post('logout', [StaffLoginController::class, 'logout'])->name('staff.logout')->middleware('staff');
+});
+
+Route::group(['middleware' => ['staff']], function () {
+
+    // staff management routes
+    Route::group(['prefix' => 'staff'], function () {
+
+        // orders routes
+        Route::get('create-order', [StaffOrdersController::class,'orderForm' ] )->name('staff.createorder');
+        Route::post('store', [StaffOrdersController::class, 'store'])->name('staff.storeOrder');
+        Route::get('pendingorder', [StaffOrdersController::class, 'pendingOrderindex'])->name('staff.pendingOrder');
+        Route::put('order/update/{id}', [StaffOrdersController::class, 'updateOrder'])->name('staff.pendingOrder.update');
+        Route::delete('destroyorder', [StaffOrdersController::class, 'destroyOrder'])->name('staff.order.destroy');
+        Route::get('rejectedorder', [StaffOrdersController::class, 'rejectedOrderindex'])->name('staff.rejectedorder');
+        Route::get('completedorder', [StaffOrdersController::class, 'completedOrderindex'])->name('staff.completedorder');
+        Route::get('view-order/{id}', [StaffOrdersController::class, 'viewOrder'])->name('staff.orders.vieworder');
+
+        // customers routes
+        Route::get('agents', [StaffCustomerController::class, 'agents'])->name('staff.listagents');
+        Route::post('storeagent', [StaffCustomerController::class, 'storeAgent'])->name('staff.storeagent');
+        Route::put('agent/update/{id}', [StaffCustomerController::class, 'updateAgent'])->name('staff.agent.update');
+        Route::delete('destroyagent', [StaffCustomerController::class, 'destroy'])->name('staff.agent.destroyagent');
+        Route::get('view-agent/{id}', [StaffCustomerController::class, 'viewAgent'])->name('staff.agent.view-agent');
+        Route::get('view-agentcard/{id}', [StaffCustomerController::class, 'viewAgentCard'])->name('staff.agent.view-agent_card');
+
+        // Products routes
+        Route::get('list', [StaffProductsController::class, 'index'])->name('staff.products.listproducts');
+
+
+    });
+
+
+});
+
 // seller authentication routes
 Route::group(['prefix' => 'seller'], function () {
     Route::get('login', [SellerLoginController::class, 'login'])->name('seller.login');
     Route::post('login/submit', [SellerLoginController::class, 'submit'])->name('seller.submit.login');
     Route::post('logout', [SellerLoginController::class, 'logout'])->name('seller.logout')->middleware('seller');
 });
+
 
 //seller admin routes
 Route::group(['prefix' => 'seller', 'middleware' => ['seller']], function () {

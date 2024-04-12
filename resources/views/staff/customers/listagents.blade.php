@@ -1,4 +1,4 @@
-@extends('layouts.admin.base')
+@extends('layouts.staff.base')
 
 @section('content')
 
@@ -43,7 +43,7 @@
               <tr class="btn-reveal-trigger">
                 <td class="sn">{{ ++$key }}</td>
                 <td class="name align-middle white-space-nowrap py-2">
-                  <a href="{{ route('agent.view-agent', $agent->id) }}">
+                  <a href="{{ route('staff.agent.view-agent', $agent->id) }}">
                     <div class="d-flex d-flex align-items-center">
                       <div class="avatar avatar-xl me-2">
                         <div class="avatar-name rounded-circle"><span>{{ \App\Helpers\SettingsHelper::getAgentInitials($agent->id) }}</span></div>
@@ -78,7 +78,7 @@
                 <td class="align-middle white-space-nowrap py-2 text-center">
                       <div class="dropdown font-sans-serif position-static"><button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal" type="button" id="customer-dropdown-0" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false"><svg class="svg-inline--fa fa-ellipsis-h fa-w-16 fs--1" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="ellipsis-h" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"></path></svg><!-- <span class="fas fa-ellipsis-h fs--1"></span> Font Awesome fontawesome.com --></button>
                       <div class="dropdown-menu dropdown-menu-end border py-0" aria-labelledby="customer-dropdown-0">
-                          <div class="py-2"><a class="dropdown-item text-primary" href="{{ route('agent.view-agent', $agent->id) }}">View</a></div>
+                          <div class="py-2"><a class="dropdown-item text-primary" href="{{ route('staff.agent.view-agent', $agent->id) }}">View</a></div>
                           <div class="py-2"><a class="dropdown-item text-success" href="#!" data-bs-toggle="modal" data-bs-target="#editAgent{{ $agent->id }}">Edit</a></div>
                           <div class="py-2"><a class="dropdown-item text-danger" href="#!" data-bs-toggle="modal" data-bs-target="#deleteAgent{{ $agent->id }}">Delete</a></div>
                       </div>
@@ -94,7 +94,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
-                        <form action="{{ route('agent.destroyagent') }}" method="POST">
+                        <form action="{{ route('staff.agent.destroyagent') }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <div class="modal-body">
@@ -120,7 +120,7 @@
               {{-- edit modal here --}}
               <div class="modal fade" id="editAgent{{ $agent->id }}" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                    <form action="{{ route('agent.update', ['id' => $agent->id]) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('staff.agent.update', ['id' => $agent->id]) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div>
@@ -209,7 +209,7 @@
 
 <div class="modal fade" id="addagent" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <form action="{{ route('admin.storeagent') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate="novalidate">
+        <form action="{{ route('staff.storeagent') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate="novalidate">
             @csrf
             <div class="modal-content position-relative">
                 <div class="position-absolute top-0 end-0 mt-2 me-2 z-1">

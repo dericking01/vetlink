@@ -10,22 +10,22 @@
       <div class="row justify-content-center g-0">
         <div class="col-lg-9 col-xl-8 col-xxl-6">
           <div class="card">
-            <div class="card-header bg-circle-shape bg-shape text-center p-2"><a class="font-sans-serif fw-bolder fs-4 z-1 position-relative link-light" href="#!" data-bs-theme="light">VETLINK - PORTAL</a></div>
+            <div class="card-header bg-circle-shape bg-shape text-center p-2"><a class="font-sans-serif fw-bolder fs-4 z-1 position-relative link-light" href="#!" data-bs-theme="light">STAFF - PORTAL</a></div>
             <div class="card-body p-4">
               <div class="row flex-between-center">
                 <div class="col-auto">
                   <h3>Login</h3>
                 </div>
                 <div class="col-auto fs--1 text-600">
-                    <span class="mb-0 fw-semi-bold">Not an Admin?</span>
-                    <span><a href="{{ route('staff.login') }} ">Go Here</a></span>
+                    <span class="mb-0 fw-semi-bold">Not Staff?</span>
+                    <span><a href="{{ route('admin.login') }} ">Go Here</a></span>
                 </div>
               </div>
-              <form action="{{ route('admin.submit.login') }}" method="POST">
+              <form action="{{ route('staff.submit.login') }}" method="POST">
                 @csrf
                 <div class="mb-3">
-                    <label class="form-label" for="split-login-email">Email <span class="text-danger">*</span> </label>
-                    <input type="email" name="email" class="form-control" id="split-login-email" placeholder="youremail@gmail.com" autofocus />
+                    <label class="form-label" for="split-login-email">Phone <span class="text-danger">*</span> </label>
+                    <input type="text" name="phone" class="form-control" id="split-login-email" placeholder="Enter your phone number" autofocus />
                 </div>
                 <div class="mb-3">
                   <div class="d-flex justify-content-between">

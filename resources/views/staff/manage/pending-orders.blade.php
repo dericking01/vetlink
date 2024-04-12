@@ -1,4 +1,4 @@
-@extends('layouts.admin.base')
+@extends('layouts.staff.base')
 
 @section('content')
 
@@ -72,7 +72,7 @@
                     </button>
                     <div class="dropdown-menu dropdown-menu-end border py-2"
                       aria-labelledby="dropdown-simple-pagination-table-item-1">
-                      <a class="dropdown-item text-primary" href="{{ route('admin.orders.vieworder', $order->id) }}">View</a>
+                      <a class="dropdown-item text-primary" href="{{ route('staff.orders.vieworder', $order->id) }}">View</a>
                       <div class="dropdown-divider"></div>
                       <a class="dropdown-item text-success" href="#!" data-bs-toggle="modal" data-bs-target="#editPendingOrder{{ $order->id }}">Edit</a>
                       <div class="dropdown-divider"></div>
@@ -89,7 +89,7 @@
                         <div class="modal-header">
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form action="{{ route('admin.order.destroy') }}" method="POST">
+                        <form action="{{ route('staff.order.destroy') }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <div class="modal-body">
@@ -114,7 +114,7 @@
             {{-- Edit Pending Orders Modal --}}
             <div class="modal fade" id="editPendingOrder{{ $order->id }}" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                    <form action="{{ route('admin.pendingOrder.update', ['id' => $order->id]) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('staff.pendingOrder.update', ['id' => $order->id]) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="modal-content position-relative">
