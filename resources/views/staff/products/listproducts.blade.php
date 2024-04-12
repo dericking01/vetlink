@@ -1,4 +1,4 @@
-@extends('layouts.admin.base')
+@extends('layouts.staff.base')
 
 @section('content')
 
@@ -11,15 +11,14 @@
               <span class="d-none d-sm-inline-block">({{ $products->count() }})</span>
                   </h5>
         </div>
-        <div class="col text-end">
+        {{-- <div class="col text-end">
             <a class="font-sans-serif" href="#!" data-bs-toggle="modal" data-bs-target="#addproduct">
                 <button class="btn btn-falcon-default btn-sm" type="button">
                     <svg class="svg-inline--fa fa-plus fa-w-14" data-fa-transform="shrink-3 down-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="" style="transform-origin: 0.4375em 0.625em;"><g transform="translate(224 256)"><g transform="translate(0, 64)  scale(0.8125, 0.8125)  rotate(0 0 0)"><path fill="currentColor" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" transform="translate(-224 -256)"></path></g></g></svg><!-- <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span> Font Awesome fontawesome.com -->
                         <span class="d-none d-sm-inline-block ms-1">Add Product</span>
                 </button>
             </a>
-          {{-- <a class="font-sans-serif" href="#!" data-bs-toggle="modal" data-bs-target="#addproduct">Add Product</a> --}}
-        </div>
+        </div> --}}
     </div>
 </div>
     <div class="card-body">
@@ -35,7 +34,7 @@
               <th>Quantity</th>
               <th>Status</th>
               <th>Description</th>
-              <th>Action</th>
+              {{-- <th>Action</th> --}}
             </tr>
           </thead>
           <tbody class="list">
@@ -85,7 +84,7 @@
                 </div>
               </td>
 
-              <td class="align-middle white-space-nowrap text-end">
+              {{-- <td class="align-middle white-space-nowrap text-end">
                 <div class="dropstart font-sans-serif position-static d-inline-block">
                     <button class="btn btn-link text-600 btn-sm dropdown-toggle
                       btn-reveal float-end" type="button" id="dropdown-simple-pagination-table-item-1"
@@ -100,7 +99,7 @@
                       <a class="dropdown-item text-danger" href="#!" data-bs-toggle="modal" data-bs-target="#deleteSender{{ $product->id }}">Delete</a>
                     </div>
                   </div>
-              </td>
+              </td> --}}
             </tr>
 
             <div class="modal fade" id="deleteSender{{ $product->id }}" tabindex="-1" aria-hidden="true">

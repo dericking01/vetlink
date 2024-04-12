@@ -31,7 +31,7 @@
           <thead class="bg-200 text-900">
             <tr>
               <th class="sort pe-1 align-middle white-space-nowrap" data-sort="phone">Joined</th>
-              <th class="sort pe-1 align-middle white-space-nowrap text-center" data-sort="name">Admin Name</th>
+              <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Admin Name</th>
               <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Phone</th>
               <th class="sort pe-1 align-middle white-space-nowrap" data-sort="email">Email</th>
               <th class="sort pe-1 align-middle white-space-nowrap text-center" data-sort="phone">Role</th>

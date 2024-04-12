@@ -21,6 +21,10 @@ use App\Http\Controllers\seller\orders\OrdersManagementController;
 use App\Http\Controllers\seller\products\ProductsManagementController;
 use App\Http\Controllers\seller\SellerDashboardController;
 use App\Http\Controllers\seller\SellerLoginController;
+use App\Http\Controllers\staff\customer\StaffCustomerController;
+use App\Http\Controllers\staff\order\OrdersController as OrderOrdersController;
+use App\Http\Controllers\staff\order\StaffOrdersController;
+use App\Http\Controllers\staff\products\StaffProductsController;
 use App\Http\Controllers\staff\StaffLoginController;
 use App\Http\Controllers\staff\VetStaffController;
 use App\Http\Controllers\WebsiteController;
@@ -101,7 +105,6 @@ Route::group(['prefix' => 'admin'], function () {
             Route::delete('destroy', [UsersController::class, 'destroy'])->name('agent.destroyagent');
             Route::get('view-agent/{id}', [UsersController::class, 'viewAgent'])->name('agent.view-agent');
             Route::get('view-agentcard/{id}', [UsersController::class, 'viewAgentCard'])->name('agent.view-agent_card');
-            Route::get('dwnld-agentcard', [UsersController::class, 'downloadBusinessCardImage'])->name('agent.dwnld-agent_card');
             Route::get('view-user/{id}', [UsersController::class, 'viewUser'])->name('admin.view-user');
             Route::get('branches', [UsersController::class, 'branches'])->name('admin.listbranches');
             Route::post('storebranch', [UsersController::class, 'storeBranch'])->name('admin.storebranch');
@@ -201,7 +204,28 @@ Route::group(['middleware' => ['staff']], function () {
 
     // staff management routes
     Route::group(['prefix' => 'staff'], function () {
-        Route::get('home', [VetStaffController::class, 'index'])->name('staff.dashboard');
+
+        // orders routes
+        Route::get('create-order', [StaffOrdersController::class,'orderForm' ] )->name('staff.createorder');
+        Route::post('store', [StaffOrdersController::class, 'store'])->name('staff.storeOrder');
+        Route::get('pendingorder', [StaffOrdersController::class, 'pendingOrderindex'])->name('staff.pendingOrder');
+        Route::put('order/update/{id}', [StaffOrdersController::class, 'updateOrder'])->name('staff.pendingOrder.update');
+        Route::delete('destroyorder', [StaffOrdersController::class, 'destroyOrder'])->name('staff.order.destroy');
+        Route::get('rejectedorder', [StaffOrdersController::class, 'rejectedOrderindex'])->name('staff.rejectedorder');
+        Route::get('completedorder', [StaffOrdersController::class, 'completedOrderindex'])->name('staff.completedorder');
+        Route::get('view-order/{id}', [StaffOrdersController::class, 'viewOrder'])->name('staff.orders.vieworder');
+
+        // customers routes
+        Route::get('agents', [StaffCustomerController::class, 'agents'])->name('staff.listagents');
+        Route::post('storeagent', [StaffCustomerController::class, 'storeAgent'])->name('staff.storeagent');
+        Route::put('agent/update/{id}', [StaffCustomerController::class, 'updateAgent'])->name('staff.agent.update');
+        Route::delete('destroyagent', [StaffCustomerController::class, 'destroy'])->name('staff.agent.destroyagent');
+        Route::get('view-agent/{id}', [StaffCustomerController::class, 'viewAgent'])->name('staff.agent.view-agent');
+        Route::get('view-agentcard/{id}', [StaffCustomerController::class, 'viewAgentCard'])->name('staff.agent.view-agent_card');
+
+        // Products routes
+        Route::get('list', [StaffProductsController::class, 'index'])->name('staff.products.listproducts');
+
 
     });
 

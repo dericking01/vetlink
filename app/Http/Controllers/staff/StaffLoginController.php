@@ -32,7 +32,7 @@ class StaffLoginController extends Controller
             $greeting = SettingsHelper::getGreeting();
             $staff = auth('staff')->user()->name;
             Toastr::info($greeting. ' ' .$staff. '!' .' Welcome back!');
-            return redirect()->route('staff.dashboard');
+            return redirect()->route('staff.createorder');
         }
 
         return redirect()->back()->withInput($request->only('phone', 'remember', 'password'))

@@ -44,8 +44,20 @@
               <td class="sn">{{ ++$key }}</td>
               <td class="date">{{ date_format(date_create($staff->created_at), 'd M, Y') }}</td>
               <td class="name">
-                {{$staff->name}}
-              </td>
+                <div class="row align-items-center">
+                    <div class="col-auto me-2">
+                        <div class="avatar avatar-xl">
+                            <div class="avatar-name rounded-circle">
+                                <span>{{ \App\Helpers\SettingsHelper::getStaffInitials($staff->id) }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col" style="margin-left: -30px;">
+                        {{$staff->name}}
+                    </div>
+                </div>
+            </td>
+
               <td class="name">
                 <div class="d-flex align-items-center position-relative">
                     {{-- <img class="rounded-1 border border-200" src="{{ asset('upload/catalog/'.$product->image) }}" width="60" alt=""> --}}

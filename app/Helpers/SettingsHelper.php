@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\Agent;
 use App\Models\Branch;
 use App\Models\Seller;
+use App\Models\Staff;
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -180,6 +181,37 @@ class SettingsHelper
     {
         $admin = Admin::find($id);
         $name = $admin->name;
+        $name_arr = explode(" ", $name);
+        $names = [
+            'fname' => isset($name_arr[0]) ? $name_arr[0] : '',
+            'mname' => isset($name_arr[1]) ? $name_arr[1] : '',
+            'lname' => isset($name_arr[2]) ? $name_arr[2] : '',
+        ];
+
+        if (count($names) > 1) {
+            $firstInitial = strtoupper(substr($names['fname'], 0, 1));
+            $secondInitial = strtoupper(substr($names['mname'], 0, 1));
+            $thirdInitial = strtoupper(substr($names['lname'], 0, 1));
+
+            if (isset($secondInitial)) {
+                $initials = $firstInitial.$secondInitial;
+                return $initials;
+            } else {
+                $initials = $firstInitial.$thirdInitial;
+                return $initials;
+            }
+        } else {
+            $initials = strtoupper(substr($names['fname'], 0, 2));
+        }
+
+        return $initials;
+
+    }
+
+    public static function getStaffInitials($id)
+    {
+        $staff = Staff::find($id);
+        $name = $staff->name;
         $name_arr = explode(" ", $name);
         $names = [
             'fname' => isset($name_arr[0]) ? $name_arr[0] : '',
