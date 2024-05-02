@@ -33,6 +33,7 @@
               <th>Phone</th>
               <th>Added by</th>
               <th>location</th>
+              <th>Last login at</th>
               <th>role</th>
               <th>Status</th>
               <th>Action</th>
@@ -44,9 +45,9 @@
               <td class="sn">{{ ++$key }}</td>
               <td class="date">{{ date_format(date_create($staff->created_at), 'd M, Y') }}</td>
               <td class="name">
-                <div class="row align-items-center">
+                <div class="d-flex d-flex align-items-center">
                     <div class="col-auto me-2">
-                        <div class="avatar avatar-xl">
+                        <div class="avatar avatar-xl me-4">
                             <div class="avatar-name rounded-circle">
                                 <span>{{ \App\Helpers\SettingsHelper::getStaffInitials($staff->id) }}</span>
                             </div>
@@ -80,6 +81,18 @@
                     </div>
                 </div>
               </td>
+              <td class="name">
+                <div class="d-flex align-items-center position-relative">
+                    <div class="flex-1 ms-3">
+                        @if ($staff->last_login_at)
+                            <h6 class="mb-1 fw-semi-bold rounded-pill badge-subtle-info">{{ $staff->last_login_at }}</h6>
+                        @else
+                            <small class="badge fw-semi-bold rounded-pill badge-subtle-dark">NOT YET</small>
+                        @endif
+                    </div>
+                </div>
+              </td>
+
               <td class="name">
                 <div class="d-flex align-items-center position-relative">
                     <div class="flex-1 ms-3">

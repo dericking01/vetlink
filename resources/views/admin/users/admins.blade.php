@@ -34,6 +34,7 @@
               <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Admin Name</th>
               <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Phone</th>
               <th class="sort pe-1 align-middle white-space-nowrap" data-sort="email">Email</th>
+              <th class="sort pe-1 align-middle white-space-nowrap" data-sort="email">Last login at</th>
               <th class="sort pe-1 align-middle white-space-nowrap text-center" data-sort="phone">Role</th>
               <th class="align-middle no-sort text-center">Action</th>
           </tr>
@@ -55,6 +56,17 @@
               </td>
               <td class="phone align-middle white-space-nowrap py-2"><a href="tel:2012001851">{{ $admin->phone }}</a></td>
               <td class="email align-middle py-2"><a href="mailto:ricky@example.com">{{ $admin->email }}</a></td>
+              <td class="name align-middle white-space-nowrap py-2">
+                <div class="d-flex align-items-center position-relative">
+                    <div class="flex-1 ms-3">
+                        @if ($admin->last_login_at)
+                            <h6 class="badge fw-semi-bold rounded-pill badge-subtle-info">{{ $admin->last_login_at }}</h6>
+                        @else
+                            <small class="badge fw-semi-bold rounded-pill badge-subtle-dark">Not Yet</small>
+                        @endif
+                    </div>
+                </div>
+              </td>
               <td class="align-middle text-center">
                   <small class="badge fw-semi-bold rounded-pill badge-subtle-success">{{ Str::upper($admin->role) }}</small>
               </td>

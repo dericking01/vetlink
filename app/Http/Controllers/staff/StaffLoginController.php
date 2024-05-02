@@ -5,6 +5,8 @@ namespace App\Http\Controllers\staff;
 use App\Helpers\SettingsHelper;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class StaffLoginController extends Controller
@@ -29,6 +31,11 @@ class StaffLoginController extends Controller
         $remember = ($request['remember']) ? true : false;
 
         if (auth('staff')->attempt(['phone' => $request->phone, 'password' => $request->password], $remember)) {
+           // Update the last login timestamp using DB::update()
+            DB::table('staffs')
+            ->where('id', auth('staff')->user()->id)
+            ->update(['last_login_at' => Carbon::now()]);
+
             $greeting = SettingsHelper::getGreeting();
             $staff = auth('staff')->user()->name;
             Toastr::info($greeting. ' ' .$staff. '!' .' Welcome back!');

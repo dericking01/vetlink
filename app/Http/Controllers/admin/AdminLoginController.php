@@ -6,6 +6,8 @@ use App\Helpers\SettingsHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Brian2694\Toastr\Facades\Toastr;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class AdminLoginController extends Controller
 {
@@ -29,6 +31,11 @@ class AdminLoginController extends Controller
         $remember = ($request['remember']) ? true : false;
 
         if (auth('admin')->attempt(['email' => $request->email, 'password' => $request->password], $remember)) {
+            // Update the last login timestamp using DB::update()
+            DB::table('admins')
+            ->where('id', auth('admin')->user()->id)
+            ->update(['last_login_at' => Carbon::now()]);
+
             $greeting = SettingsHelper::getGreeting();
             $admin = auth('admin')->user()->name;
             Toastr::info($greeting. ' ' .$admin. '!' .' Welcome back!');
