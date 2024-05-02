@@ -77,7 +77,7 @@
     <a class="nav-link @if(request()->routeIs('admin.listadmins')) active @endif" href="{{ route('admin.listadmins') }}">
         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
             class="fas fa-user-circle"></span></span><span
-        class="nav-link-text ps-1">Vetlink Admins</span></div>
+        class="nav-link-text ps-1">Dodoki Admins</span></div>
     </a><!-- more inner pages-->
 
     <a class="nav-link @if(request()->routeIs('admin.liststaffs')) active @endif"  href="{{ route('admin.liststaffs') }}">

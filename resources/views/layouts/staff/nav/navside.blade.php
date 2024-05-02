@@ -20,7 +20,7 @@
                     class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
         </div><a class="navbar-brand" href="index.html">
             <div class="d-flex align-items-center py-2"><img class="me-2"
-                    src="{{ asset('/') }}assets/img/icons/spot-illustrations/vetfull.png" alt=""
+                    src="{{ asset('/') }}assets/img/icons/spot-illustrations/dodoki.png" alt=""
                     width="75" /><span class="font-sans-serif"></span></div>
         </a>
     </div>

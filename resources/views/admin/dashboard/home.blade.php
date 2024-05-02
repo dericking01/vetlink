@@ -132,7 +132,7 @@
     <div class="col-xxl-6 col-xl-12">
       <div class="card py-3 mb-3">
         <div class="card-body py-3">
-          <h5 class="mb-2 text-primary">VETLINK Orders</h5>
+          <h5 class="mb-2 text-primary">DODOKI Orders</h5>
           <div class="row g-0">
             <div class="col-6 col-md-4 border-200 border-bottom border-end pb-4">
               <h6 class="pb-1 text-700">Orders </h6>

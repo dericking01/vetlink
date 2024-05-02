@@ -140,7 +140,7 @@
                     <div class="name">
                         <img class="me-2"
                 src="{{ asset('/') }}assets/img/icons/spot-illustrations/vet-partial.png" alt=""
-                width="60" height="60"/> <h8><strong>VETLINK CARD</strong></h8>
+                width="60" height="60"/> <h8><strong>DODOKI CARD</strong></h8>
                         <h6>NAME: <strong> {{$agent->name}} </strong></h6>
                         <h6>CARD ID: <strong> {{$agent->agent_id}} </strong></h6>
                         <h6>Joined at: <strong> {{$agent->created_at->format('Y-m-d')}} </strong></h6>
