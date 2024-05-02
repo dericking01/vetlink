@@ -16,7 +16,7 @@
                 </div>
                 <div class="d-flex py-3 px-2 text-center">
                   <div class="ps-4">
-                    <p class="text-600 fs--1">Today’s Vetlink sales </p>
+                    <p class="text-600 fs--1">Today’s Dodoki sales </p>
                     <h4 class="text-800 mb-0">Tsh {{ number_format($totalCompletedAmount) }}/=</h4>
                   </div>
                 </div>
