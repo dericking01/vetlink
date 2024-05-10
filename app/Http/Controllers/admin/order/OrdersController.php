@@ -22,7 +22,14 @@ class OrdersController extends Controller
     public function pendingOrderindex()
     {
         // $orders = Orders::where('status', 'Pending')->get();
-        $orders = Orders::with('orderItems')->where('status', 'Pending')->latest()->get();
+        $orders = Orders::with('orderItems')
+                        ->whereNotIn('status', ['Rejected'])
+                        ->orWhere(function ($query) {
+                            $query->where('status', '!=','Completed')
+                                ->where('isDelivered', false);
+                        })
+                        ->latest()
+                        ->get();
         $branches = Branch::latest()->where('status','active')->get();
         // dd($orders);
         $selectedBranchIds = [];
@@ -38,7 +45,7 @@ class OrdersController extends Controller
     public function completedOrderindex()
     {
         // $orders = Orders::where('status', 'Completed')->get();
-        $orders = Orders::with('orderItems')->where('status', 'Completed')->latest()->get();
+        $orders = Orders::with('orderItems')->where('status', 'Completed')->where('isDelivered', true)->latest()->get();
         $branches = Branch::latest()->where('status','active')->latest()->get();
         $selectedBranchIds = [];
 
