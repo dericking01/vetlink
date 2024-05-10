@@ -115,7 +115,15 @@ class UsersController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|regex:/^[a-zA-Z\s]+$/',
-            'phone' => 'required|numeric|regex:/^255\d{9}$/|digits:12|unique:users,phone',
+            'phone' => [
+                'required',
+                'numeric',
+                'regex:/^0\d{9}$/',
+                'digits:10',
+                Rule::unique('agents', 'phone')->where(function ($query) use ($request) {
+                    return $query->where('phone', $request->phone);
+                }),
+            ],
             'email' => 'nullable|email|unique:users,email',
             'gender' => 'nullable|string',
             'location' => 'nullable|string',
@@ -132,12 +140,18 @@ class UsersController extends Controller
             $agentId = 'VET-' . date('Y') . '-' . mt_rand(1000, 9999);
         }
 
+        // Extract the last 9 digits of the phone number
+        $lastNineDigits = substr($request->phone, -9);
+
+        // Prepend '255' to the extracted digits
+        $phoneNumber = '255' . $lastNineDigits;
+
         // dd($request);
         // Create the agent with the unique agent ID
         Agent::create([
             'agent_id' => $agentId,
             'name' => $request->name,
-            'phone' => $request->phone,
+            'phone' => $phoneNumber,
             'email' => $request->email,
             'gender' => $request->gender,
             'location' => $request->location,
@@ -163,7 +177,15 @@ class UsersController extends Controller
         // Define validation rules dynamically
         $validationRules = [
             'name' => 'required|regex:/^[a-zA-Z\s]+$/',
-            'phone' => 'required|numeric|regex:/^255\d{9}$/|digits:12',
+            'phone' => [
+                'required',
+                'numeric',
+                'regex:/^0\d{9}$/',
+                'digits:10',
+                Rule::unique('agents', 'phone')->where(function ($query) use ($request) {
+                    return $query->where('phone', $request->phone);
+                }),
+            ],
         ];
 
         if ($phoneChanged) {
@@ -174,8 +196,14 @@ class UsersController extends Controller
         // dd($request);
         // dd($request->all());
 
+        // Extract the last 9 digits of the phone number
+        $lastNineDigits = substr($request->phone, -9);
+
+        // Prepend '255' to the extracted digits
+        $phoneNumber = '255' . $lastNineDigits;
+
         $agents->name = $request->name;
-        $agents->phone = $request->phone;
+        $agents->phone = $phoneNumber;
         $agents->location = $request->location;
         $agents->email = $request->email;
         $agents->status = $request->status;

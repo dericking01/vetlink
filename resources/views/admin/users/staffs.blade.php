@@ -280,9 +280,9 @@
                                 <div class="mb-3">
                                     <label class="col-form-label" for="name">Email <span class="text-danger">*</span>
                                     </label>
-                                    <input class="form-control @error('name') is-invalid @enderror" name="email" value="{{ old('name') }}" required=""
+                                    <input class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('name') }}" required=""
                                         id="name" type="text" placeholder="staff's Email" />
-                                      @error('name')
+                                      @error('email')
                                           <div class="invalid-feedback">{{ $message }}</div>
                                       @enderror
                                 </div>
@@ -300,11 +300,11 @@
 
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="col-form-label" for="name">Location <span class="text-danger">*</span>
+                                    <label class="col-form-label" for="location">Location <span class="text-danger">*</span>
                                     </label>
-                                    <input class="form-control @error('name') is-invalid @enderror" name="location" value="{{ old('name') }}" required=""
+                                    <input class="form-control @error('location') is-invalid @enderror" name="location" value="{{ old('name') }}" required=""
                                         id="name" type="text" placeholder="Name of Staff" />
-                                      @error('name')
+                                      @error('location')
                                           <div class="invalid-feedback">{{ $message }}</div>
                                       @enderror
                                 </div>

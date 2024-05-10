@@ -8,6 +8,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class AdminsController extends Controller
 {
@@ -21,14 +22,38 @@ class AdminsController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|regex:/^[a-zA-Z\s]+$/',
-            'phone' => 'required|numeric|regex:/^255\d{9}$/|digits:12|unique:admins,phone',
+            'phone' => [
+                'required',
+                'numeric',
+                'regex:/^0\d{9}$/',
+                'digits:10',
+                Rule::unique('admins', 'phone')->where(function ($query) use ($request) {
+                    return $query->where('phone', $request->phone);
+                }),
+            ],
             'email' => 'required|email|unique:admins,email',
             // 'role' => 'required|in:admin'
+        ], [
+            'phone.unique' => 'Phone number is already in use.',
         ]);
 
+        // Extract the last 9 digits of the phone number
+        $lastNineDigits = substr($request->phone, -9);
+
+        // Prepend '255' to the extracted digits
+        $phoneNumber = '255' . $lastNineDigits;
+
+        // Check if the phone number already exists
+        if (Admin::where('phone', $phoneNumber)->exists()) {
+            // Phone number already exists, toast a message and redirect back
+            Toastr::error('Phone number is already in use.');
+            return redirect()->back()->withInput($request->except('password'));
+        }
+
+        // Create a new Admin instance
         $admin = new Admin();
         $admin->name = $request->name;
-        $admin->phone = $request->phone;
+        $admin->phone = $phoneNumber;
         $admin->email = $request->email;
         $admin->role = 'admin';
         $admin->email_verified_at = now();
@@ -52,8 +77,17 @@ class AdminsController extends Controller
         // Define validation rules dynamically
         $validationRules = [
             'name' => 'required|regex:/^[a-zA-Z\s]+$/',
-            'phone' => 'required|numeric|regex:/^255\d{9}$/|digits:12',
-            'email' => 'required|email',
+            'phone' => [
+                'required',
+                'numeric',
+                'regex:/^0\d{9}$/',
+                'digits:10',
+                Rule::unique('admins', 'phone')->where(function ($query) use ($request) {
+                    // Assuming $request is accessible here, adjust if necessary
+                    return $query->where('phone', $request->phone);
+                }),
+            ],
+            'email' => 'required|email|unique:admins,email',
             // 'role' => 'required|in:admin'
         ];
 

@@ -29,21 +29,32 @@ class StaffsController extends Controller
             'phone' => [
                 'required',
                 'numeric',
-                'regex:/^255\d{9}$/',
-                'digits:12',
-                Rule::unique('staffs')->where(function ($query) use ($request) {
-                    return $query->where('phone', $request->phone);
+                'regex:/^0\d{9}$/',
+                'digits:10',
+            ],
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('staffs', 'email')->where(function ($query) use ($request) {
+                    return $query->where('email', $request->email);
                 }),
             ],
-            'email' => 'required|email|unique:admins,email',
             // 'role' => 'required|in:admin'
+        ], [
+            'email.unique' => 'Email is already in use.',
         ]);
+
+        // Extract the last 9 digits of the phone number
+        $lastNineDigits = substr($request->phone, -9);
+
+        // Prepend '255' to the extracted digits
+        $phoneNumber = '255' . $lastNineDigits;
 
         $staff = new Staff();
         $staff->admin_id = $adminId;
         $staff->name = $request->name;
         $staff->email = $request->email;
-        $staff->phone = $request->phone;
+        $staff->phone = $phoneNumber;
         $staff->role = 'staff';
         $staff->status = 'active';
         $staff->location = $request->location;
@@ -55,7 +66,6 @@ class StaffsController extends Controller
 
         $staff->save();
 
-
         Toastr::success('Staff successfully added!');
         return redirect()->route('admin.liststaffs');
     }
@@ -63,8 +73,6 @@ class StaffsController extends Controller
 
     public function update(Request $request, $id)
     {
-
-
 
         $staff = Staff::findOrFail($id);
 
@@ -75,7 +83,12 @@ class StaffsController extends Controller
         // Define validation rules dynamically
         $validationRules = [
             'name' => 'required|regex:/^[a-zA-Z\s]+$/',
-            'phone' => 'required|numeric|regex:/^255\d{9}$/|digits:12',
+            'phone' => [
+                'required',
+                'numeric',
+                'regex:/^0\d{9}$/',
+                'digits:10',
+            ],
             'email' => 'required|email',
             // 'role' => 'required|in:staff'
         ];
@@ -90,9 +103,15 @@ class StaffsController extends Controller
 
         $this->validate($request, $validationRules);
 
+         // Extract the last 9 digits of the phone number
+         $lastNineDigits = substr($request->phone, -9);
+
+         // Prepend '255' to the extracted digits
+         $phoneNumber = '255' . $lastNineDigits;
+
 
         $staff->name = $request->name;
-        $staff->phone = $request->phone;
+        $staff->phone = $phoneNumber;
         $staff->email = $request->email;
         $staff->role = 'staff';
         $staff->status = $request->status;
