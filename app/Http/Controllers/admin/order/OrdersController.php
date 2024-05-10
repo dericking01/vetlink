@@ -23,10 +23,19 @@ class OrdersController extends Controller
     {
         // $orders = Orders::where('status', 'Pending')->get();
         $orders = Orders::with('orderItems')
-                        ->whereNotIn('status', ['Rejected'])
-                        ->orWhere(function ($query) {
-                            $query->where('status', '!=','Completed')
-                                ->where('isDelivered', false);
+                        ->where(function ($query) {
+                            $query->where(function ($q) {
+                                    $q->where('status', 'Completed')
+                                    ->where('isDelivered', false);
+                                })
+                                ->orWhere(function ($q) {
+                                    $q->where('status', 'Pending')
+                                    ->where('isDelivered', true);
+                                })
+                                ->orWhere(function ($q) {
+                                    $q->where('status', 'Pending')
+                                    ->where('isDelivered', false);
+                                });
                         })
                         ->latest()
                         ->get();

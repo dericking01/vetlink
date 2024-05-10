@@ -17,7 +17,23 @@ class StaffOrdersController extends Controller
     public function pendingOrderindex()
     {
         // $orders = Orders::where('status', 'Pending')->get();
-        $orders = Orders::with('orderItems')->where('status', 'Pending')->latest()->get();
+        $orders = Orders::with('orderItems')
+                        ->where(function ($query) {
+                            $query->where(function ($q) {
+                                    $q->where('status', 'Completed')
+                                    ->where('isDelivered', false);
+                                })
+                                ->orWhere(function ($q) {
+                                    $q->where('status', 'Pending')
+                                    ->where('isDelivered', true);
+                                })
+                                ->orWhere(function ($q) {
+                                    $q->where('status', 'Pending')
+                                    ->where('isDelivered', false);
+                                });
+                        })
+                        ->latest()
+                        ->get();
         $branches = Branch::latest()->where('status','active')->get();
         // dd($orders);
         $selectedBranchIds = [];
