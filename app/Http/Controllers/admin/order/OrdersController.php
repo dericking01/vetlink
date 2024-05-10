@@ -112,13 +112,12 @@ class OrdersController extends Controller
             'name' => 'required|array',
             'name.*' => 'exists:admin_products,id', // Ensure all selected products exist in the admin_products table
             'quantity' => 'required|array',
-            'status' => 'required|in:Completed,Pending',
         ]);
         // Create the order
         $order = new Orders();
 
         $order->agent_id = $request->id;
-        $order->status = $request->status;
+        $order->status = 'Pending';
         $order->branch_id = $request->branch;
         $order->isDelivered = false;
         // dd($order);

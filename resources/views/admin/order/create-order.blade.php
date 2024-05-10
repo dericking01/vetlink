@@ -1,4 +1,4 @@
-@extends('layouts.admin.base') 
+@extends('layouts.admin.base')
 
 @section('content')
 
@@ -54,13 +54,13 @@
                 </div>
 
 
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <label for="status">Order Status <span class="text-danger">*</span> </label>
                     <select class="form-select" id="organizerSingle2" size="1" name="status">
                         <option value="Completed" {{ old('status', $prod->status) === 'Completed' ? 'selected' : '' }}>COMPLETED</option>
                         <option value="Pending" {{ old('status', $prod->status) === 'Pending' ? 'selected' : '' }}>PENDING</option>
                     </select>
-                </div> 
+                </div>  --}}
 
                 <button class="btn btn-primary" type="submit">Confirm</button>
             </form>
