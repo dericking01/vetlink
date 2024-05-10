@@ -30,7 +30,7 @@
               <th>Customer</th>
               <th>Branch</th>
               <th>Amount</th>
-              <th>Delivery</th>
+              <th>Delivered</th>
               <th class="text-center" >Payment Status</th>
               <th>Action</th>
             </tr>

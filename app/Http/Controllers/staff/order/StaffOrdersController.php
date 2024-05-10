@@ -49,7 +49,7 @@ class StaffOrdersController extends Controller
     public function completedOrderindex()
     {
         // $orders = Orders::where('status', 'Completed')->get();
-        $orders = Orders::with('orderItems')->where('status', 'Completed')->latest()->get();
+        $orders = Orders::with('orderItems')->where('status', 'Completed')->where('isDelivered', true)->latest()->get();
         $branches = Branch::latest()->where('status','active')->latest()->get();
         $selectedBranchIds = [];
 
