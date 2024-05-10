@@ -54,7 +54,12 @@
                   </div>
                   </a>
               </td>
-              <td class="phone align-middle white-space-nowrap py-2"><a href="tel:2012001851">{{ $admin->phone }}</a></td>
+              <td class="phone align-middle white-space-nowrap py-2 text-center">
+                @php
+                    $formattedPhone = str_replace('255', '0', $admin->phone);
+                @endphp
+                {{ $formattedPhone }}
+              </td>
               <td class="email align-middle py-2"><a href="mailto:ricky@example.com">{{ $admin->email }}</a></td>
               <td class="name align-middle white-space-nowrap py-2">
                 <div class="d-flex align-items-center position-relative">

@@ -43,7 +43,7 @@
               <tr class="btn-reveal-trigger">
                 <td class="sn">{{ ++$key }}</td>
                 <td class="name align-middle white-space-nowrap py-2">
-                  <a href="{{ route('agent.view-agent', $agent->id) }}"> 
+                  <a href="{{ route('agent.view-agent', $agent->id) }}">
                     <div class="d-flex d-flex align-items-center">
                       <div class="avatar avatar-xl me-2">
                         <div class="avatar-name rounded-circle"><span>{{ \App\Helpers\SettingsHelper::getAgentInitials($agent->id) }}</span></div>
@@ -60,7 +60,7 @@
                     $formattedPhone = str_replace('255', '0', $agent->phone);
                 @endphp
                 {{ $formattedPhone }}
-              </td>
+              </td> 
 
                   <td class="phone align-middle white-space-nowrap py-2 text-center">
                     {{ $agent->agent_id }}

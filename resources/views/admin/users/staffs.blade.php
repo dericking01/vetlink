@@ -63,7 +63,12 @@
                 <div class="d-flex align-items-center position-relative">
                     {{-- <img class="rounded-1 border border-200" src="{{ asset('upload/catalog/'.$product->image) }}" width="60" alt=""> --}}
                     <div class="flex-1 ms-3">
-                        <h6 class="mb-1 fw-semi-bold text-nowrap">{{ $staff->phone }}</h6>
+                        <h6 class="mb-1 fw-semi-bold text-nowrap">
+                            @php
+                            $formattedPhone = str_replace('255', '0', $staff->phone);
+                            @endphp
+                        {{ $formattedPhone }}
+                        </h6>
                     </div>
                 </div>
               </td>
