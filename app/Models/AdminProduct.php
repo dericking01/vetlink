@@ -20,7 +20,15 @@ class AdminProduct extends Model
     protected $table = 'admin_products';
 
 
-    protected $fillable = ['name', 'admin_id','image'];
+    protected $fillable = [
+            'admin_id',
+            'name',
+            'quantity',
+            'price',
+            'description',
+            'status',
+            'image',
+    ];
 
     // the relationship with the Admin model
     public function admin()

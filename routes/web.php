@@ -10,6 +10,7 @@ use App\Http\Controllers\admin\products\MarketProductsController;
 use App\Http\Controllers\admin\products\ProductsController;
 use App\Http\Controllers\admin\products\SabProductsController;
 use App\Http\Controllers\admin\AdminsController;
+use App\Http\Controllers\admin\products\AdminProductExportController;
 use App\Http\Controllers\admin\StaffsController;
 use App\Http\Controllers\admin\transactions\TransactionsController;
 use App\Http\Controllers\admin\UsersController;
@@ -140,6 +141,8 @@ Route::group(['prefix' => 'admin'], function () {
             Route::put('update/{id}', [ProductsController::class, 'update'])->name('admin.products.update');
             Route::delete('destroy', [ProductsController::class, 'destroy'])->name('admin.products.destroy');
             Route::get('product-details/{id}',[ProductsController::class, 'details'])->name('admin.products.details');
+            Route::get('export-admin-products', [AdminProductExportController::class, 'export'])->name('admin.products.export');
+            Route::post('import-products', [AdminProductExportController::class, 'import'])->name('admin.products.import');
         });
 
 

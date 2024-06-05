@@ -63,7 +63,7 @@
               </td>
               @endif
               <td class="status text-center">
-                <span class="badge badge-subtle-success">COMPLETED</span>
+                <span class="badge badge-subtle-success">DONE</span>
               </td>
               <td class="align-middle white-space-nowrap text-end">
                 <div class="dropstart font-sans-serif position-static d-inline-block">

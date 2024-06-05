@@ -133,11 +133,11 @@ class UsersController extends Controller
         $promo = Str::substr(Str::upper($request->name), 0, 1) . mt_rand(10000, 99999);
 
         // Generate a unique agent ID
-        $agentId = 'VET-' . date('Y') . '-' . mt_rand(1000, 9999);
+        $agentId = 'DOD-' . date('Y') . '-' . mt_rand(1000, 9999);
 
         // Ensure the generated agent ID is unique
         while (Agent::where('agent_id', $agentId)->exists()) {
-            $agentId = 'VET-' . date('Y') . '-' . mt_rand(1000, 9999);
+            $agentId = 'DOD-' . date('Y') . '-' . mt_rand(1000, 9999);
         }
 
         // Extract the last 9 digits of the phone number
