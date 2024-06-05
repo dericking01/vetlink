@@ -66,7 +66,7 @@
 
               @if ($order->status == 'Completed' )
               <td class="status text-center">
-                <span class="badge badge-subtle-success">COMPLETED</span>
+                <span class="badge badge-subtle-success">DONE</span>
               </td>
               @else
               <td class="status text-center">

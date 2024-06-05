@@ -25,7 +25,7 @@
                 @csrf
                 <div class="mb-3">
                     <label class="form-label" for="split-login-email">Phone <span class="text-danger">*</span> </label>
-                    <input type="text" name="phone" class="form-control" id="split-login-email" placeholder="Enter your phone number" autofocus />
+                    <input type="text" name="phone" class="form-control" id="split-login-email" placeholder="Phone (start with 255)" autofocus />
                 </div>
                 <div class="mb-3">
                   <div class="d-flex justify-content-between">
