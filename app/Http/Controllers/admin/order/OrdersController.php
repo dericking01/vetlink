@@ -22,7 +22,23 @@ class OrdersController extends Controller
     public function pendingOrderindex()
     {
         // $orders = Orders::where('status', 'Pending')->get();
-        $orders = Orders::with('orderItems')->where('status', 'Pending')->latest()->get();
+        $orders = Orders::with('orderItems')
+                        ->where(function ($query) {
+                            $query->where(function ($q) {
+                                    $q->where('status', 'Completed')
+                                    ->where('isDelivered', false);
+                                })
+                                ->orWhere(function ($q) {
+                                    $q->where('status', 'Pending')
+                                    ->where('isDelivered', true);
+                                })
+                                ->orWhere(function ($q) {
+                                    $q->where('status', 'Pending')
+                                    ->where('isDelivered', false);
+                                });
+                        })
+                        ->latest()
+                        ->get();
         $branches = Branch::latest()->where('status','active')->get();
         // dd($orders);
         $selectedBranchIds = [];
@@ -38,7 +54,7 @@ class OrdersController extends Controller
     public function completedOrderindex()
     {
         // $orders = Orders::where('status', 'Completed')->get();
-        $orders = Orders::with('orderItems')->where('status', 'Completed')->latest()->get();
+        $orders = Orders::with('orderItems')->where('status', 'Completed')->where('isDelivered', true)->latest()->get();
         $branches = Branch::latest()->where('status','active')->latest()->get();
         $selectedBranchIds = [];
 
@@ -80,33 +96,14 @@ class OrdersController extends Controller
         $agents = Agent::where('status','active')->latest()->get();
         $products = AdminProduct::where('status','active')->latest()->get();
         $branches = Branch::latest()->where('status','active')->get();
+        $prod = AdminProduct::latest()->get();
+
 
         // dd('here');
 
-        return view('admin.order.create-order',compact('agents','products','branches'));
+        return view('admin.order.create-order',compact('agents','products','branches','prod'));
     }
 
-    // public function store(Request $request)
-    // {
-    //     // dd($request);
-    //     $this->validate($request, [
-    //         'id' => 'required|numeric|min:0',
-    //         'name[]' => 'regex:/^[a-zA-Z\s]+$/',
-    //     ]);
-    //     dd($request);
-
-    //     $product = new AdminProduct();
-    //     $product->agent_id = $request->id;
-    //     $product->total_amount = ;
-    //     $product->status = $request->status;
-    //     $product->isDelivered = false;
-    //     dd($request);
-
-    //     $product->save();
-
-    //     Toastr::success('Order saved successfully!');
-    //     return back();
-    // }
 
     public function store(Request $request)
     {
@@ -115,13 +112,12 @@ class OrdersController extends Controller
             'name' => 'required|array',
             'name.*' => 'exists:admin_products,id', // Ensure all selected products exist in the admin_products table
             'quantity' => 'required|array',
-            'status' => 'required|in:Completed,Pending',
         ]);
         // Create the order
         $order = new Orders();
 
         $order->agent_id = $request->id;
-        $order->status = $request->status;
+        $order->status = 'Pending';
         $order->branch_id = $request->branch;
         $order->isDelivered = false;
         // dd($order);
@@ -155,10 +151,10 @@ class OrdersController extends Controller
         $order->total_amount = $totalAmount;
         // dd($request);
 
+        $order->save();
+
         // Dispatch the OrderCompleted event
         event(new OrderCompleted($order));
-
-        $order->save();
 
         Toastr::success('Order saved successfully!');
         return back();
@@ -167,24 +163,23 @@ class OrdersController extends Controller
 
     public function updateOrder(Request $request, $id)
     {
-        // // Find the existing ProductCategory record
+    //  Find the existing ProductCategory record
         $order = Orders::where('id', $id)->first();
-        // $order = Orders::find($request->id);
+    // $order = Orders::find($request->id);
 
-        // Find the existing Order record
-        // $order = Orders::findOrFail($id);
-        // dd($order);
+    // Find the existing Order record
+    // $order = Orders::findOrFail($id);
+    //  dd($order);
 
         // Update the record with the new data
         $order->isDelivered = $request->isDelivered;
         $order->status = $request->status;
         $order->branch_id = $request->branch;
-        // dd($order);
-        // dd($request->input('branch'));
+
         $order->save();
 
-         // Dispatch the OrderCompleted event
-         event(new OrderCompleted($order));
+        // Dispatch the OrderCompleted event
+        event(new OrderCompleted($order));
 
         Toastr::success('Order successfully updated! ✔');
         return back();
@@ -192,24 +187,6 @@ class OrdersController extends Controller
 
 
 
-
-    // public function destroyOrder(Request $request)
-    // {
-    //     $order = Orders::find($request);
-
-    //     if ($order) {
-    //         if ($order->isDelivered) {
-    //             Toastr::error('Cannot delete a delivered order.');
-    //         } else {
-    //             $order->delete();
-    //             Toastr::success('Order successfully deleted!');
-    //         }
-    //     } else {
-    //         Toastr::error('Order not found or already deleted.');
-    //     }
-
-    //     return back();
-    // }
     public function destroyOrder(Request $request)
     {
         $orderId = $request->input('id'); // Assuming 'orderId' is the name of the input field containing the order ID

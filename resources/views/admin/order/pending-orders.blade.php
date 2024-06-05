@@ -28,10 +28,10 @@
               <th>Date</th>
               {{-- <th>Buyer</th> --}}
               <th>Customer</th>
-              {{-- <th>Amount</th> --}}
+              <th>Branch</th>
               <th>Amount</th>
-              <th>Delivery</th>
-              <th>Status</th>
+              <th>Delivered</th>
+              <th class="text-center" >Payment Status</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -40,7 +40,12 @@
             <tr>
               <td class="sn">{{ ++$key }}</td>
               <td class="date">{{ date_format(date_create($order->created_at), 'd M, Y') }}</td>
-              <td class="service_category">{{ $order->agent->name }}</td>
+              <td class="service_category">
+                <a href="{{ route('admin.orders.vieworder', $order->id) }}">
+                    {{ $order->agent->name }}
+                </a>
+              </td>
+              <td class="service_category">{{ $order->branch->branch_name }}</td>
 
               {{-- <td class="quantity">
                 @foreach ($order->orderItems as $orderItem)
@@ -58,9 +63,16 @@
                 <span class="badge badge-subtle-danger">NO</span>
               </td>
               @endif
+
+              @if ($order->status == 'Completed' )
+              <td class="status text-center">
+                <span class="badge badge-subtle-success">DONE</span>
+              </td>
+              @else
               <td class="status text-center">
                 <span class="badge badge-subtle-warning">PENDING</span>
               </td>
+              @endif
               <td class="align-middle white-space-nowrap text-end">
                 <div class="dropstart font-sans-serif position-static d-inline-block">
                     <button class="btn btn-link text-600 btn-sm dropdown-toggle
@@ -81,12 +93,12 @@
               </td>
             </tr>
 
-            {{-- Delete Pending Orders Modal --}} 
+            {{-- Delete Pending Orders Modal --}}
             <div class="modal fade" id="deletePendingOrder{{ $order->id }}" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> 
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <form action="{{ route('admin.order.destroy') }}" method="POST">
                             @csrf

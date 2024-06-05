@@ -12,14 +12,28 @@
                   </h5>
         </div>
         <div class="col text-end">
+            <a class="font-sans-serif" href="#!" data-bs-toggle="modal" data-bs-target="#addBULKproduct">
+                <button class="btn btn-falcon-default btn-sm" type="button">
+                    <svg class="bi bi-box-arrow-down" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8.354 1.646a.5.5 0 01.707 0l3 3a.5.5 0 01-.707.707L8.5 3.707V9a.5.5 0 01-1 0V3.707L4.646 5.354a.5.5 0 01-.707-.707l3-3zM1 5.5a.5.5 0 01.5-.5h3a.5.5 0 010 1H2.707L5.354 8.646a.5.5 0 11-.708.708L1.146 6.354A.5.5 0 011 5.646zM2 14a.5.5 0 01.5-.5h11a.5.5 0 010 1H2.5a.5.5 0 01-.5-.5z"/>
+                    </svg>
+                    <span class="d-none d-sm-inline-block ms-1">Bulk Import</span>
+                </button>
+            </a>
             <a class="font-sans-serif" href="#!" data-bs-toggle="modal" data-bs-target="#addproduct">
                 <button class="btn btn-falcon-default btn-sm" type="button">
                     <svg class="svg-inline--fa fa-plus fa-w-14" data-fa-transform="shrink-3 down-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="" style="transform-origin: 0.4375em 0.625em;"><g transform="translate(224 256)"><g transform="translate(0, 64)  scale(0.8125, 0.8125)  rotate(0 0 0)"><path fill="currentColor" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" transform="translate(-224 -256)"></path></g></g></svg><!-- <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span> Font Awesome fontawesome.com -->
                         <span class="d-none d-sm-inline-block ms-1">Add Product</span>
                 </button>
             </a>
+            <a class="font-sans-serif" href="{{ route('admin.products.export') }}">
+                <button class="btn btn-falcon-default btn-sm" type="button"><svg class="svg-inline--fa fa-external-link-alt fa-w-16" data-fa-transform="shrink-3 down-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="external-link-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" style="transform-origin: 0.5em 0.625em;"><g transform="translate(256 256)"><g transform="translate(0, 64)  scale(0.8125, 0.8125)  rotate(0 0 0)"><path fill="currentColor" d="M432,320H400a16,16,0,0,0-16,16V448H64V128H208a16,16,0,0,0,16-16V80a16,16,0,0,0-16-16H48A48,48,0,0,0,0,112V464a48,48,0,0,0,48,48H400a48,48,0,0,0,48-48V336A16,16,0,0,0,432,320ZM488,0h-128c-21.37,0-32.05,25.91-17,41l35.73,35.73L135,320.37a24,24,0,0,0,0,34L157.67,377a24,24,0,0,0,34,0L435.28,133.32,471,169c15,15,41,4.5,41-17V24A24,24,0,0,0,488,0Z" transform="translate(-256 -256)"></path></g></g></svg><!-- <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span> Font Awesome fontawesome.com -->
+                    <span class="d-none d-sm-inline-block ms-1">Export</span>
+                </button>
+            </a>
           {{-- <a class="font-sans-serif" href="#!" data-bs-toggle="modal" data-bs-target="#addproduct">Add Product</a> --}}
         </div>
+
     </div>
 </div>
     <div class="card-body">
@@ -29,7 +43,7 @@
             <tr>
               <th>SN.</th>
               <th>Date</th>
-              <th>Admin Name</th>
+              <th>Added by</th>
               <th>Product Name</th>
               <th>Price</th>
               <th>Quantity</th>
@@ -47,7 +61,8 @@
                 {{$product->admin->name}}
               </td>
               <td class="name">
-                <div class="d-flex align-items-center position-relative"><img class="rounded-1 border border-200" src="{{ asset('upload/catalog/'.$product->image) }}" width="60" alt="">
+                <div class="d-flex align-items-center position-relative">
+                    {{-- <img class="rounded-1 border border-200" src="{{ asset('upload/catalog/'.$product->image) }}" width="60" alt=""> --}}
                     <div class="flex-1 ms-3">
                         <h6 class="mb-1 fw-semi-bold text-nowrap">{{ $product->name }}</h6>
                     </div>
@@ -173,14 +188,14 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12">
+                                        {{-- <div class="col-md-12">
                                             <div class="mb-3">
                                                 <label class="col-form-label" for="image">Image <span class="text-danger">*</span>
                                                 </label>
                                                 <input class="form-control" name="image"
                                                     id="image" type="file" />
                                             </div>
-                                        </div>
+                                        </div> --}}
 
                                         <div class="col-md-12">
                                             <div class="mb-3">
@@ -269,7 +284,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-12">
+                            {{-- <div class="col-md-12">
                                 <div class="mb-3">
                                     <label class="col-form-label" for="image">Image <span class="text-danger">*</span>
                                     </label>
@@ -279,7 +294,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="col-md-12">
                                 <div class="mb-3">
@@ -302,5 +317,63 @@
             </div>
         </form>
     </div>
-  </div>
+</div>
+
+
+<div class="modal fade" id="addBULKproduct" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <form action="{{ route('admin.products.import') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate="novalidate">
+            @csrf
+            <div class="modal-content position-relative">
+                <div class="position-absolute top-0 end-0 mt-2 me-2 z-1">
+                    <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                        data-bs-dismiss="modal" aria-label="Close" onclick="event.preventDefault();"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="rounded-top-3 py-3 ps-4 pe-6 bg-light">
+                        <h4 class="mb-1" id="modalExampleDemoLabel">Upload an Excel File (max 2MB) </h4>
+                    </div>
+                    <a href="{{ asset('upload/catalog/upload-sample.xlsx') }}" class="btn btn-link">&nbsp;&nbsp;&nbsp;&nbsp;Download a Sample Format ?</a>
+
+                    <div class="p-4 pb-0">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="col-form-label" for="file">&nbsp;&nbsp;Upload File <span class="text-danger">*</span></label>
+                                    <input type="file" class="form-control @error('file') is-invalid @enderror" name="file" required id="file" accept=".csv,.xlsx" onchange="validateFileSize()">
+                                    @error('file')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    <div class="invalid-feedback" id="file-size-error" style="display:none;">File size must be less than 2MB.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-info" type="submit">Submit </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 @endsection
+
+<script>
+    function validateFileSize() {
+        const fileInput = document.getElementById('file');
+        const fileSizeError = document.getElementById('file-size-error');
+        const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+
+        if (fileInput.files[0].size > maxSize) {
+            fileInput.classList.add('is-invalid');
+            fileSizeError.style.display = 'block';
+        } else {
+            fileInput.classList.remove('is-invalid');
+            fileSizeError.style.display = 'none';
+        }
+    }
+</script>
+

@@ -28,10 +28,10 @@
               <th>Date</th>
               {{-- <th>Buyer</th> --}}
               <th>Customer</th>
-              {{-- <th>Amount</th> --}}
+              <th>Branch</th>
               <th>Amount</th>
-              <th>Delivery</th>
-              <th>Status</th>
+              <th>Delivered</th>
+              <th class="text-center" >Payment Status</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -40,18 +40,22 @@
             <tr>
               <td class="sn">{{ ++$key }}</td>
               <td class="date">{{ date_format(date_create($order->created_at), 'd M, Y') }}</td>
-              <td class="service_category">{{ $order->agent->name }}</td>
-
+              <td class="service_category">
+                <a href="{{ route('admin.orders.vieworder', $order->id) }}">
+                    {{ $order->agent->name }}
+                </a>
+              </td>
+              <td class="service_category">{{ $order->branch->branch_name }}</td>
               {{-- <td class="quantity">
                 @foreach ($order->orderItems as $orderItem)
                     {{ $orderItem->quantity }}
                 @endforeach
               </td> --}}
               {{-- <td class="quantity">{{ $order->orderItems->quantity }}</td> --}}
-              <td class="amount">{{ number_format ($order->total_amount, 2) }}</td> 
+              <td class="amount">{{ number_format ($order->total_amount, 2) }}</td>
               @if ($order->isDelivered)
               <td class="status text-center">
-                <span class="badge badge-subtle-success">YES</span> 
+                <span class="badge badge-subtle-success">YES</span>
               </td>
               @else
               <td class="status text-center">
@@ -59,7 +63,7 @@
               </td>
               @endif
               <td class="status text-center">
-                <span class="badge badge-subtle-success">COMPLETED</span>
+                <span class="badge badge-subtle-success">DONE</span>
               </td>
               <td class="align-middle white-space-nowrap text-end">
                 <div class="dropstart font-sans-serif position-static d-inline-block">

@@ -28,10 +28,10 @@
               <th>Date</th>
               {{-- <th>Buyer</th> --}}
               <th>Customer</th>
-              {{-- <th>Amount</th> --}}
+              <th>Branch</th>
               <th>Amount</th>
-              <th>Delivery</th>
-              <th>Status</th>
+              <th>Delivered</th>
+              <th class="text-center" >Payment Status</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -40,8 +40,12 @@
             <tr>
               <td class="sn">{{ ++$key }}</td>
               <td class="date">{{ date_format(date_create($order->created_at), 'd M, Y') }}</td>
-              <td class="service_category">{{ $order->agent->name }}</td>
-
+              <td class="service_category">
+                <a href="{{ route('admin.orders.vieworder', $order->id) }}">
+                    {{ $order->agent->name }}
+                </a>
+              </td>
+              <td class="service_category">{{ $order->branch->branch_name }}</td>
               {{-- <td class="quantity">
                 @foreach ($order->orderItems as $orderItem)
                     {{ $orderItem->quantity }}
@@ -137,9 +141,9 @@
 
                                         </div>
                                         <div class="col-md-6">
- 
 
-                                            <div class="mb-3"> 
+
+                                            <div class="mb-3">
                                                 <label class="col-form-label" for="amount">Amount <span class="text-danger"></span></label>
                                                 <input class="form-control " name="amount" id="amount"
                                                        type="number" placeholder="Total amount" value="{{ $order->total_amount }}" readonly/>
@@ -179,7 +183,7 @@
                                           {{-- </div> --}}
                                         </div>
 
-                                    </div> 
+                                    </div>
                                 </div>
                             </div>
                             <div class="mt-3 modal-footer">

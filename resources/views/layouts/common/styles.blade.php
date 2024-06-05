@@ -5,7 +5,7 @@
 <!-- ===============================================-->
 <!--    Document Title-->
 <!-- ===============================================-->
-<title>Vetlink</title>
+<title>Dodoki</title>
 
 <!-- ===============================================-->
 <!--    Favicons-->
@@ -13,7 +13,7 @@
 {{-- <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('/') }}assets/img/favicons/apple-touch-icon.jpeg">
 <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('/') }}assets/img/favicons/favicon-32x32.png"> --}}
 <link rel="icon" type="image/png" sizes="20x16"
-    href="{{ asset('/') }}assets/img/favicons/sab.png">
+    href="{{ asset('/') }}assets/img/favicons/dodoki.png">
 <link rel="shortcut icon" type="image/x-icon" href="{{ asset('/') }}assets/img/favicons/favicon.ico">
 <link rel="manifest" href="{{ asset('/') }}assets/img/favicons/manifest.json">
 <meta name="msapplication-TileImage" content="assets/img/favicons/mstile-150x150.png">
@@ -47,7 +47,7 @@
     var isRTL = JSON.parse(localStorage.getItem('isRTL'));
     if (isRTL) {
         var linkDefault = document.getElementById('style-default');
-        var userLinkDefault = document.getElementById('user-style-default'); 
+        var userLinkDefault = document.getElementById('user-style-default');
         linkDefault.setAttribute('disabled', true);
         userLinkDefault.setAttribute('disabled', true);
         document.querySelector('html').setAttribute('dir', 'rtl');

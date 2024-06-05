@@ -18,7 +18,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use Spatie\Browsershot\Browsershot;
 
 class UsersController extends Controller
 {
@@ -92,55 +91,39 @@ class UsersController extends Controller
 
     public function destroyBranch(Request $request)
     {
+        $branch = Branch::find($request->id);
 
-        $branches = Branch::find($request->id);
+        // Check if the branch has any associated orders
+        if ($branch->order()->exists()) {
+            Toastr::error('Branch has associated orders. It cannot be deleted!');
+            return back();
+        }
 
-        if($branches->status == 'Active'){
+        if($branch->status == 'active'){
             Toastr::error('You cannot delete an active branch');
             return back();
         }
         // dd($branches);
 
-        $branches->delete();
+        $branch->delete();
         Toastr::success('Branch successfully deleted!');
         return back();
     }
 
 
-    // public function storeAgent(Request $request)
-    // {
-    //     $this->validate($request, [
-    //         'name' => 'required|regex:/^[a-zA-Z\s]+$/',
-    //         'phone' => 'required|numeric|regex:/^255\d{9}$/|digits:12|unique:users,phone',
-    //     ]);
-
-    //     // dd($request);
-
-    //     $promo = Str::substr(Str::upper($request->name), 0, 1) . mt_rand(10000, 99999);
-
-    //     // dd($request);
-    //     Agent::create([
-    //         'name' => $request->name,
-    //         'phone' => $request->phone,
-    //         'email' => $request->email,
-    //         'gender' => $request->gender,
-    //         'location' => $request->location,
-    //         'status' => $request->status,
-    //         'promo_code' => $promo,
-    //         'points' => 0,
-    //         'password' => Hash::make('12345678'),
-    //     ]);
-
-
-    //     Toastr::success('Customer successfully added ✔');
-    //     return back();
-    // }
-
     public function storeAgent(Request $request)
     {
         $this->validate($request, [
             'name' => 'required|regex:/^[a-zA-Z\s]+$/',
-            'phone' => 'required|numeric|regex:/^255\d{9}$/|digits:12|unique:users,phone',
+            'phone' => [
+                'required',
+                'numeric',
+                'regex:/^0\d{9}$/',
+                'digits:10',
+                Rule::unique('agents', 'phone')->where(function ($query) use ($request) {
+                    return $query->where('phone', $request->phone);
+                }),
+            ],
             'email' => 'nullable|email|unique:users,email',
             'gender' => 'nullable|string',
             'location' => 'nullable|string',
@@ -149,28 +132,26 @@ class UsersController extends Controller
 
         $promo = Str::substr(Str::upper($request->name), 0, 1) . mt_rand(10000, 99999);
 
-        // // Generate a unique agent ID
-        // $agentId = 'VET-' . now()->format('Y-m') . '-' . Str::random(5);
-
-        // // Ensure the generated agent ID is unique
-        // while (Agent::where('agent_id', $agentId)->exists()) {
-        //     $agentId = 'VET-' . now()->format('Y-m') . '-' . Str::random(5);
-        // }
-
         // Generate a unique agent ID
-        $agentId = 'VET-' . date('Y') . '-' . Carbon::now()->format('dhms') . '-' . mt_rand(1000, 9999);
+        $agentId = 'DOD-' . date('Y') . '-' . mt_rand(1000, 9999);
 
-    // Ensure the generated agent ID is unique
+        // Ensure the generated agent ID is unique
         while (Agent::where('agent_id', $agentId)->exists()) {
-            $agentId = 'VET-' . date('Y') . '-' . Carbon::now()->format('dhms') . '-' . mt_rand(1000, 9999);
+            $agentId = 'DOD-' . date('Y') . '-' . mt_rand(1000, 9999);
         }
+
+        // Extract the last 9 digits of the phone number
+        $lastNineDigits = substr($request->phone, -9);
+
+        // Prepend '255' to the extracted digits
+        $phoneNumber = '255' . $lastNineDigits;
 
         // dd($request);
         // Create the agent with the unique agent ID
         Agent::create([
             'agent_id' => $agentId,
             'name' => $request->name,
-            'phone' => $request->phone,
+            'phone' => $phoneNumber,
             'email' => $request->email,
             'gender' => $request->gender,
             'location' => $request->location,
@@ -196,7 +177,15 @@ class UsersController extends Controller
         // Define validation rules dynamically
         $validationRules = [
             'name' => 'required|regex:/^[a-zA-Z\s]+$/',
-            'phone' => 'required|numeric|regex:/^255\d{9}$/|digits:12',
+            'phone' => [
+                'required',
+                'numeric',
+                'regex:/^0\d{9}$/',
+                'digits:10',
+                Rule::unique('agents', 'phone')->where(function ($query) use ($request) {
+                    return $query->where('phone', $request->phone);
+                }),
+            ],
         ];
 
         if ($phoneChanged) {
@@ -207,8 +196,14 @@ class UsersController extends Controller
         // dd($request);
         // dd($request->all());
 
+        // Extract the last 9 digits of the phone number
+        $lastNineDigits = substr($request->phone, -9);
+
+        // Prepend '255' to the extracted digits
+        $phoneNumber = '255' . $lastNineDigits;
+
         $agents->name = $request->name;
-        $agents->phone = $request->phone;
+        $agents->phone = $phoneNumber;
         $agents->location = $request->location;
         $agents->email = $request->email;
         $agents->status = $request->status;
@@ -337,18 +332,5 @@ class UsersController extends Controller
         // dd($orders);
         return view('admin.users.view-user', compact('user', 'orders'));
     }
-
-
-    public function downloadBusinessCardImage()
-    {
-        // HTML content of the div
-        $html = '<div class="card p-3 mb-2">...</div>';
-
-        $imagePath = public_path('images/business_card.jpg');
-
-        Browsershot::html($html)->debug()->save($imagePath);
-
-    }
-
 
 }

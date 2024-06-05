@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('branch_name');
             $table->string('location');
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
             $table->softDeletes();
         });

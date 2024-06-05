@@ -11,7 +11,7 @@
     </a>
     <ul class="navbar-nav align-items-center d-none d-lg-block">
         <li class="nav-item">
-            @include('layouts.admin.nav.partials.search-box') 
+            {{-- @include('layouts.admin.nav.partials.search-box') --}}
         </li>
     </ul>
     <ul class="navbar-nav navbar-nav-icons ms-auto flex-row align-items-center">
@@ -44,11 +44,11 @@
                             class="fas fa-crow me-1"></span><span>{{auth('admin')->user()->name}}</span></a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#!">Set status</a>
-                    <a class="dropdown-item" href="javascript:void(0);">Profile &amp;
+                    {{-- <a class="dropdown-item" href="javascript:void(0);">Profile &amp;
                         account</a>
                     <a class="dropdown-item" href="#!">Feedback</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="javascript:void(0);">Settings</a>
+                    <a class="dropdown-item" href="javascript:void(0);">Settings</a> --}}
                     <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal"
                     data-bs-target="#logout">Logout</a>
                 </div>
