@@ -7,7 +7,7 @@
   <div class="card-header bg-light">
     <div class="row align-items-center">
         <div class="col">
-            <h5 class="mb-0" id="followers">Pending Orders
+            <h5 class="mb-0" id="followers">Partially Paid Orders
               <span class="d-none d-sm-inline-block">({{ $orders->count() }})</span>
                   </h5>
         </div>
@@ -29,7 +29,8 @@
               {{-- <th>Buyer</th> --}}
               <th>Customer</th>
               <th>Branch</th>
-              <th>Amount</th>
+              <th>Paid</th>
+              <th>Debt</th>
               <th>Delivered</th>
               <th class="text-center" >Payment Status</th>
               <th>Action</th>
@@ -52,8 +53,8 @@
                     {{ $orderItem->quantity }}
                 @endforeach
               </td> --}}
-              {{-- <td class="quantity">{{ $order->orderItems->quantity }}</td> --}}
-              <td class="amount">{{ number_format ($order->total_amount, 2) }}</td>
+              <td class="amount">{{ number_format ($order->partial_amt, 2) }}</td>
+              <td class="quantity">{{ $order->total_amount - $order->partial_amt }}</td>
               @if ($order->isDelivered)
               <td class="status text-center">
                 <span class="badge badge-subtle-success">YES</span>
@@ -70,7 +71,7 @@
               </td>
               @else
               <td class="status text-center">
-                <span class="badge badge-subtle-warning">PENDING</span>
+                <span class="badge badge-subtle-warning">PARTIAL</span>
               </td>
               @endif
               <td class="align-middle white-space-nowrap text-end">
@@ -178,7 +179,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3" id="partialAmountField{{ $order->id }}" style="display: none;">
-                                                <label class="status" for="partial_amount">Partial Amount <span class="text-danger">*</span></label>
+                                                <label class="col-form-label" for="partial_amount">Partial Amount <span class="text-danger">*</span></label>
                                                 <input class="form-control" name="partial_amount" id="partial_amount{{ $order->id }}" type="number" placeholder="Partial amount" value="{{ old('partial_amount', $order->partial_amt) }}" />
                                             </div>
                                         </div>

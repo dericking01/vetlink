@@ -171,6 +171,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::put('update/{id}', [OrdersController::class, 'updateOrder'])->name('admin.pendingOrder.update');
             Route::delete('destroy', [OrdersController::class, 'destroyOrder'])->name('admin.order.destroy');
             Route::get('rejectedorder', [OrdersController::class, 'rejectedOrderindex'])->name('admin.rejectedorder');
+            Route::get('partialorder', [OrdersController::class, 'partialOrderindex'])->name('admin.partialorder');
             Route::get('completedorder', [OrdersController::class, 'completedOrderindex'])->name('admin.completedorder');
             Route::get('view-order/{id}', [OrdersController::class, 'viewOrder'])->name('admin.orders.vieworder');
         });
