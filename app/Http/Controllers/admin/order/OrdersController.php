@@ -81,6 +81,21 @@ class OrdersController extends Controller
         return view('admin.order.rejected-orders', compact('orders','branches','selectedBranchIds'));
     }
 
+    public function partialOrderindex()
+    {
+        // $orders = Orders::where('status', 'Cancelled')->get();
+        $orders = Orders::with('orderItems')->where('status', 'Partial')->latest()->get();
+        $branches = Branch::latest()->where('status','active')->latest()->get();
+        $selectedBranchIds = [];
+
+        foreach ($orders as $order) {
+            $selectedBranchIds[$order->id] = $order->branch_id;
+        }
+        // dd($selectedBranchIds);
+
+        return view('admin.order.partial-orders', compact('orders','branches','selectedBranchIds'));
+    }
+
     public function viewOrder($id)
     {
         $order = Orders::where('id', $id)->first();
@@ -163,27 +178,47 @@ class OrdersController extends Controller
 
     public function updateOrder(Request $request, $id)
     {
-    //  Find the existing ProductCategory record
-        $order = Orders::where('id', $id)->first();
-    // $order = Orders::find($request->id);
+        // Find the existing Order record
+        $order = Orders::find($id);
 
-    // Find the existing Order record
-    // $order = Orders::findOrFail($id);
-    //  dd($order);
+        if (!$order) {
+            Toastr::error('Order not found.');
+            return back();
+        }
 
-        // Update the record with the new data
+        // Check if the status is Partial and partial amount is provided
+        if ($request->status === 'Partial') {
+            if (is_null($request->partial_amount) || $request->partial_amount === '') {
+                Toastr::error('Partial amount cannot be empty.');
+                return back()->withInput();
+            }
+
+            // Check if partial amount is greater than total amount
+            if ($request->partial_amount > $order->total_amount) {
+                Toastr::error('Partial amount cannot be greater than the total amount.');
+                return back()->withInput();
+            }
+        }
+
+        // Update the order with the new data
         $order->isDelivered = $request->isDelivered;
         $order->status = $request->status;
         $order->branch_id = $request->branch;
+        $order->partial_amt = $request->status === 'Partial' ? $request->partial_amount : null;
 
+        // Save the updated order
         $order->save();
 
-        // Dispatch the OrderCompleted event
-        event(new OrderCompleted($order));
+        // Dispatch the OrderCompleted event if necessary
+        if ($order->status === 'Completed') {
+            event(new OrderCompleted($order));
+        }
 
         Toastr::success('Order successfully updated! ✔');
         return back();
     }
+
+
 
 
 

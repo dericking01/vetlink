@@ -176,6 +176,12 @@
         class="nav-link-text ps-1">Pending Orders</span></div>
     </a><!-- more inner pages-->
 
+    <a class="nav-link @if(request()->routeIs('admin.partialorder')) active @endif" href="{{ route('admin.partialorder') }} ">
+        <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+            class="fas fa-spinner fa-spin"></span></span><span
+        class="nav-link-text ps-1">Partial Orders</span></div>
+    </a><!-- more inner pages-->
+
     <a class="nav-link @if(request()->routeIs('admin.completedorder')) active @endif" href="{{ route('admin.completedorder') }}">
         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
             class="fas fa-check-circle"></span></span><span
