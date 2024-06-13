@@ -38,12 +38,14 @@
           <tbody class="list">
             @foreach ($orders as $key => $order)
             <tr>
-              <td class="sn">{{ ++$key }}</td>
+              <td class="sn">
+                <a href="{{ route('staff.orders.vieworder', $order->id) }}">
+                {{ ++$key }}
+                </a>
+              </td>
               <td class="date">{{ date_format(date_create($order->created_at), 'd M, Y') }}</td>
               <td class="service_category">
-                <a href="{{ route('admin.orders.vieworder', $order->id) }}">
                     {{ $order->agent->name }}
-                </a>
               </td>
               <td class="service_category">{{ $order->branch->branch_name }}</td>
               {{-- <td class="quantity">
