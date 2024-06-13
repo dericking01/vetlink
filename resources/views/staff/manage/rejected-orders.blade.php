@@ -174,7 +174,7 @@
 
                                         <div class="col-md-6">
                                           {{-- <div class="mb-3"> --}}
-                                              <label for="status">Order Status <span class="text-danger">*</span> </label>
+                                              <label for="status">Payment Status <span class="text-danger">*</span> </label>
                                               <select class="form-select" id="organizerSingle2" size="1" name="status">
                                                 <option value="Cancelled" {{ old('status', $order->status) === 'Cancelled' ? 'selected' : '' }}>REJECT</option>
                                                 <option value="Completed" {{ old('status', $order->status) === 'Completed' ? 'selected' : '' }}>APPROVE</option>

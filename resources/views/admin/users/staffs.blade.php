@@ -303,7 +303,7 @@
                                     <label class="col-form-label" for="location">Location <span class="text-danger">*</span>
                                     </label>
                                     <input class="form-control @error('location') is-invalid @enderror" name="location" value="{{ old('name') }}" required=""
-                                        id="name" type="text" placeholder="Name of Staff" />
+                                        id="name" type="text" placeholder="Location's name" />
                                       @error('location')
                                           <div class="invalid-feedback">{{ $message }}</div>
                                       @enderror
