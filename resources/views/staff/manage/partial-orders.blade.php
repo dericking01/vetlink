@@ -7,7 +7,7 @@
   <div class="card-header bg-light">
     <div class="row align-items-center">
         <div class="col">
-            <h5 class="mb-0" id="followers">Completed Orders
+            <h5 class="mb-0" id="followers">Partially Paid Orders
               <span class="d-none d-sm-inline-block">({{ $orders->count() }})</span>
                   </h5>
         </div>
@@ -29,7 +29,8 @@
               {{-- <th>Buyer</th> --}}
               <th>Customer</th>
               <th>Branch</th>
-              <th>Amount</th>
+              <th>Paid</th>
+              <th>Debt</th>
               <th>Delivered</th>
               <th class="text-center" >Payment Status</th>
               <th>Action</th>
@@ -48,13 +49,14 @@
                     {{ $order->agent->name }}
               </td>
               <td class="service_category">{{ $order->branch->branch_name }}</td>
+
               {{-- <td class="quantity">
                 @foreach ($order->orderItems as $orderItem)
                     {{ $orderItem->quantity }}
                 @endforeach
               </td> --}}
-              {{-- <td class="quantity">{{ $order->orderItems->quantity }}</td> --}}
-              <td class="amount">{{ number_format ($order->total_amount, 2) }}</td>
+              <td class="amount">{{ number_format ($order->partial_amt, 2) }}</td>
+              <td class="quantity">{{ number_format ($order->total_amount - $order->partial_amt) }}</td>
               @if ($order->isDelivered)
               <td class="status text-center">
                 <span class="badge badge-subtle-success">YES</span>
@@ -64,9 +66,16 @@
                 <span class="badge badge-subtle-danger">NO</span>
               </td>
               @endif
+
+              @if ($order->status == 'Completed' )
               <td class="status text-center">
                 <span class="badge badge-subtle-success">DONE</span>
               </td>
+              @else
+              <td class="status text-center">
+                <span class="badge badge-subtle-warning">PARTIAL</span>
+              </td>
+              @endif
               <td class="align-middle white-space-nowrap text-end">
                 <div class="dropstart font-sans-serif position-static d-inline-block">
                     <button class="btn btn-link text-600 btn-sm dropdown-toggle
@@ -77,7 +86,7 @@
                     </button>
                     <div class="dropdown-menu dropdown-menu-end border py-2"
                       aria-labelledby="dropdown-simple-pagination-table-item-1">
-                      <a class="dropdown-item text-primary" href="{{ route('staff.orders.vieworder', $order->id) }}">View</a>
+                      <a class="dropdown-item text-primary" href="{{ route('admin.orders.vieworder', $order->id) }}">View</a>
                       <div class="dropdown-divider"></div>
                       <a class="dropdown-item text-success" href="#!" data-bs-toggle="modal" data-bs-target="#editPendingOrder{{ $order->id }}">Edit</a>
                       <div class="dropdown-divider"></div>
@@ -119,13 +128,13 @@
             {{-- Edit Pending Orders Modal --}}
             <div class="modal fade" id="editPendingOrder{{ $order->id }}" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                    <form action="{{ route('staff.pendingOrder.update', ['id' => $order->id]) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('staff.partialOrder.update', ['id' => $order->id]) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="modal-content position-relative">
                             <div class="position-absolute top-0 end-0 mt-2 me-2 z-1">
                                 <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
-                                    data-bs-dismiss="modal" aria-label="Close" onclick="event.preventDefault();"></button>
+                                        data-bs-dismiss="modal" aria-label="Close" onclick="event.preventDefault();"></button>
                             </div>
                             <div class="modal-body p-0">
                                 <div class="rounded-top-3 py-3 ps-4 pe-6 bg-light">
@@ -135,62 +144,48 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="col-form-label" for="buyer_name">Customer Name <span class="text-danger"></span>
-                                                </label>
-                                                <input class="form-control " name="name"
-                                                    id="name" type="text" placeholder="Name of the product" value="{{ $order->agent->name }}" readonly />
+                                                <label class="col-form-label" for="buyer_name">Customer Name <span class="text-danger"></span></label>
+                                                <input class="form-control" name="name" id="name" type="text" value="{{ $order->agent->name }}" readonly />
                                             </div>
-
                                         </div>
                                         <div class="col-md-6">
-
-
                                             <div class="mb-3">
                                                 <label class="col-form-label" for="amount">Amount <span class="text-danger"></span></label>
-                                                <input class="form-control " name="amount" id="amount"
-                                                       type="number" placeholder="Total amount" value="{{ $order->total_amount }}" readonly/>
+                                                <input class="form-control" name="amount" id="amount{{ $order->id }}" type="number" value="{{ $order->total_amount }}" readonly />
                                             </div>
                                         </div>
-
                                         <div class="col-md-6">
-                                            {{-- <div class="mb-3"> --}}
-                                                <label for="status">Delivery Status <span class="text-danger">*</span> </label>
-                                                <select class="form-select" id="organizerSingle2" size="1" name="isDelivered">
-                                                  <option value="0" {{ old('isDelivered', $order->isDelivered) == '0' ? 'selected' : '' }}>No</option>
-                                                  <option value="1" {{ old('isDelivered', $order->isDelivered) == '1' ? 'selected' : '' }}>Yes</option>
-                                                </select>
-                                            {{-- </div> --}}
+                                            <label for="status">Delivery Status <span class="text-danger">*</span></label>
+                                            <select class="form-select" id="organizerSingle2" size="1" name="isDelivered">
+                                                <option value="0" {{ old('isDelivered', $order->isDelivered) == '0' ? 'selected' : '' }}>No</option>
+                                                <option value="1" {{ old('isDelivered', $order->isDelivered) == '1' ? 'selected' : '' }}>Yes</option>
+                                            </select>
                                         </div>
-
                                         <div class="col-md-6">
                                             <label for="organizerSingle2">Branch Name</label>
-                                            <select class="form-control select2" id="status" name="branch">
+                                            <select class="form-control select2" id="branch{{ $order->id }}" name="branch">
                                                 <option value="">Select branch...</option>
                                                 @foreach ($branches as $branch)
-                                                    <option value= "{{$branch->id}}"  {{ old('branch', $selectedBranchIds[$order->id] ?? null) == $branch->id ? 'selected' : '' }} >
-                                                        {{ $branch->branch_name }}
-                                                    </option>
+                                                    <option value="{{ $branch->id }}" {{ old('branch', $selectedBranchIds[$order->id] ?? null) == $branch->id ? 'selected' : '' }}>{{ $branch->branch_name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
-
                                         <div class="col-md-6">
-                                          {{-- <div class="mb-3"> --}}
-                                              <label for="status">Payment Status <span class="text-danger">*</span> </label>
-                                              <select class="form-select" id="organizerSingle2" size="1" name="status">
-                                                <option value="Cancelled" {{ old('status', $order->status) === 'Cancelled' ? 'selected' : '' }}>REJECT</option>
-                                                <option value="Completed" {{ old('status', $order->status) === 'Completed' ? 'selected' : '' }}>APPROVE</option>
-                                                <option value="Pending" {{ old('status', $order->status) === 'Pending' ? 'selected' : '' }}>PENDING</option>
-                                              </select>
-                                          {{-- </div> --}}
+                                            <label for="status">Payment Status <span class="text-danger">*</span></label>
+                                            <input class="form-control" name="amount" id="amount{{ $order->id }}" value="{{ $order->status === 'Partial' ? 'PARTIAL' : $order->status }}" readonly />
                                         </div>
-
+                                        <div class="col-md-6">
+                                            <div class="mb-3" id="partialAmountField{{ $order->id }}" >
+                                                <label for="status">Partial Amount<span class="text-danger">*</span></label>
+                                                <input class="form-control" name="partial_amount" id="partial_amount{{ $order->id }}" type="number" placeholder="Partial amount" value="{{ old('partial_amount', $order->partial_amt) }}" />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="mt-3 modal-footer">
                                 <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Close</button>
-                                <button class="btn btn-info" type="submit">Submit </button>
+                                <button class="btn btn-info" type="submit">Submit</button>
                             </div>
                         </div>
                     </form>
@@ -203,3 +198,39 @@
     </div>
 </div>
 @endsection
+
+<script>
+    function togglePartialAmountField(orderId, selectElement) {
+        console.log('Order ID:', orderId);
+        console.log('Selected status:', selectElement.value);
+
+        var partialAmountField = document.getElementById('partialAmountField' + orderId);
+        console.log('Partial amount field ID:', 'partialAmountField' + orderId);
+
+        if (selectElement.value === 'Partial') {
+            console.log('Showing partial amount field for order ID:', orderId);
+            partialAmountField.style.display = 'block';
+        } else {
+            console.log('Hiding partial amount field for order ID:', orderId);
+            partialAmountField.style.display = 'none';
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM fully loaded and parsed');
+
+        @foreach ($orders as $order)
+            console.log('Initial check for order ID:', {{ $order->id }});
+            togglePartialAmountField({{ $order->id }}, document.getElementById('status{{ $order->id }}'));
+        @endforeach
+    });
+
+    document.querySelector('form').addEventListener('submit', function(event) {
+        @foreach ($orders as $order)
+            var partialAmountValue = document.querySelector('#partialAmountField{{ $order->id }} input').value;
+            console.log('Partial amount for order ID {{ $order->id }}:', partialAmountValue);
+        @endforeach
+    });
+</script>
+
+

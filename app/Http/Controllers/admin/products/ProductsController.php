@@ -6,6 +6,7 @@ use App\Helpers\FileHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\AdminProduct;
+use App\Models\Branch;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 
@@ -15,8 +16,9 @@ class ProductsController extends Controller
     {
         $products = AdminProduct::latest()->get();
         $admins = Admin::latest()->get();
+        $branches = Branch::latest()->where('status','active')->get();
 
-        return view('admin.products.admin-products', compact('products','admins'));
+        return view('admin.products.admin-products', compact('products','admins','branches'));
     }
 
     public function store(Request $request)
@@ -39,6 +41,7 @@ class ProductsController extends Controller
         }
         $product = new AdminProduct();
         $product->name = $request->name;
+        $product->branch_id = $request->branch;
         $product->price = $request->price;
         $product->quantity = $request->quantity;
         $product->description = $request->description;
@@ -78,6 +81,7 @@ class ProductsController extends Controller
         $product->status = $request->status;
         $product->image = $img;
         $product->admin_id = $adminId;
+        $product->branch_id = $request->branch;
         $product->save();
 
         Toastr::success('Product updated successfully!');

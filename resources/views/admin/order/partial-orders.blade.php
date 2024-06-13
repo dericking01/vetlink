@@ -39,12 +39,14 @@
           <tbody class="list">
             @foreach ($orders as $key => $order)
             <tr>
-              <td class="sn">{{ ++$key }}</td>
+              <td class="sn">
+                <a href="{{ route('admin.orders.vieworder', $order->id) }}">
+                {{ ++$key }}
+                </a>
+              </td>
               <td class="date">{{ date_format(date_create($order->created_at), 'd M, Y') }}</td>
               <td class="service_category">
-                <a href="{{ route('admin.orders.vieworder', $order->id) }}">
                     {{ $order->agent->name }}
-                </a>
               </td>
               <td class="service_category">{{ $order->branch->branch_name }}</td>
 
@@ -54,7 +56,7 @@
                 @endforeach
               </td> --}}
               <td class="amount">{{ number_format ($order->partial_amt, 2) }}</td>
-              <td class="quantity">{{ $order->total_amount - $order->partial_amt }}</td>
+              <td class="quantity">{{ number_format ($order->total_amount - $order->partial_amt) }}</td>
               @if ($order->isDelivered)
               <td class="status text-center">
                 <span class="badge badge-subtle-success">YES</span>
@@ -126,7 +128,7 @@
             {{-- Edit Pending Orders Modal --}}
             <div class="modal fade" id="editPendingOrder{{ $order->id }}" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                    <form action="{{ route('admin.pendingOrder.update', ['id' => $order->id]) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.partialOrder.update', ['id' => $order->id]) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="modal-content position-relative">
@@ -169,17 +171,12 @@
                                             </select>
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="status">Order Status <span class="text-danger">*</span></label>
-                                            <select class="form-select" id="status{{ $order->id }}" name="status" onchange="togglePartialAmountField({{ $order->id }}, this)">
-                                                <option value="Cancelled" {{ old('status', $order->status) === 'Cancelled' ? 'selected' : '' }}>REJECT</option>
-                                                <option value="Completed" {{ old('status', $order->status) === 'Completed' ? 'selected' : '' }}>APPROVE</option>
-                                                <option value="Pending" {{ old('status', $order->status) === 'Pending' ? 'selected' : '' }}>PENDING</option>
-                                                <option value="Partial" {{ old('status', $order->status) === 'Partial' ? 'selected' : '' }}>PARTIAL</option>
-                                            </select>
+                                            <label for="status">Payment Status <span class="text-danger">*</span></label>
+                                            <input class="form-control" name="amount" id="amount{{ $order->id }}" value="{{ $order->status === 'Partial' ? 'PARTIAL' : $order->status }}" readonly />
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="mb-3" id="partialAmountField{{ $order->id }}" style="display: none;">
-                                                <label class="col-form-label" for="partial_amount">Partial Amount <span class="text-danger">*</span></label>
+                                            <div class="mb-3" id="partialAmountField{{ $order->id }}" >
+                                                <label for="status">Partial Amount<span class="text-danger">*</span></label>
                                                 <input class="form-control" name="partial_amount" id="partial_amount{{ $order->id }}" type="number" placeholder="Partial amount" value="{{ old('partial_amount', $order->partial_amt) }}" />
                                             </div>
                                         </div>

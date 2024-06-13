@@ -172,6 +172,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::delete('destroy', [OrdersController::class, 'destroyOrder'])->name('admin.order.destroy');
             Route::get('rejectedorder', [OrdersController::class, 'rejectedOrderindex'])->name('admin.rejectedorder');
             Route::get('partialorder', [OrdersController::class, 'partialOrderindex'])->name('admin.partialorder');
+            Route::put('update-partialorder/{id}', [OrdersController::class, 'updatePartialOrder'])->name('admin.partialOrder.update');
             Route::get('completedorder', [OrdersController::class, 'completedOrderindex'])->name('admin.completedorder');
             Route::get('view-order/{id}', [OrdersController::class, 'viewOrder'])->name('admin.orders.vieworder');
         });
@@ -214,6 +215,8 @@ Route::group(['middleware' => ['staff']], function () {
         Route::post('store', [StaffOrdersController::class, 'store'])->name('staff.storeOrder');
         Route::get('pendingorder', [StaffOrdersController::class, 'pendingOrderindex'])->name('staff.pendingOrder');
         Route::put('order/update/{id}', [StaffOrdersController::class, 'updateOrder'])->name('staff.pendingOrder.update');
+        Route::get('partialorder', [StaffOrdersController::class, 'partialOrderindex'])->name('staff.partialorder');
+        Route::put('update-partialorder/{id}', [StaffOrdersController::class, 'updatePartialOrder'])->name('staff.partialOrder.update');
         Route::delete('destroyorder', [StaffOrdersController::class, 'destroyOrder'])->name('staff.order.destroy');
         Route::get('rejectedorder', [StaffOrdersController::class, 'rejectedOrderindex'])->name('staff.rejectedorder');
         Route::get('completedorder', [StaffOrdersController::class, 'completedOrderindex'])->name('staff.completedorder');

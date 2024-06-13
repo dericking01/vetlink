@@ -13,6 +13,8 @@
             <span class="badge badge-subtle-warning d-flex align-items-center">Pending <i class="fas fa-spinner ms-1" aria-hidden="true"></i></span>
         @elseif($order->status == 'Completed')
             <span class="badge badge-subtle-success d-flex align-items-center">Completed <i class="fa fa-check-circle ms-1" aria-hidden="true"></i></span>
+        @elseif($order->status == 'Partial')
+            <span class="badge badge-subtle-warning d-flex align-items-center">Partially Paid <i class="fa fa-spinner fa-spin ms-1" aria-hidden="true"></i></span>
         @else
             <span class="badge badge-subtle-danger d-flex align-items-center">Rejected <i class="fa fa-times-circle ms-1" aria-hidden="true"></i></span>
         @endif

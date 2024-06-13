@@ -73,8 +73,8 @@ class UsersController extends Controller
         $branches = Branch::findOrFail($id);
 
         $validationRules = [
-            'name' => 'required|regex:/^[a-zA-Z\s]+$/',
-            'location' => 'required|regex:/^[a-zA-Z\s]+$/',
+            // 'name' => 'required|regex:/^[a-zA-Z\s]+$/',
+            // 'location' => 'required|regex:/^[a-zA-Z\s]+$/',
         ];
 
         $this->validate($request, $validationRules);

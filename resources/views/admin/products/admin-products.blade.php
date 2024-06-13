@@ -44,6 +44,7 @@
               <th>SN.</th>
               <th>Date</th>
               <th>Added by</th>
+              <th>Branch Name</th>
               <th>Product Name</th>
               <th>Price</th>
               <th>Quantity</th>
@@ -60,6 +61,14 @@
               <td class="name">
                 {{$product->admin->name}}
               </td>
+              <td class="name" style="text-align: center;">
+                @if($product->branch && $product->branch->branch_name)
+                    {{ $product->branch->branch_name }}
+                @else
+                    <span class="badge badge-subtle-warning">NONE</span>
+                @endif
+              </td>
+
               <td class="name">
                 <div class="d-flex align-items-center position-relative">
                     {{-- <img class="rounded-1 border border-200" src="{{ asset('upload/catalog/'.$product->image) }}" width="60" alt=""> --}}
@@ -188,6 +197,18 @@
                                             </div>
                                         </div>
 
+                                        <div class="col-md-12">
+                                            <label for="branch">Branch Name</label>
+                                            <select class="form-control select2" id="branch{{ $product->id }}" name="branch">
+                                                <option value="">Select branch...</option>
+                                                @foreach ($branches as $branch)
+                                                    <option value="{{ $branch->id }}" {{ old('branch', $product->branch_id) == $branch->id ? 'selected' : '' }}>
+                                                        {{ $branch->branch_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
                                         {{-- <div class="col-md-12">
                                             <div class="mb-3">
                                                 <label class="col-form-label" for="image">Image <span class="text-danger">*</span>
@@ -282,6 +303,20 @@
                                           <div class="invalid-feedback">{{ $message }}</div>
                                       @enderror
                                 </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="col-form-label" for="name">Branch Name <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select js-choice" id="organizerSingle2" size="1" required="required" name="branch" data-options='{"removeItemButton":true,"placeholder":true}'>
+                                    <option value="">Select branch...</option>
+                                    @foreach ($branches as $branch)
+                                        <option value="{{ $branch->id }}" {{ old('branch_id') == $branch->id ? 'selected' : '' }}>{{ $branch->branch_name }}</option>
+                                    @endforeach
+                                </select>
+                                  @error('name')
+                                      <div class="invalid-feedback">{{ $message }}</div>
+                                  @enderror
                             </div>
 
                             {{-- <div class="col-md-12">

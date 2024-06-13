@@ -38,12 +38,14 @@
           <tbody class="list">
             @foreach ($orders as $key => $order)
             <tr>
-              <td class="sn">{{ ++$key }}</td>
+              <td class="sn">
+                <a href="{{ route('staff.orders.vieworder', $order->id) }}">
+                {{ ++$key }}
+                </a>
+              </td>
               <td class="date">{{ date_format(date_create($order->created_at), 'd M, Y') }}</td>
               <td class="service_category">
-                <a href="{{ route('admin.orders.vieworder', $order->id) }}">
                     {{ $order->agent->name }}
-                </a>
               </td>
               <td class="service_category">{{ $order->branch->branch_name }}</td>
 
@@ -194,14 +196,19 @@
                                         </div>
 
                                         <div class="col-md-6">
-                                          {{-- <div class="mb-3"> --}}
-                                              <label for="status">Order Status <span class="text-danger">*</span> </label>
-                                              <select class="form-select" id="organizerSingle2" size="1" name="status">
+                                            <label for="status">Payment Status <span class="text-danger">*</span></label>
+                                            <select class="form-select" id="status{{ $order->id }}" name="status" onchange="togglePartialAmountField({{ $order->id }}, this)">
                                                 <option value="Cancelled" {{ old('status', $order->status) === 'Cancelled' ? 'selected' : '' }}>REJECT</option>
                                                 <option value="Completed" {{ old('status', $order->status) === 'Completed' ? 'selected' : '' }}>APPROVE</option>
                                                 <option value="Pending" {{ old('status', $order->status) === 'Pending' ? 'selected' : '' }}>PENDING</option>
-                                              </select>
-                                          {{-- </div> --}}
+                                                <option value="Partial" {{ old('status', $order->status) === 'Partial' ? 'selected' : '' }}>PARTIAL</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3" id="partialAmountField{{ $order->id }}" style="display: none;">
+                                                <label class="status" for="partial_amount">Partial Amount <span class="text-danger">*</span></label>
+                                                <input class="form-control" name="partial_amount" id="partial_amount{{ $order->id }}" type="number" placeholder="Partial amount" value="{{ old('partial_amount', $order->partial_amt) }}" />
+                                            </div>
                                         </div>
 
                                     </div>
@@ -222,3 +229,37 @@
     </div>
 </div>
 @endsection
+
+<script>
+    function togglePartialAmountField(orderId, selectElement) {
+        console.log('Order ID:', orderId);
+        console.log('Selected status:', selectElement.value);
+
+        var partialAmountField = document.getElementById('partialAmountField' + orderId);
+        console.log('Partial amount field ID:', 'partialAmountField' + orderId);
+
+        if (selectElement.value === 'Partial') {
+            console.log('Showing partial amount field for order ID:', orderId);
+            partialAmountField.style.display = 'block';
+        } else {
+            console.log('Hiding partial amount field for order ID:', orderId);
+            partialAmountField.style.display = 'none';
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM fully loaded and parsed');
+
+        @foreach ($orders as $order)
+            console.log('Initial check for order ID:', {{ $order->id }});
+            togglePartialAmountField({{ $order->id }}, document.getElementById('status{{ $order->id }}'));
+        @endforeach
+    });
+
+    document.querySelector('form').addEventListener('submit', function(event) {
+        @foreach ($orders as $order)
+            var partialAmountValue = document.querySelector('#partialAmountField{{ $order->id }} input').value;
+            console.log('Partial amount for order ID {{ $order->id }}:', partialAmountValue);
+        @endforeach
+    });
+</script>
