@@ -22,6 +22,7 @@ class AdminProduct extends Model
 
     protected $fillable = [
             'admin_id',
+            'branch_id',
             'name',
             'quantity',
             'price',
@@ -44,5 +45,10 @@ class AdminProduct extends Model
     public function orderItem()
     {
         return $this->morphMany(OrderItems::class, 'productable');
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
     }
 }

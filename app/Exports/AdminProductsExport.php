@@ -19,7 +19,6 @@ class AdminProductsExport implements FromCollection, WithHeadings, WithStyles
     {
         return AdminProduct::select(
             'id',
-            'admin_id',
             'name',
             'quantity',
             'price',
@@ -34,8 +33,7 @@ class AdminProductsExport implements FromCollection, WithHeadings, WithStyles
     public function headings(): array
     {
         return [
-            'id',
-            'admin_id',
+            's/n',
             'name',
             'quantity',
             'price',
