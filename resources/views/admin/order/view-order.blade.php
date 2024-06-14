@@ -8,7 +8,7 @@
       <h5>Order Details: #00{{$order->id}} </h5>
       <p class="fs--1">{{ date_format(date_create($order->created_at), 'F j, Y, g:i A') }}</p>
       <div class="d-flex align-items-center">
-        <strong class="me-2">Status:</strong>
+        <strong class="me-2">Payment Status:</strong>
         @if ($order->status == 'Pending')
             <span class="badge badge-subtle-warning d-flex align-items-center">Pending <i class="fas fa-spinner ms-1" aria-hidden="true"></i></span>
         @elseif($order->status == 'Completed')
