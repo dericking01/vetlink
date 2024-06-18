@@ -231,6 +231,21 @@
                                             </div>
                                         </div>
 
+                                        <div class="col-md-12">
+                                            <label for="status">Select Role <span class="text-danger">*</span></label>
+                                            <select class="form-select" id="roleSelect" name="role">
+                                                <option value="staff"
+                                                    {{ old('role', isset($staff) ? $staff->role : '') == 'staff' ? 'selected' : '' }}>
+                                                    STAFF
+                                                </option>
+                                                <option value="delivery"
+                                                    {{ old('role', isset($staff) ? $staff->role : '') == 'delivery' ? 'selected' : '' }}>
+                                                    COURIER
+                                                </option>
+                                            </select>
+                                        </div>
+
+
                                     </div>
                                 </div>
                             </div>
@@ -281,7 +296,7 @@
                                     <label class="col-form-label" for="name">Email <span class="text-danger">*</span>
                                     </label>
                                     <input class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('name') }}" required=""
-                                        id="name" type="text" placeholder="staff's Email" />
+                                        id="name" type="email" placeholder="staff's Email" />
                                       @error('email')
                                           <div class="invalid-feedback">{{ $message }}</div>
                                       @enderror
@@ -308,6 +323,45 @@
                                           <div class="invalid-feedback">{{ $message }}</div>
                                       @enderror
                                 </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="col-form-label" for="password">Password <span class="text-danger">*</span></label>
+                                    <input class="form-control @error('password') is-invalid @enderror"
+                                           name="password"
+                                           id="password"
+                                           type="password"
+                                           placeholder="Enter password"
+                                           value="{{ old('password') }}"
+                                           required />
+                                    @error('password')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="col-form-label" for="password_confirmation">Confirm Password <span class="text-danger">*</span></label>
+                                    <input class="form-control @error('password_confirmation') is-invalid @enderror"
+                                           name="password_confirmation"
+                                           id="password_confirmation"
+                                           type="password"
+                                           placeholder="Confirm password"
+                                           value="{{ old('password_confirmation') }}"
+                                           required />
+                                    @error('password_confirmation')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                    <label for="status">Select Role <span class="text-danger">*</span> </label>
+                                    <select class="form-select" id="organizerSingle2" size="1" name="role">
+                                      <option value="staff" {{ old('role', $staff->role) == 'staff' ? 'selected' : '' }}>STAFF</option>
+                                      <option value="delivery" {{ old('role', $staff->role) == 'delivery' ? 'selected' : '' }}>COURIER</option>
+                                    </select>
                             </div>
 
                         </div>

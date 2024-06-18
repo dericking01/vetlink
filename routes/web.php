@@ -23,6 +23,7 @@ use App\Http\Controllers\seller\products\ProductsManagementController;
 use App\Http\Controllers\seller\SellerDashboardController;
 use App\Http\Controllers\seller\SellerLoginController;
 use App\Http\Controllers\staff\customer\StaffCustomerController;
+use App\Http\Controllers\staff\DeliveryController;
 use App\Http\Controllers\staff\order\OrdersController as OrderOrdersController;
 use App\Http\Controllers\staff\order\StaffOrdersController;
 use App\Http\Controllers\staff\products\StaffProductsController;
@@ -84,13 +85,6 @@ Route::group(['prefix' => 'admin'], function () {
 
          });
 
-        //staff routes
-        //  Route::group(['prefix' => 'admin'], function () {
-        //     Route::get('staff', [StaffsController::class, 'index'])->name('admin.liststaffs');
-        //     Route::post('storestaff', [StaffsController::class, 'store'])->name('admin.storestaff');
-        //     Route::put('update/{id}', [StaffsController::class, 'update'])->name('admin.update');
-        //     Route::delete('destroy', [StaffsController::class, 'destroy'])->name('admin.destroystaff');
-        //  });
 
          //sab-users routes
         Route::group(['prefix' => 'vetinfo'], function () {
@@ -205,7 +199,29 @@ Route::group(['prefix' => 'staff'], function () {
     Route::post('logout', [StaffLoginController::class, 'logout'])->name('staff.logout')->middleware('staff');
 });
 
-Route::group(['middleware' => ['staff']], function () {
+// Routes accessible only to delivery staff
+Route::middleware(['auth:staff', 'role:delivery'])->group(function () {
+
+    Route::group(['prefix' => 'staff'], function () {
+
+        Route::get('/deliveries', [DeliveryController::class, 'index'])->name('staff.deliveries');
+        Route::put('deliveryorder/update/{id}', [DeliveryController::class, 'updateOrder'])->name('staff.deliverystatus.update');
+
+        // Add other delivery-specific routes here
+
+    });
+
+});
+
+// A route for access denied page
+Route::get('/access-denied', function () {
+    return response()->view('errors.access_denied', [], 403);
+})->name('access.denied');
+
+
+// Routes accessible only to regular staff
+Route::middleware(['auth:staff', 'role:staff'])->group(function () {
+// Route::group(['middleware' => ['staff']], function () {
 
     // staff management routes
     Route::group(['prefix' => 'staff'], function () {
