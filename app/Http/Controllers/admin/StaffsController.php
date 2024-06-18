@@ -39,7 +39,9 @@ class StaffsController extends Controller
                     return $query->where('email', $request->email);
                 }),
             ],
-            // 'role' => 'required|in:admin'
+            'password' => 'required|min:8|confirmed',  // Ensures password confirmation matches
+            'password_confirmation' => 'required'
+
         ], [
             'email.unique' => 'Email is already in use.',
         ]);
@@ -55,11 +57,11 @@ class StaffsController extends Controller
         $staff->name = $request->name;
         $staff->email = $request->email;
         $staff->phone = $phoneNumber;
-        $staff->role = 'staff';
+        $staff->role = $request->role;
         $staff->status = 'active';
         $staff->location = $request->location;
         $staff->email_verified_at = now();
-        $staff->password = Hash::make('staff2024');
+        $staff->password = Hash::make($request->password); //Hashes password before saving
         $staff->remember_token = Str::random(10);
 
         // dd($staff);
@@ -73,14 +75,9 @@ class StaffsController extends Controller
 
     public function update(Request $request, $id)
     {
-
         $staff = Staff::findOrFail($id);
 
-        // Check if email or phone number has changed
-        $emailChanged = $request->email !== $staff->email;
-        $phoneChanged = $request->phone !== $staff->phone;
-
-        // Define validation rules dynamically
+        // Define initial validation rules
         $validationRules = [
             'name' => 'required|regex:/^[a-zA-Z\s]+$/',
             'phone' => [
@@ -90,40 +87,50 @@ class StaffsController extends Controller
                 'digits:10',
             ],
             'email' => 'required|email',
-            // 'role' => 'required|in:staff'
+            'role' => 'required|in:staff,delivery', // Added role validation
         ];
 
+        // Check if email or phone number has changed
+        $emailChanged = $request->email !== $staff->email;
+        $phoneChanged = $request->phone !== $staff->phone;
+
+        // Append unique validation rule if email has changed
         if ($emailChanged) {
             $validationRules['email'] .= '|unique:staffs,email';
         }
 
+        // Append unique validation rule if phone has changed
         if ($phoneChanged) {
-            $validationRules['phone'] .= '|unique:staffs,phone';
+            $validationRules['phone'][] = 'unique:staffs,phone'; // Use array for phone rules
         }
 
+        // Perform the validation
         $this->validate($request, $validationRules);
 
-         // Extract the last 9 digits of the phone number
-         $lastNineDigits = substr($request->phone, -9);
+        // Extract the last 9 digits of the phone number
+        $lastNineDigits = substr($request->phone, -9);
 
-         // Prepend '255' to the extracted digits
-         $phoneNumber = '255' . $lastNineDigits;
+        // Prepend '255' to the extracted digits
+        $phoneNumber = '255' . $lastNineDigits;
 
-
+        // Update staff details
         $staff->name = $request->name;
         $staff->phone = $phoneNumber;
         $staff->email = $request->email;
-        $staff->role = 'staff';
+        $staff->role = $request->role;
         $staff->status = $request->status;
         $staff->location = $request->location;
 
+        // Debugging: Display the staff object
         // dd($staff);
 
+        // Save updated staff
         $staff->save();
 
         Toastr::success('Staff successfully updated!');
         return redirect()->route('admin.liststaffs');
     }
+
 
     public function destroy(Request $request)
     {
