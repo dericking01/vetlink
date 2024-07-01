@@ -20,8 +20,9 @@ class ForgotPasswordController extends Controller
 
     public function forgotPasswordPost(Request $request)
     {
+        // Validate the email input
         $request->validate([
-            'email' => "required|email",
+            'email' => 'required|email',
         ]);
 
         // Check if the email exists in admins or staffs table
@@ -33,21 +34,33 @@ class ForgotPasswordController extends Controller
             return back();
         }
 
-        // Generate a token
+        // Check if a reset token already exists for this email
+        $existingToken = DB::table('password_reset_tokens')->where('email', $request->email)->first();
+
+        if ($existingToken) {
+            // Token already exists, show the toast message and return
+            Toastr::info('We already sent you a password reset link.');
+            return redirect()->route('admin.login');
+        }
+
+        // Generate a new token
         $token = Str::random(64);
 
+        // Insert the token into the password_reset_tokens table
         DB::table('password_reset_tokens')->insert([
             'email' => $request->email,
             'token' => $token,
             'created_at' => Carbon::now()
         ]);
 
-        Mail::send("password.email-pwd",['token' => $token], function ($message) use ($request) {
-            $message -> to($request->email);
-            $message -> subject('Reset Password');
+        // Send the password reset email
+        Mail::send("password.email-pwd", ['token' => $token], function ($message) use ($request) {
+            $message->to($request->email);
+            $message->subject('Reset Password');
         });
 
-        Toastr::success('We have sent you an Email to reset your Password!');
+        // Show success message and redirect
+        Toastr::success('We have sent you an email to reset your password!');
         return redirect()->route('admin.login');
     }
 
