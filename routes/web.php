@@ -14,6 +14,7 @@ use App\Http\Controllers\admin\products\AdminProductExportController;
 use App\Http\Controllers\admin\StaffsController;
 use App\Http\Controllers\admin\transactions\TransactionsController;
 use App\Http\Controllers\admin\UsersController;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\seller\business\BankInfoController;
 use App\Http\Controllers\seller\business\MyShopController;
 use App\Http\Controllers\seller\business\MyWalletController;
@@ -53,6 +54,14 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('login', [AdminLoginController::class, 'login'])->name('admin.login');
     Route::post('login/submit', [AdminLoginController::class, 'submit'])->name('admin.submit.login');
     Route::post('logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
+});
+
+//Reset Password Routes
+Route::group(['prefix' => 'mypass'], function () {
+    Route::get('forgotpassword', [ForgotPasswordController::class, 'index'])->name('forgotpassword');
+    Route::post('forgotpwd', [ForgotPasswordController::class, 'forgotPasswordPost'])->name('forgotpwd');
+    Route::get('reset-password/{token}', [ForgotPasswordController::class, 'resetPassword'])->name('reset.password');
+    Route::post('reset-password}', [ForgotPasswordController::class, 'resetPasswordPost'])->name('resetpassword.post');
 });
 
 // administrator routes

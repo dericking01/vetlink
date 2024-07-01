@@ -41,7 +41,7 @@
                     </div>
                   </div>
                   <div class="col-auto">
-                    {{-- <a class="fs--1" href="forgot-password.html">Forgot Password?</a> --}}
+                    <a class="fs--1" href="{{ route('forgotpassword') }}">Forgot Password?</a>
                   </div>
                 </div>
                 <div class="mb-3">
