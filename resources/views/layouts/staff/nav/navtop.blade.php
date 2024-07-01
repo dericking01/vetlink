@@ -43,7 +43,7 @@
                     <a class="dropdown-item fw-bold text-warning" href="#!"><span
                             class="fas fa-crow me-1"></span><span>{{auth('staff')->user()->name}}</span></a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#!">Set status</a>
+                    <a class="dropdown-item" href="{{ route('forgotpassword') }}">Change Password</a>
                     {{-- <a class="dropdown-item" href="javascript:void(0);">Profile &amp;
                         account</a>
                     <a class="dropdown-item" href="#!">Feedback</a>
