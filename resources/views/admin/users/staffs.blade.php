@@ -306,7 +306,7 @@
                             <div class="col-md-12">
                                 <div class="mb-3">
                                   <label for="validationCustom04" class="form-label">Phone Number</label>
-                                  <input class="form-control @error('phone') is-invalid @enderror" id="validationCustom04" value="{{ old('phone', $staff->phone) }}" type="phone" name="phone" autocomplete="on" placeholder="Phone number"/>
+                                  <input class="form-control @error('phone') is-invalid @enderror" id="validationCustom04" value="{{ old('phone', isset($staff) ? $staff->phone : '') }}" type="phone" name="phone" autocomplete="on" placeholder="Phone number"/>
                                   @error('phone')
                                       <div class="invalid-feedback">{{ $message }}</div>
                                   @enderror
@@ -359,8 +359,8 @@
                             <div class="col-md-12">
                                     <label for="status">Select Role <span class="text-danger">*</span> </label>
                                     <select class="form-select" id="organizerSingle2" size="1" name="role">
-                                      <option value="staff" {{ old('role', $staff->role) == 'staff' ? 'selected' : '' }}>STAFF</option>
-                                      <option value="delivery" {{ old('role', $staff->role) == 'delivery' ? 'selected' : '' }}>COURIER</option>
+                                        <option value="staff" {{ old('role') == 'staff' ? 'selected' : '' }}>STAFF</option>
+                                        <option value="delivery" {{ old('role') == 'delivery' ? 'selected' : '' }}>COURIER</option>
                                     </select>
                             </div>
 
@@ -374,5 +374,5 @@
             </div>
         </form>
     </div>
-  </div>
+</div>
 @endsection

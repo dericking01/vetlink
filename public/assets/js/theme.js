@@ -5246,7 +5246,7 @@ var barChartInit = function barChartInit() {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
         datasets: [{
           label: '# of products',
-          data: [5, 12, 22, 7, 0, 0],
+          data: [0, 0, 0, 0, 0, 0],
           backgroundColor: [utils.rgbaColor(utils.getColor('secondary'), 0.2), utils.rgbaColor(utils.getColor('warning'), 0.2), utils.rgbaColor(utils.getColor('info'), 0.2), utils.rgbaColor(utils.getColor('success'), 0.2), utils.rgbaColor(utils.getColor('info'), 0.2), utils.rgbaColor(utils.getColor('primary'), 0.2)],
           borderColor: [utils.getColor('secondary'), utils.getColor('warning'), utils.getColor('info'), utils.getColor('success'), utils.getColor('info'), utils.getColor('primary')],
           borderWidth: 2
@@ -5498,7 +5498,7 @@ var chartLine = function chartLine() {
           borderColor: utils.getColor('primary'),
           borderWidth: 2,
           fill: false,
-          data: [210000, 660000, 610000, 220000, 0, 0, 0],
+          data: [0, 0, 0, 0, 0, 0, 0],
           tension: 0.3
         }]
       },

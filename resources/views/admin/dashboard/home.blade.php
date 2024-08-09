@@ -138,48 +138,48 @@
               <h6 class="pb-1 text-700">Orders </h6>
               <p class="font-sans-serif lh-1 mb-1 fs-2">{{$totalOrders}} </p>
               <div class="d-flex align-items-center">
-                <h6 class="fs--1 text-500 mb-0">7 </h6>
-                <h6 class="fs--2 ps-3 mb-0 text-primary"><span class="me-1 fas fa-caret-up"></span>21.8%</h6>
+                <h6 class="fs--1 text-500 mb-0">0 </h6>
+                <h6 class="fs--2 ps-3 mb-0 text-primary"><span class="me-1 fas fa-caret-up"></span>0%</h6>
               </div>
             </div>
             <div class="col-6 col-md-4 border-200 border-bottom border-end-md pb-4 ps-3">
               <h6 class="pb-1 text-700">Items sold </h6>
               <p class="font-sans-serif lh-1 mb-1 fs-2">{{$totalItems}} </p>
               <div class="d-flex align-items-center">
-                <h6 class="fs--1 text-500 mb-0">6 </h6>
-                <h6 class="fs--2 ps-3 mb-0 text-warning"><span class="me-1 fas fa-caret-up"></span>11.8%</h6>
+                <h6 class="fs--1 text-500 mb-0">0 </h6>
+                <h6 class="fs--2 ps-3 mb-0 text-warning"><span class="me-1 fas fa-caret-up"></span>0%</h6>
               </div>
             </div>
             <div class="col-6 col-md-4 border-200 border-bottom border-end border-end-md-0 pb-4 pt-4 pt-md-0 ps-md-3">
               <h6 class="pb-1 text-700">Total sale </h6>
               <p class="font-sans-serif lh-1 mb-1 fs-2">Tsh {{number_format($totalSale)}}/= </p>
               <div class="d-flex align-items-center">
-                <h6 class="fs--1 text-500 mb-0">Tsh 13,675/= </h6>
-                <h6 class="fs--2 ps-3 mb-0 text-success"><span class="me-1 fas fa-caret-up"></span>81.8%</h6>
+                <h6 class="fs--1 text-500 mb-0">Tsh 0/= </h6>
+                <h6 class="fs--2 ps-3 mb-0 text-success"><span class="me-1 fas fa-caret-up"></span>0%</h6>
               </div>
             </div>
             <div class="col-6 col-md-4 border-200 border-bottom border-bottom-md-0 border-end-md pt-4 pb-md-0 ps-3 ps-md-0">
               <h6 class="pb-1 text-700">Pending Orders</h6>
               <p class="font-sans-serif lh-1 mb-1 fs-2"> {{$PendingOrders}} </p>
               <div class="d-flex align-items-center">
-                <h6 class="fs--1 text-500 mb-0">3 </h6>
-                <h6 class="fs--2 ps-3 mb-0 text-danger"><span class="me-1 fas fa-caret-down"></span>1.8%</h6>
+                <h6 class="fs--1 text-500 mb-0">0 </h6>
+                <h6 class="fs--2 ps-3 mb-0 text-danger"><span class="me-1 fas fa-caret-down"></span>0%</h6>
               </div>
             </div>
             <div class="col-6 col-md-4 border-200 border-bottom-md-0 border-end pt-4 pb-md-0 ps-md-3">
               <h6 class="pb-1 text-700">Completed Orders </h6>
               <p class="font-sans-serif lh-1 mb-1 fs-2">{{$CompletedOrders}} </p>
               <div class="d-flex align-items-center">
-                <h6 class="fs--1 text-500 mb-0">4 </h6>
-                <h6 class="fs--2 ps-3 mb-0 text-success"><span class="me-1 fas fa-caret-up"></span>8%</h6>
+                <h6 class="fs--1 text-500 mb-0">0 </h6>
+                <h6 class="fs--2 ps-3 mb-0 text-success"><span class="me-1 fas fa-caret-up"></span>0%</h6>
               </div>
             </div>
             <div class="col-6 col-md-4 pb-0 pt-4 ps-3">
               <h6 class="pb-1 text-700">Rejected Orders </h6>
               <p class="font-sans-serif lh-1 mb-1 fs-2">{{$RejectedOrders}} </p>
               <div class="d-flex align-items-center">
-                <h6 class="fs--1 text-500 mb-0">1 </h6>
-                <h6 class="fs--2 ps-3 mb-0 text-info"><span class="me-1 fas fa-caret-up"></span>13%</h6>
+                <h6 class="fs--1 text-500 mb-0">0 </h6>
+                <h6 class="fs--2 ps-3 mb-0 text-info"><span class="me-1 fas fa-caret-up"></span>0%</h6>
               </div>
             </div>
           </div>
@@ -212,7 +212,7 @@
           <div class="card">
             <div class="card-header">
               <div class="row flex-between-end">
-                <div class="col-auto align-self-center">
+                <div class="col-auto align-self-center"> 
                   <h5 class="mb-0" data-anchor="data-anchor" id="bar-chart">Products Sold<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="#" href="#bar-chart" style="padding-left: 0.375em;"></a></h5>
                 </div>
                 {{-- <div class="col-auto ms-auto">

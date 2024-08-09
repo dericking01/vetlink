@@ -82,12 +82,8 @@ class AdminsController extends Controller
                 'numeric',
                 'regex:/^0\d{9}$/',
                 'digits:10',
-                Rule::unique('admins', 'phone')->where(function ($query) use ($request) {
-                    // Assuming $request is accessible here, adjust if necessary
-                    return $query->where('phone', $request->phone);
-                }),
             ],
-            'email' => 'required|email|unique:admins,email',
+            'email' => 'required|email',
             // 'role' => 'required|in:admin'
         ];
 
@@ -96,11 +92,12 @@ class AdminsController extends Controller
         }
 
         if ($phoneChanged) {
-            $validationRules['phone'] .= '|unique:admins,phone';
+            $validationRules['phone'][] = Rule::unique('admins', 'phone')->where(function ($query) use ($request) {
+                return $query->where('phone', $request->phone);
+            });
         }
 
         $this->validate($request, $validationRules);
-
 
         $admin->name = $request->name;
         $admin->phone = $request->phone;
@@ -111,6 +108,7 @@ class AdminsController extends Controller
         Toastr::success('Admin successfully updated!');
         return redirect()->route('admin.listadmins');
     }
+
 
     public function destroy(Request $request)
     {
