@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\Branch;
 use App\Models\Staff;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
@@ -16,7 +17,8 @@ class StaffsController extends Controller
     public function index()
     {
         $staffs = Staff::latest()->get();
-        return view('admin.users.staffs', compact('staffs'));
+        $branches = Branch::latest()->where('status','active')->get();
+        return view('admin.users.staffs', compact('staffs','branches'));
     }
 
 

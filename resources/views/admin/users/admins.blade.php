@@ -146,7 +146,7 @@
                                   <div class="col-md-12">
                                     <div class="mb-3">
                                       <label for="validationCustom04" class="form-label">Phone Number</label>
-                                      <input class="form-control @error('phone') is-invalid @enderror" id="validationCustom04" value="{{ old('phone', $admin->phone) }}" type="phone" name="phone" autocomplete="on" placeholder="Phone number"/>
+                                      <input class="form-control @error('phone') is-invalid @enderror" id="validationCustom04" value="{{ old('phone', $admin->phone) }}" type="phone" name="phone" autocomplete="on" placeholder="start with 0"/>
                                       @error('phone')
                                           <div class="invalid-feedback">{{ $message }}</div>
                                       @enderror
@@ -220,7 +220,7 @@
                           <div class="col-md-12">
                             <div class="mb-3">
                               <label for="validationCustom04" class="form-label">Phone Number</label>
-                              <input class="form-control @error('phone') is-invalid @enderror" id="validationCustom04" value="{{ old('phone') }}" type="phone" name="phone" autocomplete="on" placeholder="Phone number" required />
+                              <input class="form-control @error('phone') is-invalid @enderror" id="validationCustom04" value="{{ old('phone') }}" type="phone" name="phone" autocomplete="on" placeholder="start with 0" required />
                               @error('phone')
                                 <div class="invalid-feedback">{{ $message }}</div>
                               @enderror

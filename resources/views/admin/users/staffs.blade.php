@@ -195,7 +195,7 @@
                                         <div class="col-md-12">
                                             <div class="mb-3">
                                               <label for="validationCustom04" class="form-label">Phone Number</label>
-                                              <input class="form-control @error('phone') is-invalid @enderror" id="validationCustom04" value="{{ old('phone', $staff->phone) }}" type="phone" name="phone" autocomplete="on" placeholder="Phone number"/>
+                                              <input class="form-control @error('phone') is-invalid @enderror" id="validationCustom04" value="{{ old('phone', $staff->phone) }}" type="phone" name="phone" autocomplete="on" placeholder="start with 0"/>
                                               @error('phone')
                                                   <div class="invalid-feedback">{{ $message }}</div>
                                               @enderror
@@ -306,7 +306,7 @@
                             <div class="col-md-12">
                                 <div class="mb-3">
                                   <label for="validationCustom04" class="form-label">Phone Number</label>
-                                  <input class="form-control @error('phone') is-invalid @enderror" id="validationCustom04" value="{{ old('phone', isset($staff) ? $staff->phone : '') }}" type="phone" name="phone" autocomplete="on" placeholder="Phone number"/>
+                                  <input class="form-control @error('phone') is-invalid @enderror" id="validationCustom04" value="{{ old('phone', isset($staff) ? $staff->phone : '') }}" type="phone" name="phone" autocomplete="on" placeholder="start with 0"/>
                                   @error('phone')
                                       <div class="invalid-feedback">{{ $message }}</div>
                                   @enderror
@@ -315,13 +315,14 @@
 
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="col-form-label" for="location">Location <span class="text-danger">*</span>
-                                    </label>
-                                    <input class="form-control @error('location') is-invalid @enderror" name="location" value="{{ old('name') }}" required=""
-                                        id="name" type="text" placeholder="Location's name" />
-                                      @error('location')
-                                          <div class="invalid-feedback">{{ $message }}</div>
-                                      @enderror
+                                    <label for="organizerSingle2">Branch Name</label>
+                                    <select class="form-select js-choice" id="organizerSingle2" size="1" required="required" name="location" data-options='{"removeItemButton":true,"placeholder":true}'>
+                                        <option value="">Select branch...</option>
+                                        @foreach ($branches as $branch)
+                                            <option value="{{ $branch->branch_name }}" {{ old('branch_id') == $branch->id ? 'selected' : '' }}>{{ $branch->branch_name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <div class="invalid-feedback">Please select one</div>
                                 </div>
                             </div>
 

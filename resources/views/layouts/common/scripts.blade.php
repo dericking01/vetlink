@@ -62,7 +62,7 @@
 
     function screenshot(id){
         html2canvas(document.getElementById(id)).then(function(canvas){
-           downloadImage(canvas.toDataURL(),"VetlinkCard_" + id + ".png");
+           downloadImage(canvas.toDataURL(),"DodokiCard_" + id + ".jpeg");
         });
     }
 

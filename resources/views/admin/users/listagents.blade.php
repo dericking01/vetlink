@@ -60,7 +60,7 @@
                     $formattedPhone = str_replace('255', '0', $agent->phone);
                 @endphp
                 {{ $formattedPhone }}
-              </td> 
+              </td>
 
                   <td class="phone align-middle white-space-nowrap py-2 text-center">
                     {{ $agent->agent_id }}
@@ -149,7 +149,7 @@
                                       <div class="col-md-12">
                                         <div class="mb-3">
                                           <label for="validationCustom04" class="form-label">Phone Number</label>
-                                          <input class="form-control @error('phone') is-invalid @enderror" id="validationCustom04" value="{{ old('phone', $agent->phone) }}" type="phone" name="phone" autocomplete="on" placeholder="Phone number"/>
+                                          <input class="form-control @error('phone') is-invalid @enderror" id="validationCustom04" value="{{ old('phone', $agent->phone) }}" type="phone" name="phone" autocomplete="on" placeholder="start with 0"/>
                                           @error('phone')
                                               <div class="invalid-feedback">{{ $message }}</div>
                                           @enderror
@@ -235,7 +235,7 @@
                             <div class="col-md-12">
                               <div class="mb-3">
                                 <label for="validationCustom04" class="form-label">Phone Number</label>
-                                <input class="form-control @error('phone') is-invalid @enderror" id="validationCustom04" value="{{ old('phone') }}" type="phone" name="phone" autocomplete="on" placeholder="Phone number" required />
+                                <input class="form-control @error('phone') is-invalid @enderror" id="validationCustom04" value="{{ old('phone') }}" type="phone" name="phone" autocomplete="on" placeholder="start with 0" required />
                                 @error('phone')
                                   <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

@@ -27,7 +27,7 @@ class ProductsController extends Controller
         $adminId = auth('admin')->user()->id;
 
         $this->validate($request, [
-            'name' => 'regex:/^[a-zA-Z\s]+$/',
+            // 'name' => 'regex:/^[a-zA-Z\s]+$/',
             // 'image' => 'mimes:jpg,png|max:2048',
             'quantity' => 'required|numeric|min:1',
             'price' => 'required|numeric|min:0',

@@ -43,13 +43,13 @@
             <tr>
               <th>SN.</th>
               <th>Date</th>
-              <th>Added by</th>
+              {{-- <th>Added by</th> --}}
               <th>Branch Name</th>
               <th>Product Name</th>
               <th>Price</th>
               <th>Quantity</th>
               <th>Status</th>
-              <th>Description</th>
+              {{-- <th>Description</th> --}}
               <th>Action</th>
             </tr>
           </thead>
@@ -58,9 +58,9 @@
             <tr>
               <td class="sn">{{ ++$key }}</td>
               <td class="date">{{ date_format(date_create($product->created_at), 'd M, Y') }}</td>
-              <td class="name">
+              {{-- <td class="name">
                 {{$product->admin->name}}
-              </td>
+              </td> --}}
               <td class="name" style="text-align: center;">
                 @if($product->branch && $product->branch->branch_name)
                     {{ $product->branch->branch_name }}
@@ -100,13 +100,13 @@
                 <span class="badge badge-subtle-danger">NOT AVAILABLE</span>
               </td>
               @endif
-              <td class="name">
+              {{-- <td class="name">
                 <div class="d-flex align-items-center position-relative">
                     <div class="flex-1 ms-3">
                         <h6 class="mb-1 fw-semi-bold text-nowrap">{{ $product->description ?? 'none'}}</h6>
                     </div>
                 </div>
-              </td>
+              </td> --}}
 
               <td class="align-middle white-space-nowrap text-end">
                 <div class="dropstart font-sans-serif position-static d-inline-block">
