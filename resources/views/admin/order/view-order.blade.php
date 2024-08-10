@@ -51,7 +51,7 @@
         </div>
         </div> --}}
         <div class="col-md-6 col-lg-4">
-          <h5 class="mb-3 fs-0">Payment Method</h5>
+          <h5 class="mb-3 fs-0">Card</h5>
           <div class="d-flex"><img class="me-3" src="../../../assets/img/icons/visa.png" width="40" height="30" alt="">
             <div class="flex-1">
               <h6 class="mb-0">DODOKI CARD</h6>
@@ -96,7 +96,7 @@
                     <h6 class="mb-0 text-nowrap">{{ $product->name }}</h6>
                     <p class="mb-0">
                         @if($orderItem->productable_type == 'App\Models\AdminProduct')
-                            VetLink Product
+                            Dodoki Product
                         @else
                             Other
                         @endif

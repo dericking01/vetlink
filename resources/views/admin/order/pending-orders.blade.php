@@ -28,6 +28,7 @@
               <th>Date</th>
               {{-- <th>Buyer</th> --}}
               <th>Customer</th>
+              <th>Points</th>
               <th>Branch</th>
               <th>Amount</th>
               <th>Delivered</th>
@@ -46,6 +47,9 @@
               <td class="date">{{ date_format(date_create($order->created_at), 'd M, Y') }}</td>
               <td class="service_category">
                     {{ $order->agent->name }}
+              </td>
+              <td class="service_category">
+                    {{ $order->agent->points }}
               </td>
               <td class="service_category">{{ $order->branch->branch_name }}</td>
 

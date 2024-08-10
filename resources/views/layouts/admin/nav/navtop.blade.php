@@ -6,7 +6,8 @@
                 class="toggle-line"></span></span></button>
     <a class="navbar-brand me-1 me-sm-3" href="index.html">
         <div class="d-flex align-items-center"><img class="me-2"
-                src="{{ asset('/') }}assets/img/icons/spot-illustrations/vet-partial.png" alt=""
+                {{-- src="{{ asset('/') }}assets/img/icons/spot-illustrations/vet-partial.png" alt="" --}}
+                src="{{ asset('/') }}assets/img/icons/spot-illustrations/dodoki.png" alt=""
                 width="40" /><span class="font-sans-serif"></span></div>
     </a>
     <ul class="navbar-nav align-items-center d-none d-lg-block">
