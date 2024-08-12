@@ -214,10 +214,14 @@
 
                                         <div class="col-md-12">
                                             <div class="mb-3">
-                                                <label class="col-form-label" for="name">Location<span class="text-danger">*</span>
-                                                </label>
-                                                <input class="form-control @error('name') is-invalid @enderror" name="location"
-                                                    id="name" type="text" placeholder="location" value="{{ $staff->location }}" />
+                                                <label for="organizerSingle2">Location</label>
+                                                <select class="form-select js-choice" id="organizerSingle2" size="1" required="required" name="location" data-options='{"removeItemButton":true,"placeholder":true}'>
+                                                    <option value="">Select branch...</option>
+                                                    @foreach ($branches as $branch)
+                                                        <option value="{{ $branch->branch_name }}" {{ old('branch_id') == $branch->id ? 'selected' : '' }}>{{ $branch->branch_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <div class="invalid-feedback">Please select one</div>
                                             </div>
                                         </div>
 
@@ -315,7 +319,7 @@
 
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="organizerSingle2">Branch Name</label>
+                                    <label for="organizerSingle2">Location</label>
                                     <select class="form-select js-choice" id="organizerSingle2" size="1" required="required" name="location" data-options='{"removeItemButton":true,"placeholder":true}'>
                                         <option value="">Select branch...</option>
                                         @foreach ($branches as $branch)
