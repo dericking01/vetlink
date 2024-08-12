@@ -7,9 +7,9 @@
   <div class="card-header bg-light">
     <div class="row align-items-center">
         <div class="col">
-            <h5 class="mb-0" id="followers">Pending Orders
+            <h5 class="mb-0" id="followers">Pay-Point Orders
               <span class="d-none d-sm-inline-block">({{ $orders->count() }})</span>
-                  </h5>
+            </h5>
         </div>
         <div class="col text-end">
             <a class="font-sans-serif" href="#!" data-bs-toggle="modal" data-bs-target="#addproduct">
@@ -28,12 +28,12 @@
               <th>Date</th>
               {{-- <th>Buyer</th> --}}
               <th>Customer</th>
-              <th>Points</th>
               <th>Branch</th>
-              <th>Amount</th>
+              <th>PayPoints</th>
+              <th>Debt</th>
               <th>Delivered</th>
               <th class="text-center" >Payment Status</th>
-              <th>Action</th>
+              {{-- <th>Action</th> --}}
             </tr>
           </thead>
           <tbody class="list">
@@ -48,9 +48,6 @@
               <td class="service_category">
                     {{ $order->agent->name }}
               </td>
-              <td class="service_category">
-                    {{ $order->agent->points }}
-              </td>
               <td class="service_category">{{ $order->branch->branch_name }}</td>
 
               {{-- <td class="quantity">
@@ -58,8 +55,8 @@
                     {{ $orderItem->quantity }}
                 @endforeach
               </td> --}}
-              {{-- <td class="quantity">{{ $order->orderItems->quantity }}</td> --}}
-              <td class="amount">{{ number_format ($order->total_amount, 2) }}</td>
+              <td class="amount">{{ number_format ($order->PayPoint, 2) }}</td>
+              <td class="quantity">{{ number_format ($order->total_amount - $order->PayPoint) }}</td>
               @if ($order->isDelivered)
               <td class="status text-center">
                 <span class="badge badge-subtle-success">YES</span>
@@ -70,7 +67,7 @@
               </td>
               @endif
 
-              @if ($order->status == 'Completed' )
+              @if ($order->PayPoint == $order->total_amount)
               <td class="status text-center">
                 <span class="badge badge-subtle-success">DONE</span>
               </td>
@@ -79,7 +76,7 @@
                 <span class="badge badge-subtle-warning">PENDING</span>
               </td>
               @endif
-              <td class="align-middle white-space-nowrap text-end">
+              {{-- <td class="align-middle white-space-nowrap text-end">
                 <div class="dropstart font-sans-serif position-static d-inline-block">
                     <button class="btn btn-link text-600 btn-sm dropdown-toggle
                       btn-reveal float-end" type="button" id="dropdown-simple-pagination-table-item-1"
@@ -96,7 +93,7 @@
                       <a class="dropdown-item text-danger" href="#!" data-bs-toggle="modal" data-bs-target="#deletePendingOrder{{ $order->id }}">Delete</a>
                     </div>
                   </div>
-              </td>
+              </td> --}}
             </tr>
 
             {{-- Delete Pending Orders Modal --}}
@@ -131,7 +128,7 @@
             {{-- Edit Pending Orders Modal --}}
             <div class="modal fade" id="editPendingOrder{{ $order->id }}" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                    <form action="{{ route('admin.pendingOrder.update', ['id' => $order->id]) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.partialOrder.update', ['id' => $order->id]) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="modal-content position-relative">
@@ -175,24 +172,12 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label for="status">Payment Status <span class="text-danger">*</span></label>
-                                            <select class="form-select" id="status{{ $order->id }}" name="status" onchange="togglePartialAmountField({{ $order->id }}, this)">
-                                                <option value="Cancelled" {{ old('status', $order->status) === 'Cancelled' ? 'selected' : '' }}>REJECT</option>
-                                                <option value="Completed" {{ old('status', $order->status) === 'Completed' ? 'selected' : '' }}>APPROVE</option>
-                                                <option value="Pending" {{ old('status', $order->status) === 'Pending' ? 'selected' : '' }}>PENDING</option>
-                                                <option value="Partial" {{ old('status', $order->status) === 'Partial' ? 'selected' : '' }}>PARTIAL</option>
-                                                <option value="PayPoint" {{ old('status', $order->status) === 'PayPoint' ? 'selected' : '' }}>Pay By Points</option>
-                                            </select>
+                                            <input class="form-control" name="amount" id="amount{{ $order->id }}" value="{{ $order->status === 'Partial' ? 'PARTIAL' : $order->status }}" readonly />
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="mb-3" id="partialAmountField{{ $order->id }}" style="display: none;">
-                                                <label class="status" for="partial_amount">Partial Amount <span class="text-danger">*</span></label>
+                                            <div class="mb-3" id="partialAmountField{{ $order->id }}" >
+                                                <label for="status">Partial Amount<span class="text-danger">*</span></label>
                                                 <input class="form-control" name="partial_amount" id="partial_amount{{ $order->id }}" type="number" placeholder="Partial amount" value="{{ old('partial_amount', $order->partial_amt) }}" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="mb-3" id="PayPointAmountField{{ $order->id }}" style="display: none;">
-                                                <label class="status" for="PayPointamount">Points Amount <span class="text-danger">*</span></label>
-                                                <input class="form-control" name="PayPoint" id="PayPoint{{ $order->id }}" type="number" placeholder="Points amount" value="{{ old('PayPoint', $order->PayPoint) }}" />
                                             </div>
                                         </div>
                                     </div>
@@ -214,7 +199,7 @@
 </div>
 @endsection
 
-{{-- <script>
+<script>
     function togglePartialAmountField(orderId, selectElement) {
         console.log('Order ID:', orderId);
         console.log('Selected status:', selectElement.value);
@@ -246,50 +231,6 @@
             console.log('Partial amount for order ID {{ $order->id }}:', partialAmountValue);
         @endforeach
     });
-</script> --}}
-
-<script>
-    function togglePartialAmountField(orderId, selectElement) {
-        console.log('Order ID:', orderId);
-        console.log('Selected status:', selectElement.value);
-
-        var partialAmountField = document.getElementById('partialAmountField' + orderId);
-        var payPointAmountField = document.getElementById('PayPointAmountField' + orderId);
-
-        if (selectElement.value === 'Partial') {
-            console.log('Showing partial amount field for order ID:', orderId);
-            partialAmountField.style.display = 'block';
-            payPointAmountField.style.display = 'none';
-        } else if (selectElement.value === 'PayPoint') {
-            console.log('Showing points amount field for order ID:', orderId);
-            payPointAmountField.style.display = 'block';
-            partialAmountField.style.display = 'none';
-        } else {
-            console.log('Hiding both partial and points amount fields for order ID:', orderId);
-            partialAmountField.style.display = 'none';
-            payPointAmountField.style.display = 'none';
-        }
-    }
-
-    window.addEventListener('DOMContentLoaded', function() {
-        console.log('DOM fully loaded and parsed');
-
-        @foreach ($orders as $order)
-            console.log('Initial check for order ID:', {{ $order->id }});
-            togglePartialAmountField({{ $order->id }}, document.getElementById('status{{ $order->id }}'));
-        @endforeach
-    });
-
-    document.querySelector('form').addEventListener('submit', function(event) {
-        @foreach ($orders as $order)
-            var partialAmountValue = document.querySelector('#partialAmountField{{ $order->id }} input').value;
-            var payPointAmountValue = document.querySelector('#PayPointAmountField{{ $order->id }} input').value;
-
-            console.log('Partial amount for order ID {{ $order->id }}:', partialAmountValue);
-            console.log('Points amount for order ID {{ $order->id }}:', payPointAmountValue);
-        @endforeach
-    });
 </script>
-
 
 

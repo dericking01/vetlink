@@ -18,7 +18,7 @@
             <button class="btn navbar-toggler-humburger-icon navbar-vertical-toggle"
                 data-bs-toggle="tooltip" data-bs-placement="left" title="Toggle Navigation"><span
                     class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
-        </div><a class="navbar-brand" href="index.html">
+        </div><a class="navbar-brand" href="https://sales.dodokiinvestmenttz.co.tz/">
             <div class="d-flex align-items-center py-2"><img class="me-2"
                     src="{{ asset('/') }}assets/img/icons/spot-illustrations/dodoki.png" alt=""
                     width="75" /><span class="font-sans-serif"></span></div>

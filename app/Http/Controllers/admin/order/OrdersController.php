@@ -96,6 +96,21 @@ class OrdersController extends Controller
         return view('admin.order.partial-orders', compact('orders','branches','selectedBranchIds'));
     }
 
+    public function payPointOrderindex()
+    {
+        // $orders = Orders::where('status', 'Cancelled')->get();
+        $orders = Orders::with('orderItems')->where('status', 'PayPoint')->latest()->get();
+        $branches = Branch::latest()->where('status','active')->latest()->get();
+        $selectedBranchIds = [];
+
+        foreach ($orders as $order) {
+            $selectedBranchIds[$order->id] = $order->branch_id;
+        }
+        // dd($selectedBranchIds);
+
+        return view('admin.order.paypoints-orders', compact('orders','branches','selectedBranchIds'));
+    }
+
     public function viewOrder($id)
     {
         $order = Orders::where('id', $id)->first();
@@ -176,6 +191,87 @@ class OrdersController extends Controller
 
     }
 
+    // public function updateOrderOG(Request $request, $id)
+    // {
+    //     // Find the existing Order record
+    //     $order = Orders::find($id);
+
+    //     if (!$order) {
+    //         Toastr::error('Order not found.');
+    //         return back();
+    //     }
+
+    //     // Fetch the associated Agent
+    //     $agent = $order->agent;
+
+    //     if (!$agent) {
+    //         Toastr::error('Agent not found.');
+    //         return back();
+    //     }
+
+    //     // Check if the status is Partial and partial amount is provided
+    //     if ($request->status === 'Partial') {
+    //         if (is_null($request->partial_amount) || $request->partial_amount === '') {
+    //             Toastr::error('Partial amount cannot be empty.');
+    //             return back()->withInput();
+    //         }
+
+    //         // Check if partial amount is greater than total amount
+    //         if ($request->partial_amount > $order->total_amount) {
+    //             Toastr::error('Partial amount cannot be greater than the total amount.');
+    //             return back()->withInput();
+    //         }
+    //     }
+
+    //     // Check if the status is PayPoint and payPoint amount is provided
+    //     if ($request->status === 'PayPoint') {
+    //         if (is_null($request->PayPoint) || $request->PayPoint === '') {
+    //             Toastr::error('Points amount cannot be empty.');
+    //             return back()->withInput();
+    //         }
+
+    //         // Check if points amount is greater than total amount
+    //         if ($request->PayPoint > $order->total_amount) {
+    //             Toastr::error('Points amount cannot be greater than the total amount.');
+    //             return back()->withInput();
+    //         }
+
+    //         // Check if the agent has enough points
+    //         if ($request->PayPoint > $agent->points) {
+    //             $toastr = resolve('toastr');
+    //             $toastr->info('Sorry, Not enough points!!!');
+
+    //             // Toastr::info('Sorry, Not enough points!!!');
+    //             // return back()->withInput();
+    //         }
+    //     }
+    //     dd($order);
+    //     // Update the order with the new data
+    //     $order->isDelivered = $request->isDelivered;
+    //     $order->status = $request->status;
+    //     $order->branch_id = $request->branch;
+    //     $order->partial_amt = $request->status === 'Partial' ? $request->partial_amount : null;
+    //     $order->PayPoint = $request->status === 'PayPoint' ? $request->PayPoint : null;
+
+    //     // Save the updated order
+    //     $order->save();
+
+    //     // Deduct the used points from the agent's total points if PayPoint was used
+    //     if ($request->status === 'PayPoint') {
+    //         $agent->points -= $request->PayPoint;
+    //         $agent->save();
+    //     }
+
+    //     // If the order is completed, dispatch the OrderCompleted event
+    //     if ($order->status === 'Completed') {
+    //         event(new OrderCompleted($order));
+    //     }
+
+    //     Toastr::success('Order successfully updated! ✔');
+    //     return back();
+    // }
+
+
     public function updateOrder(Request $request, $id)
     {
         // Find the existing Order record
@@ -183,6 +279,14 @@ class OrdersController extends Controller
 
         if (!$order) {
             Toastr::error('Order not found.');
+            return back();
+        }
+
+        // Fetch the associated Agent
+        $agent = $order->agent;
+
+        if (!$agent) {
+            Toastr::error('Agent not found.');
             return back();
         }
 
@@ -200,16 +304,46 @@ class OrdersController extends Controller
             }
         }
 
+        // Check if the status is PayPoint and payPoint amount is provided
+        if ($request->status === 'PayPoint') {
+            if (is_null($request->PayPoint) || $request->PayPoint === '') {
+                Toastr::error('Points amount cannot be empty.');
+                return back()->withInput();
+            }
+
+            // Check if point amount is greater than total amount
+            if ($request->PayPoint > $order->total_amount) {
+                Toastr::error('Points amount cannot be greater than the total amount.');
+                return back()->withInput();
+            }
+
+            // Check if the agent has enough points
+            if ($request->PayPoint > $agent->points) {
+                // $toastr = resolve('toastr');
+                // $toastr->info('Sorry, Not enough points!!!');
+
+                Toastr::info('Sorry, Not enough points!!!');
+                return back()->withInput();
+            }
+        }
+        // dd($order);
         // Update the order with the new data
         $order->isDelivered = $request->isDelivered;
         $order->status = $request->status;
         $order->branch_id = $request->branch;
         $order->partial_amt = $request->status === 'Partial' ? $request->partial_amount : null;
+        $order->PayPoint = $request->status === 'PayPoint' ? $request->PayPoint : null;
 
         // Save the updated order
         $order->save();
 
-        // Dispatch the OrderCompleted event if necessary
+        // Deduct the used points from the agent's total points if PayPoint was used
+        if ($request->status === 'PayPoint') {
+            $agent->points -= $request->PayPoint;
+            $agent->save();
+        }
+
+        // If the order is completed, dispatch the OrderCompleted event
         if ($order->status === 'Completed') {
             event(new OrderCompleted($order));
         }
@@ -254,7 +388,7 @@ class OrdersController extends Controller
                 $order->status = 'Pending';
             }
         }
-        
+
         // Save the updated order
         $order->save();
 
