@@ -27,11 +27,39 @@ class ProductsImport implements ToCollection, WithHeadingRow
             $branch = Branch::where('branch_name', $row['branch_name'])->first();
 
             if ($branch) {
+                            // Check if expire_date is empty or null, and set to null if it is
+            $expireDate = null;
+            if (!empty($row['expire_date'])) {
+                $expireDate = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['expire_date']);
+            }
+
+            // Prepare the data for insertion
+            // $data = [
+            //     'admin_id' => $adminId, // Use the authenticated admin's ID
+            //     'branch_id' => $branch->id, // Use the branch ID from the database
+            //     'name' => $row['product_name'],
+            //     'quantity' => $row['quantity'],
+            //     'units' => $row['units'], // ?? '-', Provide a default if null
+            //     'expire_date' => $expireDate,
+            //     'price' => $row['price'],
+            //     'description' => $row['description'],
+            //     'status' => $row['status'],
+            //     'image' => NULL
+            // ];
+
+            // // Debug the data before saving it to the database
+            // // dd($data);
+
+            // Save the data to the database
+            // AdminProduct::create($data);
+
                 AdminProduct::create([
                     'admin_id' => $adminId, // Use the authenticated admin's ID
                     'branch_id' => $branch->id, // Use the branch ID from the database
                     'name' => $row['product_name'],
                     'quantity' => $row['quantity'],
+                    'units' => $row['units'], // set to null if empty
+                    'expire_date' => $expireDate,
                     'price' => $row['price'],
                     'description' => $row['description'],
                     'status' => $row['status'],

@@ -25,6 +25,8 @@ class AdminProduct extends Model
             'branch_id',
             'name',
             'quantity',
+            'units',
+            'expire_date',
             'price',
             'description',
             'status',

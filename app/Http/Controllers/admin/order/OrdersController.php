@@ -149,6 +149,8 @@ class OrdersController extends Controller
         $order->agent_id = $request->id;
         $order->status = 'Pending';
         $order->branch_id = $request->branch;
+        $order->discount = $request->discount;
+        $order->payment_method = $request->payment_method;
         $order->isDelivered = false;
         // dd($order);
         $order->save();

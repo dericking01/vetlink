@@ -190,6 +190,23 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div class="mb-3">
+                                                <label class="col-form-label" for="units">Units <span class="text-danger">*</span>
+                                                </label>
+                                                <input class="form-control @error('units') is-invalid @enderror" name="units"
+                                                    id="units" type="text" placeholder="Total product units" value="{{ $product->units }}" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="mb-3">
+                                                <label class="col-form-label" for="expire_date">Expire date <span class="text-danger">*</span>
+                                                </label>
+                                                <input class="form-control @error('expire_date') is-invalid @enderror" name="expire_date"
+                                                    id="expire_date" type="text" placeholder="Total product expire_date" value="{{ $product->expire_date }}" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="mb-3">
                                                 <label class="col-form-label" for="price">Price <span class="text-danger">*</span>
                                                 </label>
                                                 <input class="form-control @error('price') is-invalid @enderror" name="price"
@@ -288,6 +305,28 @@
                                     </label>
                                     <input class="form-control @error('name') is-invalid @enderror" name="quantity" value="{{ old('name') }}" required=""
                                         id="name" type="text" placeholder="Quantity of the product" />
+                                      @error('name')
+                                          <div class="invalid-feedback">{{ $message }}</div>
+                                      @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="col-form-label" for="name">Units <span class="text-danger">*</span>
+                                    </label>
+                                    <input class="form-control @error('name') is-invalid @enderror" name="units" value="{{ old('name') }}" required=""
+                                        id="name" type="text" placeholder="Units of the product" />
+                                      @error('name')
+                                          <div class="invalid-feedback">{{ $message }}</div>
+                                      @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="col-form-label" for="name">Expire date <span class="text-danger">*</span>
+                                    </label>
+                                    <input class="form-control @error('name') is-invalid @enderror" name="expire_date" value="{{ old('name') }}" required=""
+                                        id="name" type="text" placeholder="Expire date of the product" />
                                       @error('name')
                                           <div class="invalid-feedback">{{ $message }}</div>
                                       @enderror

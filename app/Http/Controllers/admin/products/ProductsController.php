@@ -44,6 +44,8 @@ class ProductsController extends Controller
         $product->branch_id = $request->branch;
         $product->price = $request->price;
         $product->quantity = $request->quantity;
+        $product->units = $request->units;
+        $product->expire_date = $request->expire_date;
         $product->description = $request->description;
         $product->image = $img;
         $product->admin_id = $adminId;
@@ -77,6 +79,8 @@ class ProductsController extends Controller
         $product->name = $request->name;
         $product->price = $request->price;
         $product->quantity = $request->quantity;
+        $product->units = $request->units;
+        $product->expire_date = $request->expire_date;
         $product->description = $request->description;
         $product->status = $request->status;
         $product->image = $img;

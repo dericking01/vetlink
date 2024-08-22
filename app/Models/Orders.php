@@ -15,6 +15,8 @@ class Orders extends Model
     protected $fillable = [
         'agent_id',
         'branch_id',
+        'discount',
+        'payment_method',
         'isDelivered',
         'status'
     ];
