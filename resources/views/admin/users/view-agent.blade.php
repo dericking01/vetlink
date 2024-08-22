@@ -45,7 +45,7 @@
               <a href="{{ route('agent.view-agent_card', $agent->id) }}">
                 <p class="mb-2 fs--1"> {{$agent->agent_id}} </p>
               </a>
-              <h4 class="mb-2 text-success">Tsh {{ number_format($cash) }}/=</h4>
+              <h4 class="mb-2 text-success">Tsh {{ number_format($agent->points) }}/=</h4>
             </div>
           </div>
         </div>
