@@ -333,9 +333,19 @@ class StaffOrdersController extends Controller
         // Save the updated order
         $order->save();
 
-        // Dispatch the OrderCompleted event if necessary
-        if ($order->status === 'Completed') {
+        // Check if Request Points equals Total amount
+        if ($request->PayPoint == $order->total_amount) { // Using == for comparison to avoid type issues
+            // Mark the order as completed
+            $order->status = 'Completed';
+            $order->save();
+
+            // Deduct product quantity
+            event(new ProductQuantityDeducted($order->orderItems));
+
+            // Dispatch the OrderCompleted event
             event(new OrderCompleted($order));
+
+            Toastr::success('Order FULLY PAID successfully! ✔');
         }
 
         Toastr::success('Order successfully updated! ✔');
