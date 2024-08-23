@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\staff\order;
 
 use App\Events\OrderCompleted;
+use App\Events\ProductQuantityDeducted;
 use App\Http\Controllers\Controller;
 use App\Models\AdminProduct;
 use App\Models\Agent;
@@ -130,6 +131,8 @@ class StaffOrdersController extends Controller
         $order->agent_id = $request->id;
         $order->status = 'Pending';
         $order->branch_id = $request->branch;
+        $order->discount = $request->discount;
+        $order->payment_method = $request->payment_method;
         $order->isDelivered = false;
         // dd($order);
         $order->save();
@@ -183,6 +186,14 @@ class StaffOrdersController extends Controller
             return back();
         }
 
+        // Fetch the associated Agent
+        $agent = $order->agent;
+
+        if (!$agent) {
+            Toastr::error('Agent not found.');
+            return back();
+        }
+
         // Check if the status is Partial and partial amount is provided
         if ($request->status === 'Partial') {
             if (is_null($request->partial_amount) || $request->partial_amount === '') {
@@ -197,17 +208,86 @@ class StaffOrdersController extends Controller
             }
         }
 
+        // Check if the status is PayPoint and payPoint amount is provided
+        if ($request->status === 'PayPoint') {
+            if (is_null($request->PayPoint) || $request->PayPoint === '') {
+                Toastr::error('Points amount cannot be empty.');
+                return back()->withInput();
+            }
+
+            // Check if point amount is greater than total amount
+            if ($request->PayPoint > $order->total_amount) {
+                Toastr::error('Points amount cannot be greater than the total amount.');
+                return back()->withInput();
+            }
+
+            // Check if the agent has enough points
+            if ($request->PayPoint > $agent->points) {
+                // $toastr = resolve('toastr');
+                // $toastr->info('Sorry, Not enough points!!!');
+
+                Toastr::info('Sorry, Not enough points!!!');
+                return back()->withInput();
+            }
+
+            // Check if Request Points equals Total amount
+            if ($request->PayPoint == $order->total_amount) { // Using == for comparison to avoid type issues
+                // Mark the order as completed
+                $order->status = 'Completed';
+                $order->save();
+
+                // Deduct product quantity
+                event(new ProductQuantityDeducted($order->orderItems));
+
+                // Dispatch the OrderCompleted event
+                event(new OrderCompleted($order));
+
+                Toastr::success('Order FULLY PAID successfully! ✔');
+            }
+
+        }
+
         // Update the record with the new data
         $order->isDelivered = $request->isDelivered;
         $order->status = $request->status;
         $order->branch_id = $request->branch;
+        $order->payment_method = $request->payment_method;
         $order->partial_amt = $request->status === 'Partial' ? $request->partial_amount : null;
+        $order->PayPoint = $request->status === 'PayPoint' ? $request->PayPoint : null;
+        // dd($order);
+        // Update the quantities of the order items
+        $totalAmount = 0;
+
+        foreach ($request->quantities as $orderItemId => $quantity) {
+            $orderItem = OrderItems::findOrFail($orderItemId);
+
+            // Update the quantity of each order item
+            $orderItem->quantity = $quantity;
+            $orderItem->save();
+
+            // Recalculate the total amount
+            $totalAmount += $quantity * $orderItem->price;
+        }
+
+        // Update the total amount in the order
+        $order->total_amount = $totalAmount;
         // dd($order);
         // Save the updated order
         $order->save();
 
-        // Dispatch the OrderCompleted event
-        event(new OrderCompleted($order));
+        // Deduct the used points from the agent's total points if PayPoint was used
+        if ($request->status === 'PayPoint') {
+            $agent->points -= $request->PayPoint;
+            $agent->save();
+        }
+
+        // If the order is completed, dispatch the OrderCompleted event
+        if ($order->status === 'Completed') {
+            // Deduct product quantity
+            event(new ProductQuantityDeducted($order->orderItems));
+            // Dispatch the OrderCompleted event
+            event(new OrderCompleted($order));
+        }
 
         Toastr::success('Order successfully updated! ✔');
         return back();

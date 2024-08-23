@@ -28,6 +28,7 @@
               <th>Date</th>
               {{-- <th>Buyer</th> --}}
               <th>Customer</th>
+              <th>Points</th>
               <th>Branch</th>
               <th>Amount</th>
               <th>Delivered</th>
@@ -46,6 +47,9 @@
               <td class="date">{{ date_format(date_create($order->created_at), 'd M, Y') }}</td>
               <td class="service_category">
                     {{ $order->agent->name }}
+              </td>
+              <td class="service_category">
+                    {{ $order->agent->points }}
               </td>
               <td class="service_category">{{ $order->branch->branch_name }}</td>
 
@@ -206,7 +210,7 @@
                                             <label for="status">Payment Status <span class="text-danger">*</span></label>
                                             <select class="form-select" id="status{{ $order->id }}" name="status" onchange="togglePartialAmountField({{ $order->id }}, this)">
                                                 <option value="Cancelled" {{ old('status', $order->status) === 'Cancelled' ? 'selected' : '' }}>REJECT</option>
-                                                <option value="Completed" {{ old('status', $order->status) === 'Completed' ? 'selected' : '' }}>APPROVE</option>
+                                                <option value="Completed" {{ old('status', $order->status) === 'Completed' ? 'selected' : '' }}>FULL PAYMENT</option>
                                                 <option value="Pending" {{ old('status', $order->status) === 'Pending' ? 'selected' : '' }}>PENDING</option>
                                                 <option value="Partial" {{ old('status', $order->status) === 'Partial' ? 'selected' : '' }}>PARTIAL</option>
                                             </select>

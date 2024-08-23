@@ -77,6 +77,10 @@
               <td class="status text-center">
                 <span class="badge badge-subtle-info">PARTIAL</span>
               </td>
+              @elseif ($order->status == 'PayPoint')
+              <td class="status text-center">
+                <span class="badge badge-subtle-primary">Paid by Points</span>
+              </td>
               @else
               <td class="status text-center">
                 <span class="badge badge-subtle-danger">REJECTED</span>
