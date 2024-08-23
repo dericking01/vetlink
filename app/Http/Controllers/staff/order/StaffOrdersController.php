@@ -164,9 +164,6 @@ class StaffOrdersController extends Controller
 
         $order->save();
 
-        // Dispatch the OrderCompleted event
-        event(new OrderCompleted($order));
-
         Toastr::success('Order saved successfully!');
         return back();
 

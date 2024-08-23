@@ -16,6 +16,8 @@
         {{-- @else --}}
         @elseif($order->status == 'Partial')
             <span class="badge badge-subtle-warning d-flex align-items-center">Partially Paid <i class="fa fa-spinner fa-spin ms-1" aria-hidden="true"></i></span>
+        @elseif($order->status == 'PayPoint')
+            <span class="badge badge-subtle-primary d-flex align-items-center">Paid By Points <i class="fa fa-barcode ms-1" aria-hidden="true"></i></span>
         @else
             <span class="badge badge-subtle-danger d-flex align-items-center">Rejected <i class="fa fa-times-circle ms-1" aria-hidden="true"></i></span>
         @endif

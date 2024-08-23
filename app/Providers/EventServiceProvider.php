@@ -18,6 +18,10 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\OrderCompleted' => [
             'App\Listeners\UpdateAgentPoints',
         ],
+
+        \App\Events\ProductQuantityDeducted::class => [
+            \App\Listeners\DeductProductQuantity::class,
+        ],
     ];
     /**
      * Register any events for your application.

@@ -173,6 +173,15 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        
+                                        {{-- ORDER ITEMS --}}
+                                        @foreach ($order->orderItems as $item)
+                                        <div class="col-md-6">
+                                            <label for="quantity{{ $item->id }}">Quantity for {{ $item->productable->name }}</label>
+                                            <input type="number" class="form-control" id="quantity{{ $item->id }}" name="quantities[{{ $item->id }}]" value="{{ $item->quantity }}" required>
+                                        </div>
+                                        @endforeach
+
                                         <div class="col-md-6">
                                             <label for="status">Payment Status <span class="text-danger">*</span></label>
                                             <select class="form-select" id="status{{ $order->id }}" name="status" onchange="togglePartialAmountField({{ $order->id }}, this)">
@@ -195,6 +204,8 @@
                                                 <input class="form-control" name="PayPoint" id="PayPoint{{ $order->id }}" type="number" placeholder="Points amount" value="{{ old('PayPoint', $order->PayPoint) }}" />
                                             </div>
                                         </div>
+
+
                                     </div>
                                 </div>
                             </div>

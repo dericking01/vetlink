@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin\order;
 
 use App\Events\OrderCompleted;
+use App\Events\ProductQuantityDeducted;
 use App\Helpers\FileHelper;
 use App\Http\Controllers\Controller;
 use App\Models\AdminProduct;
@@ -185,9 +186,6 @@ class OrdersController extends Controller
 
         $order->save();
 
-        // Dispatch the OrderCompleted event
-        event(new OrderCompleted($order));
-
         Toastr::success('Order saved successfully!');
         return back();
 
@@ -327,15 +325,50 @@ class OrdersController extends Controller
                 Toastr::info('Sorry, Not enough points!!!');
                 return back()->withInput();
             }
+
+            // Check if Request Points equals Total amount
+            if ($request->PayPoint == $order->total_amount) { // Using == for comparison to avoid type issues
+                // Mark the order as completed
+                $order->status = 'Completed';
+                $order->save();
+
+                // Deduct product quantity
+                event(new ProductQuantityDeducted($order->orderItems));
+
+                // Dispatch the OrderCompleted event
+                event(new OrderCompleted($order));
+
+                Toastr::success('Order FULLY PAID successfully! ✔');
+            }
+
         }
         // dd($order);
         // Update the order with the new data
         $order->isDelivered = $request->isDelivered;
         $order->status = $request->status;
         $order->branch_id = $request->branch;
+        // $order->discount = $request->discount;
+        $order->payment_method = $request->payment_method;
         $order->partial_amt = $request->status === 'Partial' ? $request->partial_amount : null;
         $order->PayPoint = $request->status === 'PayPoint' ? $request->PayPoint : null;
 
+        // Update the quantities of the order items
+        $totalAmount = 0;
+
+        foreach ($request->quantities as $orderItemId => $quantity) {
+            $orderItem = OrderItems::findOrFail($orderItemId);
+
+            // Update the quantity of each order item
+            $orderItem->quantity = $quantity;
+            $orderItem->save();
+
+            // Recalculate the total amount
+            $totalAmount += $quantity * $orderItem->price;
+        }
+
+        // Update the total amount in the order
+        $order->total_amount = $totalAmount;
+        // dd($order);
         // Save the updated order
         $order->save();
 
@@ -347,6 +380,9 @@ class OrdersController extends Controller
 
         // If the order is completed, dispatch the OrderCompleted event
         if ($order->status === 'Completed') {
+            // Deduct product quantity
+            event(new ProductQuantityDeducted($order->orderItems));
+            // Dispatch the OrderCompleted event
             event(new OrderCompleted($order));
         }
 
@@ -396,6 +432,9 @@ class OrdersController extends Controller
 
         // Dispatch the OrderCompleted event if necessary
         if ($order->status === 'Completed') {
+            // Deduct product quantity
+            event(new ProductQuantityDeducted($order->orderItems));
+            // Dispatch the OrderCompleted event
             event(new OrderCompleted($order));
         }
 
