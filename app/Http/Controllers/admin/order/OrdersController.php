@@ -144,6 +144,28 @@ class OrdersController extends Controller
             'name.*' => 'exists:admin_products,id', // Ensure all selected products exist in the admin_products table
             'quantity' => 'required|array',
         ]);
+
+        // Validate all quantities before creating the order
+        foreach ($request->name as $productId) {
+            // Retrieve the product
+            $product = AdminProduct::find($productId);
+
+            if (!$product) {
+                Toastr::warning("Product with ID {$productId} not found.");
+                return back();
+            }
+
+            // Get the quantity for this product
+            $quantity = $request->quantity[$productId];
+
+            // Check if requested quantity exceeds available stock
+            if ($quantity > $product->quantity) {
+                Toastr::warning("{$product->name} is out of stock!");
+                return back();
+            }
+        }
+
+        // If all quantities are valid, proceed to create the order
         // Create the order
         $order = new Orders();
 
