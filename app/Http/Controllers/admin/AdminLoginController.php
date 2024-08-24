@@ -34,7 +34,7 @@ class AdminLoginController extends Controller
             // Update the last login timestamp using DB::update()
             DB::table('admins')
             ->where('id', auth('admin')->user()->id)
-            ->update(['last_login_at' => Carbon::now()]);
+            ->update(['last_login_at' => Carbon::now(), 'is_online' => true]);
 
             $greeting = SettingsHelper::getGreeting();
             $admin = auth('admin')->user()->name;
@@ -49,10 +49,24 @@ class AdminLoginController extends Controller
 
     public function logout(Request $request)
     {
+        // Retrieve the currently authenticated admin user
+        $admin = auth()->guard('admin')->user();
+
+        // Update the is_online status to false using DB::table()->update()
+        if ($admin) {
+            DB::table('admins')
+                ->where('id', $admin->id)
+                ->update(['is_online' => false]);
+        }
+
+        // Log out the admin and invalidate the session
         auth()->guard('admin')->logout();
 
         $request->session()->invalidate();
+
         Toastr::info('Thank you, welcome again!');
         return redirect()->route('admin.login');
     }
+
+
 }

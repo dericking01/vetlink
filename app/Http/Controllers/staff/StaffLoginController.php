@@ -63,7 +63,7 @@ class StaffLoginController extends Controller
             // Update the last login timestamp
             DB::table('staffs')
                 ->where('id', auth('staff')->user()->id)
-                ->update(['last_login_at' => Carbon::now()]);
+                ->update(['last_login_at' => Carbon::now(), 'is_online' => true]);
 
             // Get the role of the authenticated staff
             $staff = auth('staff')->user();
@@ -93,10 +93,23 @@ class StaffLoginController extends Controller
 
     public function logout(Request $request)
     {
+        // Retrieve the currently authenticated staff user
+        $staff = auth()->guard('staff')->user();
+
+        // Update the is_online status to false using DB::table()->update()
+        if ($staff) {
+            DB::table('staffs')
+                ->where('id', $staff->id)
+                ->update(['is_online' => false]);
+        }
+
+        // Log out the staff and invalidate the session
         auth()->guard('staff')->logout();
 
         $request->session()->invalidate();
+
         Toastr::info('Thank you, welcome again!');
         return redirect()->route('staff.login');
     }
+
 }

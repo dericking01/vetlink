@@ -28,12 +28,13 @@
           <thead class="bg-200 text-900">
             <tr>
               <th>SN.</th>
-              <th>Date</th>
+              <th>Joined</th>
               <th>Name</th>
               <th>Phone</th>
-              <th>Added by</th>
+              {{-- <th>Added by</th> --}}
               <th>location</th>
-              <th>Last login at</th>
+              {{-- <th>Last login at</th> --}}
+              <th>Presence</th>
               <th>role</th>
               <th>Status</th>
               <th>Action</th>
@@ -72,13 +73,13 @@
                     </div>
                 </div>
               </td>
-              <td class="name">
+              {{-- <td class="name">
                 <div class="d-flex align-items-center position-relative">
                     <div class="flex-1 ms-3">
                         <h6 class="mb-1 fw-semi-bold text-nowrap">{{ $staff->admin->name }}</h6>
                     </div>
                 </div>
-              </td>
+              </td> --}}
               <td class="name">
                 <div class="d-flex align-items-center position-relative">
                     <div class="flex-1 ms-3">
@@ -86,13 +87,25 @@
                     </div>
                 </div>
               </td>
-              <td class="name">
+              {{-- <td class="name">
                 <div class="d-flex align-items-center position-relative">
                     <div class="flex-1 ms-3">
                         @if ($staff->last_login_at)
                             <h6 class="mb-1 fw-semi-bold rounded-pill badge-subtle-info">{{ $staff->last_login_at }}</h6>
                         @else
                             <small class="badge fw-semi-bold rounded-pill badge-subtle-dark">NOT YET</small>
+                        @endif
+                    </div>
+                </div>
+              </td> --}}
+              <td class="name">
+                <div class="d-flex align-items-center position-relative">
+                    <div class="flex-1 ms-3">
+                        @if ($staff->is_online)
+                            <span class="badge bg-success">ONLINE</span>
+                        @else
+                            <span class="badge bg-danger">OFFLINE</span>
+                            {{-- <i class="fas fa-circle text-danger" title="Offline"></i> --}}
                         @endif
                     </div>
                 </div>
