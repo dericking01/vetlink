@@ -200,8 +200,9 @@ class OrdersController extends Controller
 
             // Update total amount
             $totalAmount += $quantity * $product->price;
+            $totalAmount = $totalAmount - $request->discount;
         }
-
+        // dd($totalAmount);
         // Update total amount for the order
         $order->total_amount = $totalAmount;
         // dd($request);
