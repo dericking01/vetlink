@@ -1,5 +1,6 @@
 <li class="nav-item">
-    <!-- parent pages--><a class="nav-link dropdown-indicator" href="#dashboard"
+    <!-- parent pages-->
+    <a class="nav-link dropdown-indicator" href="#dashboard"
         role="button" data-bs-toggle="collapse" aria-expanded="true"
         aria-controls="dashboard">
         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
@@ -111,6 +112,11 @@
         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
             class="fas fa-cubes"></span></span><span
         class="nav-link-text ps-1">Products</span></div>
+    </a><!-- more inner pages-->
+    <a class="nav-link @if(request()->routeIs('admin.warehouse.products')) active @endif" href="{{ route('admin.warehouse.products') }}">
+        <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+            class="fas fa-home"></span></span><span
+        class="nav-link-text ps-1">Warehouse</span></div>
     </a><!-- more inner pages-->
 
 </li>

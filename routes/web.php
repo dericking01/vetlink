@@ -95,7 +95,7 @@ Route::group(['prefix' => 'admin'], function () {
          });
 
 
-         //sab-users routes
+         //vetlink-users routes
         Route::group(['prefix' => 'vetinfo'], function () {
             Route::get('users', [UsersController::class, 'index'])->name('admin.listusers');
             Route::delete('destroy-buyer', [UsersController::class, 'destroyBuyer'])->name('agent.destroybuyer');
@@ -135,11 +135,13 @@ Route::group(['prefix' => 'admin'], function () {
             Route::delete('destroy', [ServiceCategoryController::class, 'destroy'])->name('admin.destroyservice');
         });
 
-         //Products routes
+        //Products routes
 
         //  admin products
         Route::group(['prefix' => 'admin-products'], function () {
             Route::get('list', [ProductsController::class, 'index'])->name('admin.products.listproducts');
+            Route::get('warehouse', [ProductsController::class, 'warehouseIndex'])->name('admin.warehouse.products');
+            Route::post('distribute-product', [ProductsController::class, 'distributeProduct'])->name('admin.products.distributeProduct');
             Route::post('store', [ProductsController::class, 'store'])->name('admin.products.store');
             Route::put('update/{id}', [ProductsController::class, 'update'])->name('admin.products.update');
             Route::delete('destroy', [ProductsController::class, 'destroy'])->name('admin.products.destroy');

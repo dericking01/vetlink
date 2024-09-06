@@ -14,7 +14,8 @@ class Branch extends Model
 
     protected $fillable = [
         'branch_name',
-        'location'
+        'location',
+        'status'
     ];
 
     public function order()
@@ -30,5 +31,10 @@ class Branch extends Model
     public function products()
     {
         return $this->hasMany(AdminProduct::class);
+    }
+
+    public function branchProducts()
+    {
+        return $this->hasMany(BranchProduct::class);
     }
 }

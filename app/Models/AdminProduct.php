@@ -49,6 +49,11 @@ class AdminProduct extends Model
         return $this->morphMany(OrderItems::class, 'productable');
     }
 
+    public function branchProducts()
+    {
+        return $this->hasMany(BranchProduct::class, 'admin_product_id');
+    }
+
     public function branch()
     {
         return $this->belongsTo(Branch::class);
