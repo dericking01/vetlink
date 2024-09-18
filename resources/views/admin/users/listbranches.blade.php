@@ -40,7 +40,7 @@
               <tr class="btn-reveal-trigger">
                 <td class="sn">{{ ++$key }}</td>
                 <td class="name align-middle white-space-nowrap py-2">
-                  <a href="javascript:void(0)">
+                  {{-- <a href="javascript:void(0)"> --}}
                     <div class="d-flex d-flex align-items-center">
                       <div class="avatar avatar-xl me-2">
                         <div class="avatar-name rounded-circle"><span>{{ \App\Helpers\SettingsHelper::getBranchInitials($branch->id) }}</span></div>
@@ -49,7 +49,7 @@
                         <h5 class="mb-0 fs--1">{{ $branch->branch_name }}</h5>
                       </div>
                     </div>
-                  </a>
+                  {{-- </a> --}}
               </td>
                 <td class="phone align-middle white-space-nowrap py-2 text-center">
                   {{ $branch->location }}

@@ -4,6 +4,8 @@ namespace App\Imports;
 
 use App\Models\AdminProduct;
 use App\Models\Branch;
+use Brian2694\Toastr\Facades\Toastr;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -27,42 +29,37 @@ class ProductsImport implements ToCollection, WithHeadingRow
             $branch = Branch::where('branch_name', $row['branch_name'])->first();
 
             if ($branch) {
-                            // Check if expire_date is empty or null, and set to null if it is
+            // Check if expire_date is empty or null, and set to null if it is
             $expireDate = null;
-            if (!empty($row['expire_date'])) {
+
+            // Check if the expire_date is numeric (Excel date format)
+            if (is_numeric($row['expire_date']) && !empty($row['expire_date'])) {
+                // Convert Excel numeric date to DateTime object
                 $expireDate = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['expire_date']);
+            } else {
+                // Attempt to parse string dates (like 'JUNE 2025')
+                try {
+                    $expireDate = Carbon::parse($row['expire_date']);
+                } catch (\Exception $e) {
+                    // Handle invalid date format, log error or set expireDate to null
+                    $expireDate = null;
+                }
             }
 
-            // Prepare the data for insertion
-            // $data = [
-            //     'admin_id' => $adminId, // Use the authenticated admin's ID
-            //     'branch_id' => $branch->id, // Use the branch ID from the database
-            //     'name' => $row['product_name'],
-            //     'quantity' => $row['quantity'],
-            //     'units' => $row['units'], // ?? '-', Provide a default if null
-            //     'expire_date' => $expireDate,
-            //     'price' => $row['price'],
-            //     'description' => $row['description'],
-            //     'status' => $row['status'],
-            //     'image' => NULL
-            // ];
-
-            // // Debug the data before saving it to the database
-            // // dd($data);
-
-            // Save the data to the database
-            // AdminProduct::create($data);
+            // Convert numeric values from string to int/float
+            $quantity = is_numeric($row['quantity']) ? (int) $row['quantity'] : null; // Log non-numeric values
+            $price = is_numeric($row['price']) ? (float) $row['price'] : null; // Log non-numeric values
 
                 AdminProduct::create([
                     'admin_id' => $adminId, // Use the authenticated admin's ID
                     'branch_id' => $branch->id, // Use the branch ID from the database
                     'name' => $row['product_name'],
-                    'quantity' => $row['quantity'],
+                    'quantity' => $quantity,
                     'units' => $row['units'], // set to null if empty
                     'expire_date' => $expireDate,
-                    'price' => $row['price'],
+                    'price' => $price,
                     'description' => $row['description'],
-                    'status' => $row['status'],
+                    'status' =>  !empty($row['status']) ? $row['status'] : 'active', // Default to 'active' if status is null or empty,
                     'image' => NULL
                 ]);
                 $this->importedCount++; // Increment the count of imported products
@@ -92,5 +89,6 @@ class ProductsImport implements ToCollection, WithHeadingRow
     {
         return $this->importedCount;
     }
+
 }
 

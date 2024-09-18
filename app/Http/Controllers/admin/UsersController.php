@@ -52,7 +52,7 @@ class UsersController extends Controller
     public function storeBranch(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|regex:/^[a-zA-Z\s]+$/',
+            'name' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
             'location' => 'nullable|string',
         ]);
 
@@ -61,7 +61,7 @@ class UsersController extends Controller
         Branch::create([
             'branch_name' => $request->name,
             'location' => $request->location,
-            'status' => $request->status,
+            // 'status' => $request->status,
         ]);
 
         Toastr::success('Branch successfully added ✔');
