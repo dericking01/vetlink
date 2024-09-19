@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email')->unique()->nullable();
             $table->string('phone');
             // $table->string('role')->nullable();
-            $table->enum('role', ['staff', 'delivery']);
+            $table->enum('role', ['staff', 'delivery','orderman']);
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->string('location');
             $table->timestamp('email_verified_at')->nullable();

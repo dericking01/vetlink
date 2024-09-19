@@ -254,13 +254,17 @@ class StaffOrdersController extends Controller
             }
 
             // Check if Request Points equals Total amount
-            if ($request->PayPoint == $order->total_amount) { // Using == for comparison to avoid type issues
+            if ($request->PayPoint == $order->total_amount && !$order->is_quantity_deducted) { // Using == for comparison to avoid type issues
                 // Mark the order as completed
                 $order->status = 'Completed';
                 $order->save();
 
                 // Deduct product quantity
                 event(new ProductQuantityDeducted($order->orderItems));
+                // Mark quantity as deducted
+                $order->is_quantity_deducted = true;
+                // save order to mark as quantity deducted
+                $order->save();
 
                 // Dispatch the OrderCompleted event
                 event(new OrderCompleted($order));
@@ -305,12 +309,16 @@ class StaffOrdersController extends Controller
         }
 
         // If the order is completed, dispatch the OrderCompleted event
-        if ($order->status === 'Completed') {
+        if ($order->status === 'Completed' && !$order->is_quantity_deducted) {
             // Deduct product quantity
             event(new ProductQuantityDeducted($order->orderItems));
+            // Mark quantity as deducted
+            $order->is_quantity_deducted = true;
             // Dispatch the OrderCompleted event
             event(new OrderCompleted($order));
         }
+        // save order to mark as quantity deducted
+        $order->save();
 
         Toastr::success('Order successfully updated! ✔');
         return back();
@@ -357,7 +365,7 @@ class StaffOrdersController extends Controller
         $order->save();
 
         // Check if Request Points equals Total amount
-        if ($request->PayPoint == $order->total_amount) { // Using == for comparison to avoid type issues
+        if ($request->PayPoint == $order->total_amount && !$order->is_quantity_deducted) { // Using == for comparison to avoid type issues
             // Mark the order as completed
             $order->status = 'Completed';
             $order->save();
@@ -365,11 +373,16 @@ class StaffOrdersController extends Controller
             // Deduct product quantity
             event(new ProductQuantityDeducted($order->orderItems));
 
+            // Mark quantity as deducted
+            $order->is_quantity_deducted = true;
+
             // Dispatch the OrderCompleted event
             event(new OrderCompleted($order));
 
             Toastr::success('Order FULLY PAID successfully! ✔');
         }
+        // save order to mark as quantity deducted
+        $order->save();
 
         Toastr::success('Order successfully updated! ✔');
         return back();

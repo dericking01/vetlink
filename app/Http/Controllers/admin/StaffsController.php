@@ -66,6 +66,7 @@ class StaffsController extends Controller
         $staff->password = Hash::make($request->password); //Hashes password before saving
         $staff->remember_token = Str::random(10);
 
+
         // dd($staff);
 
         $staff->save();
@@ -89,7 +90,7 @@ class StaffsController extends Controller
                 'digits:10',
             ],
             'email' => 'required|email',
-            'role' => 'required|in:staff,delivery', // Added role validation
+            'role' => 'required|in:staff,delivery,orderman', // Added role validation
         ];
 
         // Check if email or phone number has changed
@@ -122,6 +123,8 @@ class StaffsController extends Controller
         $staff->role = $request->role;
         $staff->status = $request->status;
         $staff->location = $request->location;
+
+        // dd($request->all());  // This will dump all request data and stop execution
 
         // Debugging: Display the staff object
         // dd($staff);

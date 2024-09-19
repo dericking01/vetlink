@@ -78,6 +78,8 @@ class StaffLoginController extends Controller
                 return redirect()->route('staff.deliveries');
             } elseif ($role === 'staff') {
                 return redirect()->route('staff.createorder');
+            } elseif ($role === 'orderman') {
+                return redirect()->route('orderman.orders');
             } else {
                 // Handle other roles or invalid roles if necessary
                 return redirect()->route('staff.dashboard');

@@ -228,15 +228,19 @@
                                         <div class="col-md-12">
                                             <div class="mb-3">
                                                 <label for="organizerSingle2">Location</label>
-                                                <select class="form-select js-choice" id="organizerSingle2" size="1" required="required" name="location" data-options='{"removeItemButton":true,"placeholder":true}'>
-                                                    <option value="">Select branch...</option>
+                                                <select class="form-select" name="location" id="location">
                                                     @foreach ($branches as $branch)
-                                                        <option value="{{ $branch->branch_name }}" {{ old('branch_id') == $branch->id ? 'selected' : '' }}>{{ $branch->branch_name }}</option>
+                                                        <option value="{{ $branch->branch_name }}"
+                                                            {{ $branch->branch_name == $staff->location ? 'selected' : '' }}>
+                                                            {{ $branch->branch_name }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
+
                                                 <div class="invalid-feedback">Please select one</div>
                                             </div>
                                         </div>
+
 
                                         <div class="col-md-12">
                                             <div class="mb-3">
@@ -258,6 +262,10 @@
                                                 <option value="delivery"
                                                     {{ old('role', isset($staff) ? $staff->role : '') == 'delivery' ? 'selected' : '' }}>
                                                     COURIER
+                                                </option>
+                                                <option value="orderman"
+                                                    {{ old('role', isset($staff) ? $staff->role : '') == 'orderman' ? 'selected' : '' }}>
+                                                    ORDER-MAN
                                                 </option>
                                             </select>
                                         </div>
@@ -379,6 +387,7 @@
                                     <select class="form-select" id="organizerSingle2" size="1" name="role">
                                         <option value="staff" {{ old('role') == 'staff' ? 'selected' : '' }}>STAFF</option>
                                         <option value="delivery" {{ old('role') == 'delivery' ? 'selected' : '' }}>COURIER</option>
+                                        <option value="orderman" {{ old('role') == 'orderman' ? 'selected' : '' }}>ORDER-MAN</option>
                                     </select>
                             </div>
 

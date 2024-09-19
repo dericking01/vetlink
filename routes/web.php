@@ -117,24 +117,6 @@ Route::group(['prefix' => 'admin'], function () {
 
         });
 
-        //Category routes
-
-        // product category routes
-        Route::group(['prefix' => 'product-categories'], function () {
-            Route::get('productcategory', [ProductCategoryController::class, 'index'])->name('admin.listproductcategory');
-            Route::post('storeprodcat', [ProductCategoryController::class, 'store'])->name('admin.storeprodcat');
-            Route::put('updateProduct/{id}', [ProductCategoryController::class, 'update'])->name('admin.updateProduct');
-            Route::delete('destroy', [ProductCategoryController::class, 'destroy'])->name('admin.destroyprodcat');
-        });
-
-        //service category routes
-        Route::group(['prefix' => 'service-categories'], function () {
-            Route::get('servicecategory', [ServiceCategoryController::class, 'index'])->name('admin.listservicecategory');
-            Route::post('storeServCat', [ServiceCategoryController::class, 'storeServCat'])->name('admin.storeServCat');
-            Route::put('updateService/{id}', [ServiceCategoryController::class, 'update'])->name('admin.update-service');
-            Route::delete('destroy', [ServiceCategoryController::class, 'destroy'])->name('admin.destroyservice');
-        });
-
         //Products routes
 
         //  admin products
@@ -151,24 +133,7 @@ Route::group(['prefix' => 'admin'], function () {
         });
 
 
-        // sab products routes
-        Route::group(['prefix' => 'sab-products'], function () {
-            Route::get('list', [SabProductsController::class, 'list'])->name('admin.sabproducts.list');
-            Route::post('store', [SabProductsController::class, 'store'])->name('admin.sabproducts.store');
-            Route::put('update/{id}', [SabProductsController::class, 'update'])->name('admin.sabproducts.update');
-            Route::delete('destroy', [SabProductsController::class, 'destroy'])->name('admin.sabproducts.destroy');
-            Route::get('product-details/{id}',[SabProductsController::class, 'details'])->name('admin.sabproducts.details');
-
-        });
-        // Market products routes
-        Route::group(['prefix' => 'market-products'], function () {
-            Route::get('list', [MarketProductsController::class, 'list'])->name('admin.marketproducts.list');
-            Route::delete('destroy', [MarketProductsController::class, 'destroy'])->name('admin.marketproducts.destroy');
-            Route::put('update/{id}', [MarketProductsController::class, 'update'])->name('admin.marketproducts.update');
-            Route::get('product-details/{id}', [MarketProductsController::class, 'details'])->name('admin.marketproducts.details');
-
-        });
-         //  Orders Routes
+        //  Orders Routes
         Route::group(['prefix' => 'orders'], function () {
             Route::get('create-order', [OrdersController::class, 'orderForm'])->name('admin.createOrder');
             Route::post('store', [OrdersController::class, 'store'])->name('admin.storeOrder');
@@ -217,13 +182,27 @@ Route::middleware(['auth:staff', 'role:delivery'])->group(function () {
     Route::group(['prefix' => 'staff'], function () {
 
         Route::get('/deliveries', [DeliveryController::class, 'index'])->name('staff.deliveries');
-        Route::put('deliveryorder/update/{id}', [DeliveryController::class, 'updateOrder'])->name('staff.deliverystatus.update');
+        Route::put('deliveryorder/update/{id}', [DeliveryController::class, 'UpdateDeliveryStatus'])->name('staff.deliverystatus.update');
 
         // Add other delivery-specific routes here
 
     });
 
 });
+
+// Routes accessible only to orderman staff
+Route::middleware(['auth:staff', 'role:orderman'])->group(function () {
+
+    Route::group(['prefix' => 'staff'], function () {
+
+        Route::get('orderman-create', [DeliveryController::class, 'orderForm'])->name('orderman.orders');
+        Route::post('orderman-store', [DeliveryController::class, 'store'])->name('orderman.storeOrder');
+        Route::put('order/update/{id}', [DeliveryController::class, 'updateOrder'])->name('staff.orderstatus.update');
+
+    });
+
+});
+
 
 // A route for access denied page
 Route::get('/access-denied', function () {
@@ -261,56 +240,8 @@ Route::middleware(['auth:staff', 'role:staff'])->group(function () {
         // Products routes
         Route::get('list', [StaffProductsController::class, 'index'])->name('staff.products.listproducts');
 
-
     });
 
 
 });
 
-// seller authentication routes
-Route::group(['prefix' => 'seller'], function () {
-    Route::get('login', [SellerLoginController::class, 'login'])->name('seller.login');
-    Route::post('login/submit', [SellerLoginController::class, 'submit'])->name('seller.submit.login');
-    Route::post('logout', [SellerLoginController::class, 'logout'])->name('seller.logout')->middleware('seller');
-});
-
-
-//seller admin routes
-Route::group(['prefix' => 'seller', 'middleware' => ['seller']], function () {
-
-    // dashboard routes
-    Route::group(['prefix' => 'home'], function () {
-        Route::get('dashboard', [SellerDashboardController::class, 'dashboard'])->name('seller.dashboard');
-    });
-
-    //Orders Management Routes
-    Route::group(['prefix' => 'orders'], function () {
-        Route::get('pendingorders', [OrdersManagementController::class, 'pendingOrdersindex'])->name('seller.pendingOrders');
-        Route::get('completedorders', [OrdersManagementController::class, 'completedOrdersindex'])->name('seller.completedOrders');
-        Route::get('rejectedorders', [OrdersManagementController::class, 'rejectedOrdersindex'])->name('seller.rejectedOrders');
-        Route::get('vieworder/{id}', [OrdersManagementController::class, 'viewOrder'])->name('seller.viewOrder');
-        Route::get('paidorders', [OrdersManagementController::class, 'paidOrders'])->name('seller.paidOrders');
-        Route::get('unpaidorders', [OrdersManagementController::class, 'unPaidOrders'])->name('seller.unPaidOrders');
-    });
-
-    // Products Management
-    Route::group(['prefix' => 'products'], function () {
-        Route::get('myProducts', [ProductsManagementController::class, 'myProductsIndex'])->name('seller.myproducts');
-        Route::get('rejectedProducts', [ProductsManagementController::class, 'rejectedProducts'])->name('seller.rejectedProducts');
-        Route::post('storeProduct', [ProductsManagementController::class, 'storeProduct'])->name('seller.storeProducts');
-        Route::put('update/{id}', [ProductsManagementController::class, 'update'])->name('seller.updateProducts');
-        Route::delete('destroy', [ProductsManagementController::class, 'destroy'])->name('seller.destroy');
-        Route::get('product-details/{id}', [ProductsManagementController::class, 'details'])->name('seller.products-details');
-    });
-
-    //Business Management Routes
-    Route::group(['prefix' => 'business'], function () {
-        Route::get('my-shop', [MyShopController::class, 'index'])->name('seller.my-shop');
-        Route::get('bank-info', [BankInfoController::class, 'index'])->name('seller.bank-info');
-        Route::post('store-bank-info', [BankInfoController::class, 'store'])->name('seller.store-bank-info');
-        Route::get('my-wallet', [MyWalletController::class, 'index'])->name('seller.my-wallet');
-        Route::post('withdraw', [MyWalletController::class, 'withdraw'])->name('seller.withdraw');
-        Route::get('reviews', [ReviewsController::class, 'index'])->name('seller.reviews');
-    });
-
-});
