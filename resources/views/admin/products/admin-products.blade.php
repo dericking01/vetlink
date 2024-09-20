@@ -44,7 +44,7 @@
               <th>SN.</th>
               <th>Date</th>
               {{-- <th>Added by</th> --}}
-              <th>Branch Name</th>
+              <!-- <th>Branch Name</th> -->
               <th>Product Name</th>
               <th>Price</th>
               <th>Quantity</th>
@@ -61,13 +61,13 @@
               {{-- <td class="name">
                 {{$product->admin->name}}
               </td> --}}
-              <td class="name" style="text-align: center;">
+              <!-- <td class="name" style="text-align: center;">
                 @if($product->branch && $product->branch->branch_name)
                     {{ $product->branch->branch_name }}
                 @else
                     <span class="badge badge-subtle-warning">NONE</span>
                 @endif
-              </td>
+              </td> -->
 
               <td class="name">
                 <div class="d-flex align-items-center position-relative">

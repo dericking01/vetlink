@@ -11,7 +11,6 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Facades\Log;
 
-
 class ProductsImport implements ToCollection, WithHeadingRow
 {
     protected $missingBranches = [];
@@ -25,10 +24,6 @@ class ProductsImport implements ToCollection, WithHeadingRow
         $adminId = auth('admin')->user()->id;
 
         foreach ($rows as $row) {
-            // Look up the branch by name
-            $branch = Branch::where('branch_name', $row['branch_name'])->first();
-
-            if ($branch) {
             // Check if expire_date is empty or null, and set to null if it is
             $expireDate = null;
 
@@ -50,23 +45,19 @@ class ProductsImport implements ToCollection, WithHeadingRow
             $quantity = is_numeric($row['quantity']) ? (int) $row['quantity'] : null; // Log non-numeric values
             $price = is_numeric($row['price']) ? (float) $row['price'] : null; // Log non-numeric values
 
-                AdminProduct::create([
-                    'admin_id' => $adminId, // Use the authenticated admin's ID
-                    'branch_id' => $branch->id, // Use the branch ID from the database
-                    'name' => $row['product_name'],
-                    'quantity' => $quantity,
-                    'units' => $row['units'], // set to null if empty
-                    'expire_date' => $expireDate,
-                    'price' => $price,
-                    'description' => $row['description'],
-                    'status' =>  !empty($row['status']) ? $row['status'] : 'active', // Default to 'active' if status is null or empty,
-                    'image' => NULL
-                ]);
-                $this->importedCount++; // Increment the count of imported products
-            } else {
-                // Log missing branch
-                $this->missingBranches[] = $row['branch_name'];
-            }
+            AdminProduct::create([
+                'admin_id' => $adminId, // Use the authenticated admin's ID
+                'name' => $row['product_name'],
+                'quantity' => $quantity,
+                'units' => $row['units'], // set to null if empty
+                'expire_date' => $expireDate,
+                'price' => $price,
+                'description' => $row['description'],
+                'status' => !empty($row['status']) ? $row['status'] : 'active', // Default to 'active' if status is null or empty
+                'image' => null
+            ]);
+
+            $this->importedCount++; // Increment the count of imported products
         }
     }
 
@@ -89,6 +80,6 @@ class ProductsImport implements ToCollection, WithHeadingRow
     {
         return $this->importedCount;
     }
-
 }
+
 
