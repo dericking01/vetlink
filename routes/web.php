@@ -114,6 +114,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('storebranch', [UsersController::class, 'storeBranch'])->name('admin.storebranch');
             Route::put('update-branch/{id}', [UsersController::class, 'updateBranch'])->name('branch.update');
             Route::delete('destroy-branch', [UsersController::class, 'destroyBranch'])->name('branch.destroybranch');
+            Route::get('branch-details/{id}',[UsersController::class, 'viewBranch'])->name('admin.branch.details');
 
         });
 

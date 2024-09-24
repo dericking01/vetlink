@@ -110,6 +110,16 @@ class UsersController extends Controller
         return back();
     }
 
+    public function viewBranch($id)
+    {
+        // Find the branch by its ID and load the related distributions (BranchProduct) and products (AdminProduct)
+        $branch = Branch::with(['branchProducts.adminProduct'])
+            ->where('id', $id)
+            ->firstOrFail();
+        // Pass the branch and its distributions to the view
+        return view('admin.users.branch_details', compact('branch'));
+    }
+
 
     public function storeAgent(Request $request)
     {
