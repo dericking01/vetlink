@@ -167,5 +167,67 @@ class ProductsController extends Controller
         return back();
     }
 
+    public function updateDistribution(Request $request, $distributionId)
+    {
+        // Validate the input
+        $this->validate($request, [
+            'admin_product_id' => 'required|exists:admin_products,id',
+            'branch_id' => 'required|exists:branches,id',
+            'quantity' => 'required|integer|min:1'
+        ]);
+
+        // Find the distribution record
+        $distribution = BranchProduct::findOrFail($distributionId);
+
+        // Retrieve the product from admin_products table
+        $product = AdminProduct::findOrFail($request->admin_product_id);
+
+        // Get the original quantity from the distribution
+        $originalQuantity = $distribution->quantity;
+
+        // Get the new quantity from the request
+        $newQuantity = $request->quantity;
+
+        // Calculate the difference between the old and new quantities
+        $quantityDifference = $newQuantity - $originalQuantity;
+        // dd($product->name);
+        // Update the product's quantity in admin_products table
+        // If $quantityDifference > 0, decrease stock; if $quantityDifference < 0, increase stock
+        $product->quantity -= $quantityDifference;
+        $product->save();
+
+        // Update the distribution with the new quantity
+        $distribution->quantity = $newQuantity;
+        $distribution->branch_id = $request->branch_id;
+        $distribution->save();
+
+        Toastr::success('Distribution updated and stock recalculated successfully!');
+
+        return redirect()->back();
+    }
+
+    public function destroyDistribution(Request $request)
+    {
+        // Find the distribution record
+        $branchProduct = BranchProduct::findOrFail($request->id);
+
+        // Find the associated product from the admin_products table
+        $product = AdminProduct::findOrFail($branchProduct->admin_product_id);
+
+        // Add the distributed quantity back to the stock
+        $product->quantity += $branchProduct->quantity;
+
+        // Save the updated product stock
+        $product->save();
+
+        // Now delete the distribution record
+        $branchProduct->delete();
+
+        // Show success message
+        Toastr::success('Product distribution successfully deleted and stock recalculated!');
+
+        // Redirect back
+        return back();
+    }
 
 }

@@ -7,7 +7,7 @@
   <div class="card-header bg-light">
     <div class="row align-items-center">
         <div class="col">
-            <h5 class="mb-0" id="followers">Products
+            <h5 class="mb-0" id="followers">Products in warehouse
               <span class="d-none d-sm-inline-block">({{ $products->count() }})</span>
                   </h5>
         </div>
@@ -344,7 +344,7 @@
                                 </div>
                             </div>
 
-                            <div class="mb-3">
+                            {{-- <div class="mb-3">
                                 <label class="col-form-label" for="name">Branch Name <span class="text-danger">*</span>
                                 </label>
                                 <select class="form-select js-choice" id="organizerSingle2" size="1" required="required" name="branch" data-options='{"removeItemButton":true,"placeholder":true}'>
@@ -356,7 +356,7 @@
                                   @error('name')
                                       <div class="invalid-feedback">{{ $message }}</div>
                                   @enderror
-                            </div>
+                            </div> --}}
 
                             {{-- <div class="col-md-12">
                                 <div class="mb-3">

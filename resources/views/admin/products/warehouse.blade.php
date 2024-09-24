@@ -7,8 +7,8 @@
   <div class="card-header bg-light">
     <div class="row align-items-center">
         <div class="col">
-            <h5 class="mb-0" id="followers">Warehouse Products
-              <span class="d-none d-sm-inline-block">({{ $products->count() }})</span>
+            <h5 class="mb-0" id="followers">Stock Distributions
+              <span class="d-none d-sm-inline-block">({{ $branchProducts->count() }})</span>
                   </h5>
         </div>
         <div class="col text-end">
@@ -39,6 +39,7 @@
               <th>Branch Name</th>
               <th>Price</th>
               <th>Quantity</th>
+              <th>Edit</th>
             </tr>
           </thead>
           <tbody class="list">
@@ -72,6 +73,22 @@
                     </div>
                 </div>
               </td>
+              <td class="align-middle white-space-nowrap text-end">
+                <div class="dropstart font-sans-serif position-static d-inline-block">
+                    <button class="btn btn-link text-600 btn-sm dropdown-toggle
+                      btn-reveal float-end" type="button" id="dropdown-simple-pagination-table-item-1"
+                      data-bs-toggle="dropdown" data-boundary="window"
+                      aria-haspopup="true" aria-expanded="false" data-bs-reference="parent">
+                        <span class="fas fa-ellipsis-h fs--1"></span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end border py-2"
+                      aria-labelledby="dropdown-simple-pagination-table-item-1">
+                      <a class="dropdown-item text-success" href="#!" data-bs-toggle="modal" data-bs-target="#editSender{{ $branchProduct->id }}">Edit</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item text-danger" href="#!" data-bs-toggle="modal" data-bs-target="#deleteSender{{ $branchProduct->id }}">Delete</a>
+                    </div>
+                </div>
+              </td>
             </tr>
 
             <div class="modal fade" id="deleteSender{{ $branchProduct->id }}" tabindex="-1" aria-hidden="true">
@@ -81,7 +98,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
-                        <form action="{{ route('admin.products.destroy') }}" method="POST">
+                        <form action="{{ route('admin.distribution.destroy') }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <div class="modal-body">
@@ -103,6 +120,67 @@
                 </div>
             </div>
 
+            <div class="modal fade" id="editSender{{ $branchProduct->id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                    <form action="{{ route('admin.distribution.update', ['id' => $branchProduct->id]) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <div class="modal-content position-relative">
+                            <div class="position-absolute top-0 end-0 mt-2 me-2 z-1">
+                                <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                                    data-bs-dismiss="modal" aria-label="Close" onclick="event.preventDefault();"></button>
+                            </div>
+                            <div class="modal-body p-0">
+                                <div class="rounded-top-3 py-3 ps-4 pe-6 bg-light">
+                                    <h4 class="mb-1" id="modalExampleDemoLabel">Edit distribution </h4>
+                                </div>
+                                <div class="p-4 pb-0">
+                                    <div class="row">
+                                        <!-- Hidden field for admin_product_id -->
+                                        <input type="hidden" name="admin_product_id" value="{{ $branchProduct->adminProduct->id }}">
+
+                                        <!-- Display the product name (this remains unchanged) -->
+                                        <div class="col-md-12">
+                                            <div class="mb-3">
+                                                <label class="col-form-label" for="name">Product Name <span class="text-danger">*</span></label>
+                                                <input class="form-control" name="product_name" readonly
+                                                    id="name" type="text" value="{{ $branchProduct->adminProduct->name }}" />
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-12">
+                                            <div class="mb-3">
+                                                <label class="col-form-label" for="quantity">Quantity <span class="text-danger">*</span>
+                                                </label>
+                                                <input class="form-control @error('quantity') is-invalid @enderror" name="quantity"
+                                                    id="quantity" type="number" placeholder="Total product quantity" value="{{ $branchProduct->quantity }}" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <label for="branch">Branch Name</label>
+                                            <select class="form-control select2" id="branch{{ $branchProduct->id }}" name="branch_id">
+                                                <option value="">Select branch...</option>
+                                                @foreach ($branches as $branch)
+                                                    <option value="{{ $branch->id }}" {{ old('branch_id', $branchProduct->branch_id) == $branch->id ? 'selected' : '' }}>
+                                                        {{ $branch->branch_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Close</button>
+                                <button class="btn btn-info" type="submit">Submit </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
 
             @endforeach

@@ -124,6 +124,8 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('list', [ProductsController::class, 'index'])->name('admin.products.listproducts');
             Route::get('warehouse', [ProductsController::class, 'warehouseIndex'])->name('admin.warehouse.products');
             Route::post('distribute-product', [ProductsController::class, 'distributeProduct'])->name('admin.products.distributeProduct');
+            Route::put('update-distribution/{id}', [ProductsController::class, 'updateDistribution'])->name('admin.distribution.update');
+            Route::delete('destroy-distribution', [ProductsController::class, 'destroyDistribution'])->name('admin.distribution.destroy');
             Route::post('store', [ProductsController::class, 'store'])->name('admin.products.store');
             Route::put('update/{id}', [ProductsController::class, 'update'])->name('admin.products.update');
             Route::delete('destroy', [ProductsController::class, 'destroy'])->name('admin.products.destroy');
