@@ -43,7 +43,7 @@
                 <div id="quantityInputs"></div>
 
                 <div class="mb-3">
-                    <label for="discount">Discount</label> 
+                    <label for="discount">Discount</label>
                     <input type="number" step="0.01" class="form-control" id="discount" name="discount" placeholder="Enter discount amount" value="{{ old('discount') }}">
                     <div class="invalid-feedback">Please enter a valid discount amount</div>
                 </div>
@@ -52,9 +52,10 @@
                     <label for="payment_method">Payment Method</label>
                     <select class="form-select" id="payment_method" name="payment_method" required="required">
                         <option value="">Select payment method...</option>
-                        <option value="cheque" {{ old('payment_method') == 'cheque' ? 'selected' : '' }}>Cheque</option>
                         <option value="cash" {{ old('payment_method') == 'cash' ? 'selected' : '' }}>Cash</option>
                         <option value="Lipa namba" {{ old('payment_method') == 'Lipa namba' ? 'selected' : '' }}>Lipa namba</option>
+                        <option value="Bank" {{ old('payment_method') == 'Bank' ? 'selected' : '' }}>Bank</option>
+                        <option value="cheque" {{ old('payment_method') == 'cheque' ? 'selected' : '' }}>Cheque</option>
                         <option value="credit card" {{ old('payment_method') == 'credit card' ? 'selected' : '' }}>Credit Card</option>
                     </select>
                     <div class="invalid-feedback">Please select a payment method</div>

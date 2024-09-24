@@ -15,7 +15,7 @@
     </a>
 </li>
 
-<li class="nav-item">
+{{-- <li class="nav-item">
     <!-- label-->
     <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
         <div class="col-auto navbar-vertical-label">Manage Products</div>
@@ -29,7 +29,7 @@
         class="nav-link-text ps-1">Products</span></div>
     </a><!-- more inner pages-->
 
-</li>
+</li> --}}
 
 
 <li class="nav-item">
