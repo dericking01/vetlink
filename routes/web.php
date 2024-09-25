@@ -223,6 +223,7 @@ Route::middleware(['auth:staff', 'role:staff'])->group(function () {
         // orders routes
         Route::get('create-order', [StaffOrdersController::class,'orderForm' ] )->name('staff.createorder');
         Route::post('store', [StaffOrdersController::class, 'store'])->name('staff.storeOrder');
+        Route::get('branches', [StaffOrdersController::class, 'branches'])->name('staff.listbranches');
         Route::get('pendingorder', [StaffOrdersController::class, 'pendingOrderindex'])->name('staff.pendingOrder');
         Route::put('order/update/{id}', [StaffOrdersController::class, 'updateOrder'])->name('staff.pendingOrder.update');
         Route::get('partialorder', [StaffOrdersController::class, 'partialOrderindex'])->name('staff.partialorder');

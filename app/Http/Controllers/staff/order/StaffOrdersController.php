@@ -116,6 +116,13 @@ class StaffOrdersController extends Controller
         return view('staff.manage.create-order',compact('agents','products','branches','prod'));
     }
 
+    public function branches()
+    {
+        $branches = Branch::latest()->get();
+        // dd($branches);
+
+        return view('staff.manage.listbranches', compact('branches'));
+    }
 
     public function store(Request $request)
     {
