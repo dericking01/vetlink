@@ -120,26 +120,22 @@
     </a><!-- more inner pages-->
 
 </li>
-{{-- <li class="nav-item">
+
+<li class="nav-item">
     <!-- label-->
     <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
-        <div class="col-auto navbar-vertical-label">Manage Categories</div>
+        <div class="col-auto navbar-vertical-label">Manage Reports</div>
         <div class="col ps-0">
             <hr class="mb-0 navbar-vertical-divider" />
         </div>
     </div><!-- parent pages-->
-    <a class="nav-link @if(request()->routeIs('admin.listproductcategory')) active @endif" href="{{ route('admin.listproductcategory') }}">
+    <a class="nav-link @if(request()->routeIs('reports.sales')) active @endif" href="{{ route('reports.sales') }}">
         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
-            class="fas fa-cubes"></span></span><span
-        class="nav-link-text ps-1">Product Categories</span></div>
+            class="fas fa-book"></span></span><span
+        class="nav-link-text ps-1">Sales</span></div>
     </a><!-- more inner pages-->
 
-    <a class="nav-link @if(request()->routeIs('admin.listservicecategory')) active @endif" href="{{ route('admin.listservicecategory') }} ">
-        <div class="d-flex align-items-center"><span class="nav-link-icon"><span
-            class="fas fa-archive "></span></span><span
-        class="nav-link-text ps-1">Service Categories</span></div>
-    </a><!-- more inner pages-->
-</li> --}}
+</li>
 
 {{-- <li class="nav-item">
     <!-- label-->
