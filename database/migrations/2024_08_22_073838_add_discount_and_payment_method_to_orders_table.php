@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->decimal('discount', 10, 2)->nullable()->after('total_amount');
-            $table->enum('payment_method', ['cheque', 'cash', 'Lipa namba', 'credit card'])->nullable()->after('discount')->default('cash');
+            $table->enum('payment_method', ['cheque', 'cash', 'Lipa namba', 'credit card','Bank'])->nullable()->after('discount')->default('cash');
         });
     }
 

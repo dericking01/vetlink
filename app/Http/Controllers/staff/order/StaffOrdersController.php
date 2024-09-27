@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AdminProduct;
 use App\Models\Agent;
 use App\Models\Branch;
+use App\Models\BranchProduct;
 use App\Models\OrderItems;
 use App\Models\Orders;
 use Brian2694\Toastr\Facades\Toastr;
@@ -115,6 +116,13 @@ class StaffOrdersController extends Controller
         return view('staff.manage.create-order',compact('agents','products','branches','prod'));
     }
 
+    public function branches()
+    {
+        $branches = Branch::latest()->get();
+        // dd($branches);
+
+        return view('staff.manage.listbranches', compact('branches'));
+    }
 
     public function store(Request $request)
     {
@@ -139,9 +147,23 @@ class StaffOrdersController extends Controller
             // Get the quantity for this product
             $quantity = $request->quantity[$productId];
 
-            // Check if requested quantity exceeds available stock
-            if ($quantity > $product->quantity) {
-                Toastr::warning("{$product->name} is out of stock!");
+            // Retrieve the branch ID from the request
+            $branchId = $request->branch;
+
+            // Check the available quantity in the branch_products table
+            $branchProduct = BranchProduct::where('branch_id', $branchId)
+                ->where('admin_product_id', $productId)
+                ->first();
+
+            // Validate branchProduct exists
+            if (!$branchProduct) {
+                Toastr::warning("No stock available for {$product->name} in the selected branch.");
+                return back();
+            }
+
+            // Check if requested quantity exceeds available stock in branch_products
+            if ($quantity > $branchProduct->quantity) {
+                Toastr::warning("Insufficient stock for {$product->name} in the selected branch!");
                 return back();
             }
         }

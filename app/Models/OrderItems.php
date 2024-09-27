@@ -28,12 +28,7 @@ class OrderItems extends Model
 
     public function order()
     {
-        return $this->belongsTo(Orders::class);
-    }
-
-    public function seller()
-    {
-        return $this->belongsTo(Seller::class, 'seller_id');
+        return $this->belongsTo(Orders::class, 'order_id', 'id');
     }
 
     public function productable()
@@ -41,8 +36,4 @@ class OrderItems extends Model
         return $this->morphTo();
     }
 
-    public function adminProduct()
-    {
-        return $this->belongsTo(AdminProduct::class, 'admin_product_id');
-    }
 }
