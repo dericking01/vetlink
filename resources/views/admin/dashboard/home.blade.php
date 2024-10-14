@@ -212,8 +212,8 @@
           <div class="card">
             <div class="card-header">
               <div class="row flex-between-end">
-                <div class="col-auto align-self-center"> 
-                  <h5 class="mb-0" data-anchor="data-anchor" id="bar-chart">Products Sold<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="#" href="#bar-chart" style="padding-left: 0.375em;"></a></h5>
+                <div class="col-auto align-self-center">
+                  <h5 class="mb-0" data-anchor="data-anchor" id="bar-chart">Daily Sales Chart<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="#" href="#bar-chart" style="padding-left: 0.375em;"></a></h5>
                 </div>
                 {{-- <div class="col-auto ms-auto">
                   <div class="nav nav-pills nav-pills-falcon flex-grow-1" role="tablist"><button class="btn btn-sm active" data-bs-toggle="pill" data-bs-target="#dom-bc8e9a9e-e14d-48b7-b378-449e5a885a8e" type="button" role="tab" aria-controls="dom-bc8e9a9e-e14d-48b7-b378-449e5a885a8e" aria-selected="true" id="tab-dom-bc8e9a9e-e14d-48b7-b378-449e5a885a8e">Preview</button><button class="btn btn-sm" data-bs-toggle="pill" data-bs-target="#dom-fbf63e9a-f181-4770-853f-4983dc922966" type="button" role="tab" aria-controls="dom-fbf63e9a-f181-4770-853f-4983dc922966" aria-selected="false" id="tab-dom-fbf63e9a-f181-4770-853f-4983dc922966" tabindex="-1">Code</button></div>
@@ -224,7 +224,9 @@
               <div class="tab-content">
                 <div class="tab-pane preview-tab-pane active show" role="tabpanel" aria-labelledby="tab-dom-bc8e9a9e-e14d-48b7-b378-449e5a885a8e" id="dom-bc8e9a9e-e14d-48b7-b378-449e5a885a8e">
                   <!-- Find the JS file for the following chart at: src/js/charts/chartjs/chart-bar.js-->
-                  <!-- If you are not using gulp based workflow, you can find the transpiled code at: public/assets/js/theme.js--><canvas class="max-w-100" id="chartjs-bar-chart" width="688" height="425" style="box-sizing: border-box; display: block; height: 340px; width: 550.4px;"></canvas>
+                  <!-- If you are not using gulp based workflow, you can find the transpiled code at: public/assets/js/theme.js-->
+                  {{-- <canvas class="max-w-100" id="chartjs-bar-chart" width="688" height="425" style="box-sizing: border-box; display: block; height: 340px; width: 550.4px;"></canvas> --}}
+                  <canvas class="max-w-100" id="dailySalesChart" width="688" height="425" style="box-sizing: border-box; display: block; height: 340px; width: 550.4px;"></canvas>
                 </div>
                 <div class="tab-pane code-tab-pane" role="tabpanel" aria-labelledby="tab-dom-fbf63e9a-f181-4770-853f-4983dc922966" id="dom-fbf63e9a-f181-4770-853f-4983dc922966"><pre class="scrollbar rounded-1 language-html" style="max-height:420px" tabindex="0"><code class="language-html">
                     <span class="token comment">&lt;!-- Find the JS file for the following chart at: src/js/charts/chartjs/chart-bar.js--&gt;</span>
@@ -240,7 +242,7 @@
             <div class="card-header">
               <div class="row flex-between-end">
                 <div class="col-auto align-self-center">
-                  <h5 class="mb-0" data-anchor="data-anchor" id="line-chart">Sales Line Chart<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="#" href="#line-chart" style="padding-left: 0.375em;"></a></h5>
+                  <h5 class="mb-0" data-anchor="data-anchor" id="line-chart">Monthly Sales Chart<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="#" href="#line-chart" style="padding-left: 0.375em;"></a></h5>
                 </div>
                 {{-- <div class="col-auto ms-auto">
                   <div class="nav nav-pills nav-pills-falcon flex-grow-1" role="tablist"><button class="btn btn-sm active" data-bs-toggle="pill" data-bs-target="#dom-0b8a4b6d-d049-420c-9bab-7195d2a70ef5" type="button" role="tab" aria-controls="dom-0b8a4b6d-d049-420c-9bab-7195d2a70ef5" aria-selected="true" id="tab-dom-0b8a4b6d-d049-420c-9bab-7195d2a70ef5">Preview</button><button class="btn btn-sm" data-bs-toggle="pill" data-bs-target="#dom-557a3f1e-b288-48fe-a18c-1631ea60b01d" type="button" role="tab" aria-controls="dom-557a3f1e-b288-48fe-a18c-1631ea60b01d" aria-selected="false" id="tab-dom-557a3f1e-b288-48fe-a18c-1631ea60b01d" tabindex="-1">Code</button></div>
@@ -251,7 +253,9 @@
               <div class="tab-content">
                 <div class="tab-pane preview-tab-pane active" role="tabpanel" aria-labelledby="tab-dom-0b8a4b6d-d049-420c-9bab-7195d2a70ef5" id="dom-0b8a4b6d-d049-420c-9bab-7195d2a70ef5">
                   <!-- Find the JS file for the following chart at: src/js/charts/chartjs/chart-line.js-->
-                  <!-- If you are not using gulp based workflow, you can find the transpiled code at: public/assets/js/theme.js--><canvas class="max-w-100" id="chartjs-line-chart" width="688" height="425" style="box-sizing: border-box; display: block; height: 340px; width: 550.4px;"></canvas>
+                  <!-- If you are not using gulp based workflow, you can find the transpiled code at: public/assets/js/theme.js-->
+                  {{-- <canvas class="max-w-100" id="chartjs-line-chart" width="688" height="425" style="box-sizing: border-box; display: block; height: 340px; width: 550.4px;"></canvas> --}}
+                  <canvas class="max-w-100" id="monthlySalesChart" width="688" height="425" style="box-sizing: border-box; display: block; height: 340px; width: 550.4px;"></canvas>
                 </div>
                 <div class="tab-pane code-tab-pane" role="tabpanel" aria-labelledby="tab-dom-557a3f1e-b288-48fe-a18c-1631ea60b01d" id="dom-557a3f1e-b288-48fe-a18c-1631ea60b01d"><pre class="scrollbar rounded-1 language-html" style="max-height:420px" tabindex="0"><code class="language-html">
                     <span class="token comment">&lt;!-- Find the JS file for the following chart at: src/js/charts/chartjs/chart-line.js--&gt;</span>
@@ -322,4 +326,59 @@
       </div>
     </div>
   </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var dailyCtx = document.getElementById('dailySalesChart').getContext('2d');
+        var dailySalesChart = new Chart(dailyCtx, {
+            type: 'bar',
+            data: {
+                labels: {!! json_encode($dailyDates) !!},
+                datasets: [{
+                    label: 'Daily Sales',
+                    data: {!! json_encode($dailyTotalSales) !!},
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    x: { title: { display: true, text: 'Date' }},
+                    y: { title: { display: true, text: 'Sales' }}
+                }
+            }
+        });
+    </script>
+
+    <!-- Monthly Sales Chart -->
+    <script>
+        var monthlyCtx = document.getElementById('monthlySalesChart').getContext('2d');
+        var monthlySalesChart = new Chart(monthlyCtx, {
+            type: 'bar',
+            data: {
+                labels: {!! json_encode($lastMonths) !!}, // Now contains month names
+                datasets: [{
+                    label: 'Monthly Sales',
+                    data: {!! json_encode($orderedMonthlySales) !!}, // Sales data
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 2,
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Month' },
+                        ticks: {
+                            autoSkip: false,  // Don't skip any labels (you can enable this if needed)
+                        }
+                    },
+                    y: {
+                        title: { display: true, text: 'Sales' }
+                    }
+                }
+            }
+        });
+    </script>
+
 @endsection

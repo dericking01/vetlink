@@ -11,6 +11,7 @@ use App\Http\Controllers\admin\products\ProductsController;
 use App\Http\Controllers\admin\products\SabProductsController;
 use App\Http\Controllers\admin\AdminsController;
 use App\Http\Controllers\admin\products\AdminProductExportController;
+use App\Http\Controllers\admin\reports\ReportsController;
 use App\Http\Controllers\admin\StaffsController;
 use App\Http\Controllers\admin\transactions\TransactionsController;
 use App\Http\Controllers\admin\UsersController;
@@ -115,6 +116,8 @@ Route::group(['prefix' => 'admin'], function () {
             Route::put('update-branch/{id}', [UsersController::class, 'updateBranch'])->name('branch.update');
             Route::delete('destroy-branch', [UsersController::class, 'destroyBranch'])->name('branch.destroybranch');
             Route::get('branch-details/{id}',[UsersController::class, 'viewBranch'])->name('admin.branch.details');
+            Route::put('branchproduct-update/{id}', [UsersController::class, 'updateBranchProduct'])->name('branchproduct.update');
+
 
         });
 
@@ -149,6 +152,12 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('paypointorder', [OrdersController::class, 'payPointOrderindex'])->name('admin.paypointorder');
             Route::get('completedorder', [OrdersController::class, 'completedOrderindex'])->name('admin.completedorder');
             Route::get('view-order/{id}', [OrdersController::class, 'viewOrder'])->name('admin.orders.vieworder');
+        });
+
+        // Reports routes
+        Route::group(['prefix' => 'reports'], function () {
+            Route::get('sales', [ReportsController::class, 'salesReport'])->name('reports.sales');
+
         });
 
         // Invoice routes

@@ -200,7 +200,6 @@ class OrdersController extends Controller
         foreach ($request->name as $productId) {
             $quantity = $request->quantity[$productId];
             $product = AdminProduct::findOrFail($productId);
-
             // Create order item for each product
             $orderItem = new OrderItems();
             $orderItem->order_id = $order->id;
@@ -208,12 +207,12 @@ class OrdersController extends Controller
             $orderItem->productable_id = $productId;
             $orderItem->productable_type = 'App\Models\AdminProduct';
             $orderItem->quantity = $quantity;
-            $orderItem->price = $product->price; // Assuming price is retrieved from AdminProduct model
+            $orderItem->price = $branchProduct->price; // Assuming price is retrieved from AdminProduct model
             // dd($orderItem);
             $orderItem->save();
 
             // Update total amount
-            $totalAmount += $quantity * $product->price;
+            $totalAmount += $quantity * $branchProduct->price;
 
         }
         $totalAmount = $totalAmount - $request->discount;
