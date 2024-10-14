@@ -116,6 +116,8 @@ Route::group(['prefix' => 'admin'], function () {
             Route::put('update-branch/{id}', [UsersController::class, 'updateBranch'])->name('branch.update');
             Route::delete('destroy-branch', [UsersController::class, 'destroyBranch'])->name('branch.destroybranch');
             Route::get('branch-details/{id}',[UsersController::class, 'viewBranch'])->name('admin.branch.details');
+            Route::put('branchproduct-update/{id}', [UsersController::class, 'updateBranchProduct'])->name('branchproduct.update');
+
 
         });
 
@@ -157,7 +159,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('sales', [ReportsController::class, 'salesReport'])->name('reports.sales');
 
         });
-        
+
         // Invoice routes
         Route::group(['prefix' => 'invoices'], function () {
             Route::get('pendinginvoices', [InvoiceController::class, 'pendingInvoiceindex'])->name('admin.pendingInvoice');

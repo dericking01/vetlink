@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Agent;
 use App\Models\Branch;
+use App\Models\BranchProduct;
 use App\Models\MarketProduct;
 use App\Models\OrderItems;
 use App\Models\Orders;
@@ -118,6 +119,18 @@ class UsersController extends Controller
             ->firstOrFail();
         // Pass the branch and its distributions to the view
         return view('admin.users.branch_details', compact('branch'));
+    }
+
+    public function updateBranchProduct(Request $request, $id)
+    {
+        $branchProduct = BranchProduct::findOrFail($id);
+
+        $branchProduct->price = $request->price;
+        // dd($branchProduct);
+        $branchProduct->save();
+        Toastr::success('Price successfully updated!');
+        return back();
+
     }
 
 

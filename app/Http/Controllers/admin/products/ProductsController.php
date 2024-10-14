@@ -160,6 +160,7 @@ class ProductsController extends Controller
                 'admin_product_id' => $product->id,
                 'branch_id' => $branchId,
                 'quantity' => $quantity,
+                'price' => $product->price,
             ]);
         }
 
