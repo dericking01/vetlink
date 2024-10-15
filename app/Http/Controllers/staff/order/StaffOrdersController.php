@@ -93,12 +93,35 @@ class StaffOrdersController extends Controller
         return view('staff.manage.rejected-orders', compact('orders','branches','selectedBranchIds'));
     }
 
+
     public function viewOrder($id)
     {
         $order = Orders::where('id', $id)->first();
-        $orderItems = OrderItems::where('order_id', $order->id)->latest()->get();
-        $products = $orderItems->pluck('productable');
-        // dd($products);
+
+        // Load order items with their productable relation (BranchProduct)
+        $orderItems = OrderItems::where('order_id', $order->id)
+                                ->with('productable') // Load the productable relation
+                                ->latest()
+                                ->get();
+
+        // Collect data for displaying
+        $products = $orderItems->map(function ($item) {
+            // Since productable is polymorphic, check its class
+            if ($item->productable_type === BranchProduct::class) {
+                // Retrieve price and name from BranchProduct
+                return [
+                    'name' => $item->productable->adminProduct->name, // Name from AdminProduct
+                    'price' => $item->productable->price, // Price from BranchProduct
+                    'quantity' => $item->quantity,
+                ];
+            }
+            // In case it's another type, retrieve accordingly
+            return [
+                'name' => $item->productable->name,
+                'price' => $item->productable->price,
+                'quantity' => $item->quantity,
+            ];
+        });
 
         return view('staff.manage.view-order', compact('order', 'orderItems', 'products'));
     }
@@ -193,8 +216,8 @@ class StaffOrdersController extends Controller
             $orderItem = new OrderItems();
             $orderItem->order_id = $order->id;
             $orderItem->agent_id = $request->id;
-            $orderItem->productable_id = $productId;
-            $orderItem->productable_type = 'App\Models\AdminProduct';
+            $orderItem->productable_id = $branchProduct->id;
+            $orderItem->productable_type = 'App\Models\BranchProduct';
             $orderItem->quantity = $quantity;
             $orderItem->price = $branchProduct->price; // Assuming price is retrieved from AdminProduct model
             // dd($orderItem);
