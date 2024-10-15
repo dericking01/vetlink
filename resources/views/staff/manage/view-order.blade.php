@@ -96,7 +96,7 @@
                 <td class="align-middle">
                     <h6 class="mb-0 text-nowrap">{{ $product->name }}</h6>
                     <p class="mb-0">
-                        @if($orderItem->productable_type == 'App\Models\AdminProduct')
+                        @if($orderItem->productable_type == 'App\Models\BranchProduct')
                             Dodoki Product
                         @else
                             Other
@@ -104,7 +104,8 @@
                     </p>
                 </td>
                 <td class="align-middle text-center">{{$orderItem->quantity}}</td>
-                <td class="align-middle text-end">{{number_format($product->price, 2)}}</td>
+                {{-- <td class="align-middle text-end">{{number_format($product->price, 2)}}</td> --}}
+                <td class="align-middle text-end">{{ number_format($product['price'], 2) }}</td>
                 <td class="align-middle text-end">{{number_format($amount, 2) }}</td>
                 </tr>
             @endforeach
