@@ -3,7 +3,6 @@
 namespace App\Imports;
 
 use App\Models\AdminProduct;
-use App\Models\Branch;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -42,8 +41,14 @@ class ProductsImport implements ToCollection, WithHeadingRow
             }
 
             // Convert numeric values from string to int/float
-            $quantity = is_numeric($row['quantity']) ? (int) $row['quantity'] : null; // Log non-numeric values
-            $price = is_numeric($row['price']) ? (float) $row['price'] : null; // Log non-numeric values
+            $quantity = is_numeric($row['quantity']) ? (int) $row['quantity'] : null;
+            $price = is_numeric($row['price']) ? (float) $row['price'] : null;
+
+            // Check for missing product name and log error
+            if (empty($row['product_name'])) {
+                Log::error("Product name is missing in row: " . json_encode($row));
+                continue; // Skip the row if no product name
+            }
 
             AdminProduct::create([
                 'admin_id' => $adminId, // Use the authenticated admin's ID
@@ -81,5 +86,3 @@ class ProductsImport implements ToCollection, WithHeadingRow
         return $this->importedCount;
     }
 }
-
-

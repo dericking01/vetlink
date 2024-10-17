@@ -53,6 +53,8 @@
                     <select class="form-select" id="payment_method" name="payment_method" required="required">
                         <option value="">Select payment method...</option>
                         <option value="cash" {{ old('payment_method') == 'cash' ? 'selected' : '' }}>Cash</option>
+                        <option value="cheque" {{ old('payment_method') == 'cheque' ? 'selected' : '' }}>Cheque</option>
+                        <option value="Bank" {{ old('payment_method') == 'Bank' ? 'selected' : '' }}>Bank</option>
                         <option value="Lipa namba" {{ old('payment_method') == 'Lipa namba' ? 'selected' : '' }}>Lipa namba</option>
                         <option value="Bank" {{ old('payment_method') == 'Bank' ? 'selected' : '' }}>Bank</option>
                         <option value="cheque" {{ old('payment_method') == 'cheque' ? 'selected' : '' }}>Cheque</option>
