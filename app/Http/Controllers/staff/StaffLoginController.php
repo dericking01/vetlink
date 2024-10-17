@@ -60,14 +60,22 @@ class StaffLoginController extends Controller
         // Attempt to log in the staff
         if (auth('staff')->attempt(['phone' => $request->phone, 'password' => $request->password], $remember)) {
 
+            // Get the role of the authenticated staff
+            $staff = auth('staff')->user();
+            $role = $staff->role; // Assuming 'role' is the column name
+
+            // Check the status immediately after login
+            if ($staff->status === 'inactive') {
+                // Log the user out if inactive
+                auth('staff')->logout();
+                Toastr::warning('Account pending, wait for approval from Admin.');
+                return redirect()->route('staff.login');
+            }
+
             // Update the last login timestamp
             DB::table('staffs')
                 ->where('id', auth('staff')->user()->id)
                 ->update(['last_login_at' => Carbon::now(), 'is_online' => true]);
-
-            // Get the role of the authenticated staff
-            $staff = auth('staff')->user();
-            $role = $staff->role; // Assuming 'role' is the column name
 
             // Display a welcome message
             $greeting = SettingsHelper::getGreeting();
