@@ -142,7 +142,7 @@ class OrdersController extends Controller
                 'quantity' => $item->quantity,
             ];
         });
-
+        // dd($products);
         return view('admin.order.view-order', compact('order', 'orderItems', 'products'));
     }
 
@@ -230,6 +230,7 @@ class OrdersController extends Controller
             $orderItem->order_id = $order->id;
             $orderItem->agent_id = $request->id;
             $orderItem->productable_id = $branchProduct->id;
+            $orderItem->deductable_id = $branchProduct->admin_product_id;
             $orderItem->productable_type = 'App\Models\BranchProduct';
             $orderItem->quantity = $quantity;
             $orderItem->price = $branchProduct->price; // Assuming price is retrieved from AdminProduct model
@@ -365,6 +366,7 @@ class OrdersController extends Controller
 
         // If the order is completed, dispatch the OrderCompleted event
         if ($order->status === 'Completed' && !$order->is_quantity_deducted) {
+            // dd($order->orderItems);
             // Deduct product quantity
             event(new ProductQuantityDeducted($order->orderItems));
             // Mark quantity as deducted

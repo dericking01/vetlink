@@ -20,6 +20,8 @@ class OrderItems extends Model
         'seller_id',
         'productable_type',
         'quantity',
+        'price',
+        'deductable_id',
         'amount',
         'discount',
         'status',

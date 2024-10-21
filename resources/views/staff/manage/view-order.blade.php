@@ -79,37 +79,31 @@
             </tr>
           </thead>
           <tbody>
-                @php
-                    $grandTotal = 0; // Initialize the grand total
-                @endphp
-            @foreach($orderItems as $key => $orderItem)
+            @php
+                $grandTotal = 0; // Initialize the grand total
+            @endphp
+            @foreach($products as $key => $product)
 
                 @php
-                // Get the corresponding product for this order item
-                    $product = $orderItem->productable;
-                    $subtotal = $orderItems->sum('amount');
-                    $amount = ($product->price)*($orderItem->quantity);
+                    // Calculate the amount for each product
+                    $amount = ($product['price']) * ($product['quantity']);
                     $grandTotal += $amount;
                 @endphp
 
                 <tr class="border-200">
-                <td class="align-middle">
-                    <h6 class="mb-0 text-nowrap">{{ $product->name }}</h6>
-                    <p class="mb-0">
-                        @if($orderItem->productable_type == 'App\Models\BranchProduct')
-                            Dodoki Product
-                        @else
-                            Other
-                        @endif
-                    </p>
-                </td>
-                <td class="align-middle text-center">{{$orderItem->quantity}}</td>
-                {{-- <td class="align-middle text-end">{{number_format($product->price, 2)}}</td> --}}
-                <td class="align-middle text-end">{{ number_format($product['price'], 2) }}</td>
-                <td class="align-middle text-end">{{number_format($amount, 2) }}</td>
+                    <td class="align-middle">
+                        <h6 class="mb-0 text-nowrap">{{ $product['name'] }}</h6>
+                        <p class="mb-0">
+                            Dodoki Product <!-- This should always be true for your context -->
+                        </p>
+                    </td>
+                    <td class="align-middle text-center">{{ $product['quantity'] }}</td>
+                    <td class="align-middle text-end">{{ number_format($product['price'], 2) }}</td>
+                    <td class="align-middle text-end">{{ number_format($amount, 2) }}</td>
                 </tr>
+
             @endforeach
-          </tbody>
+           </tbody>
         </table>
       </div>
       <div class="row g-0 justify-content-end">

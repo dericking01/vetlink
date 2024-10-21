@@ -27,12 +27,13 @@ class DeductProductQuantity
             $branchId = $order->branch_id;
 
             // Retrieve the product ID (from the admin_products table)
-            $productId = $orderItem->productable_id;
+            $productId = $orderItem->deductable_id;
 
             // Find the specific product in the branch_products table
             $branchProduct = BranchProduct::where('branch_id', $branchId)
                 ->where('admin_product_id', $productId)
                 ->first();
+            // dd($orderItem->quantity);
 
             // If the branch product exists, deduct the quantity
             if ($branchProduct) {
