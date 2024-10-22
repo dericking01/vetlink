@@ -234,12 +234,12 @@ class OrdersController extends Controller
             $orderItem->deductable_id = $branchProduct->admin_product_id;
             $orderItem->productable_type = 'App\Models\BranchProduct';
             $orderItem->quantity = $quantity;
-            $orderItem->price = $branchProduct->price; // Assuming price is retrieved from AdminProduct model
+            $orderItem->price = $branchProduct->adminProduct->price; // Assuming price is retrieved from AdminProduct model
             // dd($orderItem);
             $orderItem->save();
 
             // Update total amount
-            $totalAmount += $quantity * $branchProduct->price;
+            $totalAmount += $quantity * $branchProduct->adminProduct->price;
 
         }
         $totalAmount = $totalAmount - $request->discount;

@@ -220,12 +220,12 @@ class StaffOrdersController extends Controller
             $orderItem->productable_id = $branchProduct->id;
             $orderItem->productable_type = 'App\Models\BranchProduct';
             $orderItem->quantity = $quantity;
-            $orderItem->price = $branchProduct->price; // Assuming price is retrieved from AdminProduct model
+            $orderItem->price = $branchProduct->adminProduct->price; // Assuming price is retrieved from AdminProduct model
             // dd($orderItem);
             $orderItem->save();
 
             // Update total amount
-            $totalAmount += $quantity * $branchProduct->price;
+            $totalAmount += $quantity * $branchProduct->adminProduct->price;
 
         }
         $totalAmount = $totalAmount - $request->discount;
