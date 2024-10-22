@@ -8,6 +8,7 @@ use App\Models\Admin;
 use App\Models\AdminProduct;
 use App\Models\Branch;
 use App\Models\BranchProduct;
+use App\Models\ProductStock;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -162,6 +163,29 @@ class ProductsController extends Controller
                 'quantity' => $quantity,
                 'price' => $product->price,
             ]);
+
+            // Insert or update the product in the product_stock_helper table
+            $stockHelper = ProductStock::where('admin_product_id', $product->id)
+            ->where('branch_id', $branchId)
+            ->first();
+
+            if ($stockHelper) {
+                // If a record exists, update the available_quantity
+                $stockHelper->available_quantity += $quantity;
+                $stockHelper->total_quantity += $quantity; // Adjust if necessary for total tracking
+                $stockHelper->save();
+                // dd($stockHelper);
+
+            } else {
+                // If no record exists, create a new one
+                ProductStock::create([
+                'admin_product_id' => $product->id,
+                'branch_id' => $branchId,
+                'total_quantity' => $quantity,
+                'available_quantity' => $quantity,
+                ]);
+            }
+
         }
 
         Toastr::success('Product successfully distributed to branches.');
@@ -191,7 +215,6 @@ class ProductsController extends Controller
 
         // Calculate the difference between the old and new quantities
         $quantityDifference = $newQuantity - $originalQuantity;
-        // dd($product->name);
         // Update the product's quantity in admin_products table
         // If $quantityDifference > 0, decrease stock; if $quantityDifference < 0, increase stock
         $product->quantity -= $quantityDifference;
@@ -200,7 +223,21 @@ class ProductsController extends Controller
         // Update the distribution with the new quantity
         $distribution->quantity = $newQuantity;
         $distribution->branch_id = $request->branch_id;
+        // dd($distribution);
         $distribution->save();
+
+        // Now update the product_stock table
+        $stockHelper = ProductStock::where('admin_product_id', $product->id)
+        ->where('branch_id', $request->branch_id)
+        ->first();
+
+        if ($stockHelper) {
+            // If a record exists, adjust the available_quantity and total_quantity
+            $stockHelper->available_quantity += $quantityDifference; // Adjust available quantity
+            $stockHelper->total_quantity += $quantityDifference; // Adjust total quantity if necessary
+            // dd($stockHelper);
+            $stockHelper->save(); // Save changes to the product_stock table
+        }
 
         Toastr::success('Distribution updated and stock recalculated successfully!');
 
@@ -211,6 +248,13 @@ class ProductsController extends Controller
     {
         // Find the distribution record
         $branchProduct = BranchProduct::findOrFail($request->id);
+        $productStock = ProductStock::where('admin_product_id', $branchProduct->admin_product_id)
+                                    ->where('branch_id', $branchProduct->branch_id) // Include branch_id
+                                    ->first();
+        // Return the quantity back to the stock
+        $productStock->total_quantity -= $branchProduct->quantity;
+        $productStock->available_quantity -= $branchProduct->quantity;
+        $productStock->save();
 
         // Find the associated product from the admin_products table
         $product = AdminProduct::findOrFail($branchProduct->admin_product_id);

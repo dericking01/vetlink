@@ -121,6 +121,19 @@ class UsersController extends Controller
         return view('admin.users.branch_details', compact('branch'));
     }
 
+    public function viewBranchStock($id)
+{
+    // Find the branch by its ID and load the related stock from product_stock table
+    $branch = Branch::with(['productStocks.adminProduct'])
+        ->where('id', $id)
+        ->firstOrFail();
+
+    // Pass the branch and its stock to the view
+    return view('admin.users.branch_stock', compact('branch'));
+}
+
+
+
     public function updateBranchProduct(Request $request, $id)
     {
         $branchProduct = BranchProduct::findOrFail($id);

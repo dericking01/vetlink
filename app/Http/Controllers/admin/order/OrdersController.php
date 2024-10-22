@@ -14,6 +14,7 @@ use App\Models\OrderItems;
 use App\Models\Orders;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\ProductStock;
 use App\Models\ServiceCategory;
 use Brian2694\Toastr\Facades\Toastr;
 use Brian2694\Toastr\Toastr as ToastrToastr;
@@ -187,8 +188,8 @@ class OrdersController extends Controller
             // Retrieve the branch ID from the request
             $branchId = $request->branch;
 
-            // Check the available quantity in the branch_products table
-            $branchProduct = BranchProduct::where('branch_id', $branchId)
+            // Check the available quantity in the product_stock table
+            $branchProduct = ProductStock::where('branch_id', $branchId)
                 ->where('admin_product_id', $productId)
                 ->first();
 
@@ -198,8 +199,8 @@ class OrdersController extends Controller
                 return back();
             }
 
-            // Check if requested quantity exceeds available stock in branch_products
-            if ($quantity > $branchProduct->quantity) {
+            // Check if requested quantity exceeds available stock in product_stock
+            if ($quantity > $branchProduct->available_quantity) {
                 Toastr::warning("Insufficient stock for {$product->name} in the selected branch!");
                 return back();
             }
