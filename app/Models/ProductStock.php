@@ -31,4 +31,11 @@ class ProductStock extends Model
     {
         return $this->belongsTo(Branch::class, 'branch_id');
     }
+
+    public function branchProducts()
+    {
+        return $this->hasMany(BranchProduct::class, 'admin_product_id', 'admin_product_id')
+                    ->where('branch_id', $this->branch_id);
+    }
+
 }

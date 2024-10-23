@@ -193,6 +193,10 @@ class OrdersController extends Controller
                 ->where('admin_product_id', $productId)
                 ->first();
 
+            // get the price from the first related BranchProduct
+            $OrderedProduct = $branchProduct->branchProducts()->first();
+            $price = $OrderedProduct->price;
+
             // Validate branchProduct exists
             if (!$branchProduct) {
                 Toastr::warning("No stock available for {$product->name} in the selected branch.");
@@ -234,12 +238,12 @@ class OrdersController extends Controller
             $orderItem->deductable_id = $branchProduct->admin_product_id;
             $orderItem->productable_type = 'App\Models\BranchProduct';
             $orderItem->quantity = $quantity;
-            $orderItem->price = $branchProduct->adminProduct->price; // Assuming price is retrieved from AdminProduct model
+            $orderItem->price = $price; // price is retrieved from BranchProduct model
             // dd($orderItem);
             $orderItem->save();
 
             // Update total amount
-            $totalAmount += $quantity * $branchProduct->adminProduct->price;
+            $totalAmount += $quantity * $price;
 
         }
         $totalAmount = $totalAmount - $request->discount;
