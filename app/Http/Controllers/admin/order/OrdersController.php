@@ -193,10 +193,6 @@ class OrdersController extends Controller
                 ->where('admin_product_id', $productId)
                 ->first();
 
-            // get the price from the first related BranchProduct
-            $OrderedProduct = $branchProduct->branchProducts()->first();
-            $price = $OrderedProduct->price;
-
             // Validate branchProduct exists
             if (!$branchProduct) {
                 Toastr::warning("No stock available for {$product->name} in the selected branch.");
@@ -208,6 +204,9 @@ class OrdersController extends Controller
                 Toastr::warning("Insufficient stock for {$product->name} in the selected branch!");
                 return back();
             }
+            // get the price from the first related BranchProduct
+            $OrderedProduct = $branchProduct->branchProducts()->first();
+            $price = $OrderedProduct->price;
 
         }
         // If all quantities are valid, proceed to create the order
