@@ -86,7 +86,7 @@ class ForgotPasswordController extends Controller
 
         if (!$updatePassword) {
             Toastr::error('Invalid Request!');
-            return redirect()->route('reset.password');
+            return redirect()->route('admin.login');
         }
 
         // Check if the email exists in the admins table
@@ -105,7 +105,7 @@ class ForgotPasswordController extends Controller
                 ->update(['password' => Hash::make($request->password)]);
         } else {
             Toastr::error('User not found!');
-            return redirect()->route('reset.password');
+            return redirect()->route('admin.login');
         }
 
         // Delete the password reset token
