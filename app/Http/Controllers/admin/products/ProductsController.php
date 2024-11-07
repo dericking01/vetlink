@@ -275,4 +275,14 @@ class ProductsController extends Controller
         return back();
     }
 
+    public function auditDistributions()
+    {
+        $products = AdminProduct::latest()->get();
+        $admins = Admin::latest()->get();
+        $branches = Branch::latest()->where('status','active')->get();
+        $branchProducts = BranchProduct::with(['branch', 'adminProduct'])->latest()->get();
+
+        return view('staff.manage.stock-auditor', compact('products','admins','branches','branchProducts'));
+    }
+
 }

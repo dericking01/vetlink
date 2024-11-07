@@ -90,7 +90,7 @@ class StaffsController extends Controller
                 'digits:10',
             ],
             'email' => 'required|email',
-            'role' => 'required|in:staff,delivery,orderman', // Added role validation
+            'role' => 'required|in:staff,delivery,orderman,auditor', // Added role validation
         ];
 
         // Check if email or phone number has changed

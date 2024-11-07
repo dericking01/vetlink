@@ -216,6 +216,16 @@ Route::middleware(['auth:staff', 'role:orderman'])->group(function () {
 
 });
 
+// Routes accessible only to Stock Auditor staff
+Route::middleware(['auth:staff', 'role:auditor'])->group(function () {
+
+    Route::group(['prefix' => 'auditor'], function () {
+
+        Route::get('distributions', [ProductsController::class, 'auditDistributions'])->name('audit.warehouse.products');
+
+    });
+
+});
 
 // A route for access denied page
 Route::get('/access-denied', function () {

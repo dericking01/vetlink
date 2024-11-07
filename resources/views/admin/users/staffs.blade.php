@@ -267,6 +267,10 @@
                                                     {{ old('role', isset($staff) ? $staff->role : '') == 'orderman' ? 'selected' : '' }}>
                                                     ORDER-MAN
                                                 </option>
+                                                <option value="auditor"
+                                                    {{ old('role', isset($staff) ? $staff->role : '') == 'auditor' ? 'selected' : '' }}>
+                                                    STOCK AUDITOR
+                                                </option>
                                             </select>
                                         </div>
 
@@ -388,6 +392,7 @@
                                         <option value="staff" {{ old('role') == 'staff' ? 'selected' : '' }}>STAFF</option>
                                         <option value="delivery" {{ old('role') == 'delivery' ? 'selected' : '' }}>COURIER</option>
                                         <option value="orderman" {{ old('role') == 'orderman' ? 'selected' : '' }}>ORDER-MAN</option>
+                                        <option value="auditor" {{ old('role') == 'auditor' ? 'selected' : '' }}>STOCK AUDITOR</option>
                                     </select>
                             </div>
 
