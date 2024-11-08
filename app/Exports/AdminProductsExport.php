@@ -27,9 +27,9 @@ class AdminProductsExport implements FromCollection, WithHeadings, WithStyles
             'description',
             'status',
             'created_at',
-            'updated_at',
-            'deleted_at',
-        )->get();
+        )
+        ->whereNull('deleted_at') // Exclude soft-deleted records
+        ->get();
     }
 
     public function headings(): array
@@ -43,10 +43,7 @@ class AdminProductsExport implements FromCollection, WithHeadings, WithStyles
             'price',
             'description',
             'status',
-            'created_at',
-            'updated_at',
-            'deleted_at',
-            // Add other fields as necessary
+            'added_on',
         ];
     }
 

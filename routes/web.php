@@ -157,6 +157,8 @@ Route::group(['prefix' => 'admin'], function () {
         // Reports routes
         Route::group(['prefix' => 'reports'], function () {
             Route::get('sales', [ReportsController::class, 'salesReport'])->name('reports.sales');
+            Route::get('prod-distributions', [ReportsController::class, 'DistributionReport'])->name('reports.product-distributions');
+            Route::get('/export-product-distributions', [ReportsController::class, 'exportProductDistributions'])->name('export.product-distributions');
 
         });
 
