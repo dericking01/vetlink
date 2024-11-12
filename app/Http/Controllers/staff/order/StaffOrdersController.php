@@ -95,32 +95,38 @@ class StaffOrdersController extends Controller
     }
 
 
-    public function viewOrder($id)
+    public function viewOrder($id) 
     {
-        $order = Orders::where('id', $id)->first();
+        $order = Orders::findOrFail($id);
 
-        // Load order items with their productable relation (BranchProduct)
+        // Retrieve order items with eager loading for nested relationships through ProductStock
         $orderItems = OrderItems::where('order_id', $order->id)
-                                ->with('productable') // Load the productable relation
+                                ->with(['productable' => function ($query) {
+                                    $query->with('adminProduct'); // Load adminProduct through ProductStock
+                                }])
                                 ->latest()
                                 ->get();
 
         // Collect data for displaying
         $products = $orderItems->map(function ($item) {
-            // Since productable is polymorphic, check its class
-            if ($item->productable_type === BranchProduct::class) {
-                // Retrieve price and name from BranchProduct
+            // Check if the productable type is ProductStock to access related AdminProduct details
+            if ($item->productable instanceof ProductStock) {
+                // Retrieve the related BranchProduct to get the price
+                $branchProduct = $item->productable->branchProducts->first();
+
                 return [
-                    'name' => $item->productable->adminProduct->name, // Name from AdminProduct
-                    'price' => $item->productable->price, // Price from BranchProduct
+                    'name' => $item->productable->adminProduct->name ?? 'N/A',
+                    'price' => $branchProduct ? $branchProduct->price : '0.00',
                     'quantity' => $item->quantity,
                 ];
             }
-            // In case it's another type, retrieve accordingly
+
+            // For any other productable type, handle differently if needed
             return [
-                'name' => $item->productable->name,
-                'price' => $item->productable->price,
+                'name' => $item->productable->adminProduct->name ?? 'Unknown Product',
+                'price' => $item->productable->price ?? '0.00',
                 'quantity' => $item->quantity,
+
             ];
         });
 
