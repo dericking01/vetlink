@@ -245,7 +245,7 @@ class OrdersController extends Controller
             $orderItem->agent_id = $request->id;
             $orderItem->productable_id = $branchProduct->id;
             $orderItem->deductable_id = $branchProduct->admin_product_id;
-            $orderItem->productable_type = 'App\Models\BranchProduct';
+            $orderItem->productable_type = 'App\Models\ProductStock';
             $orderItem->quantity = $quantity;
             $orderItem->price = $price; // price is retrieved from BranchProduct model
             // dd($orderItem);

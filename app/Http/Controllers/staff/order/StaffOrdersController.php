@@ -229,7 +229,7 @@ class StaffOrdersController extends Controller
             $orderItem->order_id = $order->id;
             $orderItem->agent_id = $request->id;
             $orderItem->productable_id = $branchProduct->id;
-            $orderItem->productable_type = 'App\Models\BranchProduct';
+            $orderItem->productable_type = 'App\Models\ProductStock';
             $orderItem->quantity = $quantity;
             $orderItem->price = $price; // Assuming price is retrieved from AdminProduct model
             // dd($orderItem);
