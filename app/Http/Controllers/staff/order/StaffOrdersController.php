@@ -95,7 +95,7 @@ class StaffOrdersController extends Controller
     }
 
 
-    public function viewOrder($id) 
+    public function viewOrder($id)
     {
         $order = Orders::findOrFail($id);
 
@@ -111,12 +111,10 @@ class StaffOrdersController extends Controller
         $products = $orderItems->map(function ($item) {
             // Check if the productable type is ProductStock to access related AdminProduct details
             if ($item->productable instanceof ProductStock) {
-                // Retrieve the related BranchProduct to get the price
-                $branchProduct = $item->productable->branchProducts->first();
 
                 return [
                     'name' => $item->productable->adminProduct->name ?? 'N/A',
-                    'price' => $branchProduct ? $branchProduct->price : '0.00',
+                    'price' => $item->price ?? '0.00',
                     'quantity' => $item->quantity,
                 ];
             }
@@ -124,7 +122,7 @@ class StaffOrdersController extends Controller
             // For any other productable type, handle differently if needed
             return [
                 'name' => $item->productable->adminProduct->name ?? 'Unknown Product',
-                'price' => $item->productable->price ?? '0.00',
+                'price' => $item->price ?? '0.00',
                 'quantity' => $item->quantity,
 
             ];

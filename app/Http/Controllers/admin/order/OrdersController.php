@@ -115,7 +115,7 @@ class OrdersController extends Controller
     }
 
 
-    public function viewOrder($id) 
+    public function viewOrder($id)
     {
         $order = Orders::findOrFail($id);
 
@@ -136,7 +136,8 @@ class OrdersController extends Controller
 
                 return [
                     'name' => $item->productable->adminProduct->name ?? 'N/A',
-                    'price' => $branchProduct ? $branchProduct->price : '0.00',
+                    // 'price' => $branchProduct ? $branchProduct->price : '0.00',
+                    'price' => $item->price ?? '0.00',
                     'quantity' => $item->quantity,
                 ];
             }
@@ -144,7 +145,8 @@ class OrdersController extends Controller
             // For any other productable type, handle differently if needed
             return [
                 'name' => $item->productable->adminProduct->name ?? 'Unknown Product',
-                'price' => $item->productable->price ?? '0.00',
+                // 'price' => $item->productable->price ?? '0.00',
+                'price' => $item->price ?? '0.00',
                 'quantity' => $item->quantity,
 
             ];
