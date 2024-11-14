@@ -159,7 +159,9 @@ Route::group(['prefix' => 'admin'], function () {
         Route::group(['prefix' => 'reports'], function () {
             Route::get('sales', [ReportsController::class, 'salesReport'])->name('reports.sales');
             Route::get('prod-distributions', [ReportsController::class, 'DistributionReport'])->name('reports.product-distributions');
+            Route::get('stock-report', [ReportsController::class, 'StockReport'])->name('reports.stock');
             Route::get('/export-product-distributions', [ReportsController::class, 'exportProductDistributions'])->name('export.product-distributions');
+            Route::get('/export-stock', [ReportsController::class, 'exportStock'])->name('export.stock-report');
 
         });
 

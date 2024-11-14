@@ -38,4 +38,12 @@ class ProductStock extends Model
                     ->where('branch_id', $this->branch_id);
     }
 
+    // Custom accessor to retrieve the price from the first BranchProduct
+    public function getPriceAttribute()
+    {
+        $branchProduct = $this->branchProducts()->first();
+        return $branchProduct ? $branchProduct->price : null;
+    }
+
+
 }

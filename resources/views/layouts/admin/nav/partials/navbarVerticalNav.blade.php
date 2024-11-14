@@ -139,6 +139,11 @@
             class="fas fa-bars"></span></span><span
         class="nav-link-text ps-1">Distributions</span></div>
     </a><!-- more inner pages-->
+    <a class="nav-link @if(request()->routeIs('reports.stock')) active @endif" href="{{ route('reports.stock') }}">
+        <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+            class="fas fa-archive"></span></span><span
+        class="nav-link-text ps-1">Stock Report</span></div>
+    </a><!-- more inner pages-->
 
 </li>
 
