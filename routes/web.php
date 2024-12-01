@@ -236,6 +236,11 @@ Route::get('/access-denied', function () {
     return response()->view('errors.access_denied', [], 403);
 })->name('access.denied');
 
+Route::get('/error', function () {
+    abort(500);
+});
+
+
 
 // Routes accessible only to regular staff
 Route::middleware(['auth:staff', 'role:staff'])->group(function () {
