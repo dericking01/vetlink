@@ -31,4 +31,11 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'sprint_sms' => [
+        'url' => env('SPRINT_SMS_API_URL'),
+        'api_id' => env('SPRINT_SMS_API_ID'),
+        'api_password' => env('SPRINT_SMS_API_PASSWORD'),
+        'sender_id' => env('SPRINT_SMS_SENDER_ID'),
+    ],
+
 ];
