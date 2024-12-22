@@ -96,7 +96,7 @@ class SalesReportExport implements FromCollection, WithHeadings, ShouldAutoSize,
 
 
         // Calculate total amount
-        $totalAmount = $item->price * $item->quantity;
+        $totalAmount = ($item->price * $item->quantity) - $order->discount;
 
         return [
             $order->id,
