@@ -191,7 +191,7 @@
     <a class="nav-link @if(request()->routeIs('admin.partialorder')) active @endif" href="{{ route('admin.partialorder') }} ">
         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
             class="fas fa-spinner fa-spin"></span></span><span
-        class="nav-link-text ps-1">Partial Orders</span></div>
+        class="nav-link-text ps-1">Partial/Credit Orders</span></div>
     </a><!-- more inner pages-->
 
     <a class="nav-link @if(request()->routeIs('admin.paypointorder')) active @endif" href="{{ route('admin.paypointorder') }} ">

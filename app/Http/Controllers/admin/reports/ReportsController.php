@@ -151,6 +151,14 @@ class ReportsController extends Controller
             Toastr::error('Invalid date format selected. Error: ' . $e->getMessage());
             return back();
         }
+
+        // Check if start date is before 2024-10-13
+        $minDate = Carbon::create('2024', '10', '13')->startOfDay();  // Set the minimum start date
+        if (Carbon::parse($startDate)->lt($minDate)) {
+            Toastr::error('The start date cannot be before 2024-10-13.');
+            return back();
+        }
+
         // dd("Start Date: $startDate, End Date: $endDate");
 
         // Return the Excel file as a download
