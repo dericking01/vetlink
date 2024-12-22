@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin\reports;
 
 use App\Exports\ProductDistributionExport;
 use App\Exports\StockReportExport;
+use App\Exports\SalesReportExport;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use App\Models\Branch;
@@ -122,6 +123,38 @@ class ReportsController extends Controller
 
         // Return the Excel file as a download
         return Excel::download(new StockReportExport($startDate, $endDate), 'Stock-Report.xlsx');
+    }
+
+    public function exportSales(Request $request)
+    {
+        // Validate incoming date range
+        $request->validate([
+            'date_range' => 'required',
+        ]);
+
+         // Retrieve the date range input
+        $dateRange = $request->input('date_range');
+
+        if (!$dateRange) {
+            return back()->withErrors(['date_range' => 'Please select a valid date range.']);
+        }
+
+        // Split the date range into start and end dates
+        [$startDate, $endDate] = explode(' to ', $dateRange);
+
+        try {
+            // Convert each date individually to ensure format compatibility
+            $startDate = Carbon::createFromFormat('d/m/y', trim($startDate))->startOfDay()->format('Y-m-d');
+            $endDate = Carbon::createFromFormat('d/m/y', trim($endDate))->endOfDay()->format('Y-m-d');
+        } catch (\Exception $e) {
+            // Debugging: Display the error if parsing fails
+            Toastr::error('Invalid date format selected. Error: ' . $e->getMessage());
+            return back();
+        }
+        // dd("Start Date: $startDate, End Date: $endDate");
+
+        // Return the Excel file as a download
+        return Excel::download(new SalesReportExport($startDate, $endDate), 'Sales-Report.xlsx');
     }
 
     /**
