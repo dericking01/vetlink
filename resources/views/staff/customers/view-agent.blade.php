@@ -24,7 +24,7 @@
         <div class="col-md-6 col-lg-4 mb-4 mb-lg-0">
           <h5 class="mb-3 fs-0">Points Details</h5>
           <h4 class="mb-2">{{ $agent->points }}</h4>
-          <p class="mb-0 fs--1"> <strong>Promo Code: </strong><small class="badge fw-semi-bold rounded-pill badge-subtle-primary">{{ $agent->promo_code }}</small></p>
+          <!-- <p class="mb-0 fs--1"> <strong>Promo Code: </strong><small class="badge fw-semi-bold rounded-pill badge-subtle-primary">{{ $agent->promo_code }}</small></p> -->
           <p class="mb-0 fs--1"> <strong>Joined Date: </strong><small class="badge fw-semi-bold rounded-pill badge-subtle-primary">{{ $agent->created_at }}</small></p>
           <p class="mb-0 fs--1"> <strong>Status:</strong>
             @if($agent->status)

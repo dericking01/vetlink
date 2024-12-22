@@ -60,4 +60,14 @@ class Agent extends Model
         return $this->hasMany(Orders::class);
     }
 
+    public static function getCode()
+    {
+        $characters = 'ewlsnmdkztpzqprtba';
+        $numericPart = mt_rand(1000000000000, 9999999999999) . mt_rand(1000000000000, 9999999999999);
+        $characterPart = $characters[rand(0, strlen($characters) - 1)];
+
+        $code = str_shuffle($numericPart . $characterPart);
+        return $code;
+    }
+
 }

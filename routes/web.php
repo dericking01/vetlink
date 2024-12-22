@@ -24,6 +24,7 @@ use App\Http\Controllers\seller\orders\OrdersManagementController;
 use App\Http\Controllers\seller\products\ProductsManagementController;
 use App\Http\Controllers\seller\SellerDashboardController;
 use App\Http\Controllers\seller\SellerLoginController;
+use App\Http\Controllers\SmsController;
 use App\Http\Controllers\staff\customer\StaffCustomerController;
 use App\Http\Controllers\staff\DeliveryController;
 use App\Http\Controllers\staff\order\OrdersController as OrderOrdersController;
@@ -64,6 +65,10 @@ Route::group(['prefix' => 'mypass'], function () {
     Route::get('reset-password/{token}', [ForgotPasswordController::class, 'resetPassword'])->name('reset.password');
     Route::post('reset-password}', [ForgotPasswordController::class, 'resetPasswordPost'])->name('resetpassword.post');
 });
+
+// SMS api routes
+Route::get('/send-sms', [SmsController::class, 'sendSingleSms']);
+Route::get('/send-bulk-sms', [SmsController::class, 'sendBulkSms']);
 
 // administrator routes
 Route::group(['prefix' => 'admin'], function () {
