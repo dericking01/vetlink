@@ -214,17 +214,6 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12">
-                                            <label for="branch">Branch Name</label>
-                                            <select class="form-control select2" id="branch{{ $product->id }}" name="branch">
-                                                <option value="">Select branch...</option>
-                                                @foreach ($branches as $branch)
-                                                    <option value="{{ $branch->id }}" {{ old('branch', $product->branch_id) == $branch->id ? 'selected' : '' }}>
-                                                        {{ $branch->branch_name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
 
                                         {{-- <div class="col-md-12">
                                             <div class="mb-3">
