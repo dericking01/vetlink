@@ -188,7 +188,7 @@
                                                 <option value="Cancelled" {{ old('status', $order->status) === 'Cancelled' ? 'selected' : '' }}>REJECT</option>
                                                 <option value="Completed" {{ old('status', $order->status) === 'Completed' ? 'selected' : '' }}>FULL PAYMENT</option>
                                                 <option value="Pending" {{ old('status', $order->status) === 'Pending' ? 'selected' : '' }}>PENDING</option>
-                                                <option value="Partial" {{ old('status', $order->status) === 'Partial' ? 'selected' : '' }}>PARTIAL</option>
+                                                <option value="Partial" {{ old('status', $order->status) === 'Partial' ? 'selected' : '' }}>PARTIAL/CREDIT</option>
                                                 <option value="PayPoint" {{ old('status', $order->status) === 'PayPoint' ? 'selected' : '' }}>Pay By Points</option>
                                             </select>
                                         </div>

@@ -53,63 +53,72 @@
     </div>
   </div>
 
-<div class="card">
+  <div class="card">
     <div class="card-header bg-light">
-      <div class="row align-items-center">
-          <div class="col">
-              <h5 class="mb-0" id="followers">Customer's Orders History</h5>
-          </div>
-            <div class="card-body">
-                <div class="table-responsive scrollbar">
-                <table class="table data-table table-bordered table-striped fs--1 mb-0">
-                    <thead class="bg-200 text-900">
+        <div class="row align-items-center">
+            <div class="col">
+                <h5 class="mb-0" id="followers">Customer's Orders History</h5>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive scrollbar">
+            <table class="table data-table table-bordered table-striped fs--1 mb-0">
+                <thead class="bg-200 text-900">
                     <tr>
                         <th class="sort pe-1 align-middle white-space-nowrap" data-sort="phone">Date</th>
                         <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Amount (Tshs)</th>
                         <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Status</th>
-                        <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Delivered</th>
+                        <th class="sort pe-1 align-middle white-space-nowrap text-center" data-sort="name">Delivered</th>
+                        <th class="sort pe-1 align-middle white-space-nowrap text-center" data-sort="action">Action</th>
                     </tr>
-                    </thead>
-                    @php
-                        $totalPoints = 0;
-                        $totalAmount = 0;
-                        $totalQuantity = 0;
-                        $totalDiscount = 0;
-                    @endphp
+                </thead>
+                @php
+                    $totalAmount = 0;
+                @endphp
 
-                    <tbody class="list">
-                        @foreach($orders as $order)
-                            @php
-                                $totalAmount += $order->total_amount;
+                <tbody class="list">
+                    @foreach($orders as $order)
+                        @php
+                            $totalAmount += $order->total_amount;
+                        @endphp
 
-                            @endphp
-
-                            <tr class="btn-reveal-trigger">
-                                <td class="joined align-middle py-2">{{ date_format(date_create($order->created_at), 'd M, Y') }}</td>
-                                <td class="joined py-2">{{ number_format($order->total_amount) }}</td>
-                                <td class="joined py-2"><span class="badge badge-subtle-success">{{ $order->status }}</span></td>
+                        <tr class="btn-reveal-trigger">
+                            <td class="joined align-middle py-2">
+                                {{ date_format(date_create($order->created_at), 'd M, Y') }}
+                            </td>
+                            <td class="joined py-2">
+                                {{ number_format($order->total_amount) }}
+                            </td>
+                            <td class="joined py-2">
+                                <span class="badge badge-subtle-success">{{ $order->status }}</span>
+                            </td>
+                            <td class="status text-center">
                                 @if ($order->isDelivered)
-                                <td class="status text-center">
                                     <span class="badge badge-subtle-success">YES</span>
-                                </td>
                                 @else
-                                <td class="status text-center">
                                     <span class="badge badge-subtle-danger">NO</span>
-                                </td>
                                 @endif
-                        @endforeach
-                            <tr>
-                            <!-- Display Total -->
-                                <td> <b>TOTAL AMOUNT</b></td>
-                                <td> <b>{{ number_format($totalAmount) }}</b></td>
-                            </tr>
-                    </tbody>
-
-                </table>
-                </div>
-            </div>
+                            </td>
+                            <td class="text-center">
+                                <!-- Action button linking to view-order -->
+                                <a href="{{ route('staff.orders.vieworder', ['id' => $order->id]) }}" class="btn btn-primary btn-sm">
+                                    View Order
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                    <tr>
+                        <!-- Display Total -->
+                        <td><b>TOTAL AMOUNT</b></td>
+                        <td><b>{{ number_format($totalAmount) }}</b></td>
+                        <td colspan="3"></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
+
 
 @endsection
