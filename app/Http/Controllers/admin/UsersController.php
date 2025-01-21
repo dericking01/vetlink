@@ -203,11 +203,9 @@ class UsersController extends Controller
 
     public function updateAgent(Request $request, $id)
     {
-
         $agents = Agent::findOrFail($id);
 
-        // Check if email or phone number has changed
-        // $emailChanged = $request->email !== $admin->email;
+        // Check if the phone number has changed
         $phoneChanged = $request->phone !== $agents->phone;
 
         // Define validation rules dynamically
@@ -218,19 +216,17 @@ class UsersController extends Controller
                 'numeric',
                 'regex:/^0\d{9}$/',
                 'digits:10',
-                Rule::unique('agents', 'phone')->where(function ($query) use ($request) {
-                    return $query->where('phone', $request->phone);
-                }),
             ],
         ];
 
+        // Add unique rule dynamically if the phone number has changed
         if ($phoneChanged) {
-            $validationRules['phone'] .= '|unique:agents,phone';
+            $validationRules['phone'][] = Rule::unique('agents', 'phone')->where(function ($query) use ($request) {
+                return $query->where('phone', $request->phone);
+            });
         }
 
         $this->validate($request, $validationRules);
-        // dd($request);
-        // dd($request->all());
 
         // Extract the last 9 digits of the phone number
         $lastNineDigits = substr($request->phone, -9);
@@ -243,7 +239,7 @@ class UsersController extends Controller
         $agents->location = $request->location;
         $agents->email = $request->email;
         $agents->status = $request->status;
-        // dd($agents);
+
         $agents->save();
 
         Toastr::success('Customer successfully updated!');
