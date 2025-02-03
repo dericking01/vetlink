@@ -38,7 +38,9 @@ class ReportsController extends Controller
     public function DistributionReport(Request $request)
     {
         // Retrieve all distributions from BranchProduct, including related AdminProduct and Branch details
-        $distributions = BranchProduct::with(['adminProduct', 'branch'])->get();
+        $distributions = BranchProduct::with(['adminProduct', 'branch'])
+        ->where('created_at', '!=', '2024-12-13 03:46:39')
+        ->get();
 
         return view('admin.reports.distributions-report', compact('distributions'));
     }

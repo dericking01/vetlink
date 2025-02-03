@@ -29,7 +29,10 @@ class ProductsController extends Controller
         $products = AdminProduct::latest()->get();
         $admins = Admin::latest()->get();
         $branches = Branch::latest()->where('status','active')->get();
-        $branchProducts = BranchProduct::with(['branch', 'adminProduct'])->latest()->get();
+        $branchProducts = BranchProduct::with(['branch', 'adminProduct'])
+        ->where('created_at', '!=', '2024-12-13 03:46:39')
+        ->latest()
+        ->get();
 
         return view('admin.products.warehouse', compact('products','admins','branches','branchProducts'));
     }
@@ -280,7 +283,10 @@ class ProductsController extends Controller
         $products = AdminProduct::latest()->get();
         $admins = Admin::latest()->get();
         $branches = Branch::latest()->where('status','active')->get();
-        $branchProducts = BranchProduct::with(['branch', 'adminProduct'])->latest()->get();
+        $branchProducts = BranchProduct::with(['branch', 'adminProduct'])
+        ->where('created_at', '!=', '2024-12-13 03:46:39')
+        ->latest()
+        ->get();
 
         return view('staff.manage.stock-auditor', compact('products','admins','branches','branchProducts'));
     }
