@@ -14,6 +14,12 @@
         class="nav-link-text ps-1">Distributions</span></div>
     </a><!-- more inner pages-->
 
+    <a class="nav-link @if(request()->routeIs('audit.salesaudit')) active @endif" href="{{ route('audit.salesaudit') }} ">
+        <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+            class="fas fa-book"></span></span><span
+        class="nav-link-text ps-1">Sales</span></div>
+    </a><!-- more inner pages-->
+
 </li>
 
 
