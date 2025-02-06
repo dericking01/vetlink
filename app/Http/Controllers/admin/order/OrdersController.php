@@ -69,6 +69,21 @@ class OrdersController extends Controller
         return view('admin.order.completed-orders', compact('orders','branches','selectedBranchIds'));
     }
 
+    public function completedOrderAuditindex()
+    {
+        // $orders = Orders::where('status', 'Completed')->get();
+        $orders = Orders::with('orderItems')->where('status', 'Completed')->where('isDelivered', true)->latest()->get();
+        $branches = Branch::latest()->where('status','active')->latest()->get();
+        $selectedBranchIds = [];
+
+        foreach ($orders as $order) {
+            $selectedBranchIds[$order->id] = $order->branch_id;
+        }
+        // dd($selectedBranchIds);
+
+        return view('staff.manage.stock-auditor-sales', compact('orders','branches','selectedBranchIds'));
+    }
+
     public function rejectedOrderindex()
     {
         // $orders = Orders::where('status', 'Cancelled')->get();
@@ -156,6 +171,49 @@ class OrdersController extends Controller
         // dd($orderItems, $products);
 
         return view('admin.order.view-order', compact('order', 'orderItems', 'products'));
+    }
+
+    public function viewAuditSales($id)
+    {
+        $order = Orders::findOrFail($id);
+
+        // Retrieve order items with eager loading for nested relationships through ProductStock
+        $orderItems = OrderItems::where('order_id', $order->id)
+                                ->with(['productable' => function ($query) {
+                                    $query->with('adminProduct'); // Load adminProduct through ProductStock
+                                }])
+                                ->latest()
+                                ->get();
+
+        // Collect data for displaying
+        $products = $orderItems->map(function ($item) {
+            // Check if the productable type is ProductStock to access related AdminProduct details
+            if ($item->productable instanceof ProductStock) {
+                // Retrieve the related BranchProduct to get the price
+                $branchProduct = $item->productable->branchProducts->first(); // Assuming the first relation is the one you need
+
+                return [
+                    'name' => $item->productable->adminProduct->name ?? 'N/A',
+                    // 'price' => $branchProduct ? $branchProduct->price : '0.00',
+                    'price' => $item->price ?? '0.00',
+                    'quantity' => $item->quantity,
+                ];
+            }
+
+            // For any other productable type, handle differently if needed
+            return [
+                'name' => $item->productable->adminProduct->name ?? 'Unknown Product',
+                // 'price' => $item->productable->price ?? '0.00',
+                'price' => $item->price ?? '0.00',
+                'quantity' => $item->quantity,
+
+            ];
+        });
+
+        // Debugging
+        // dd($orderItems, $products);
+
+        return view('staff.manage.stock-auditor-view-order', compact('order', 'orderItems', 'products'));
     }
 
 
@@ -369,7 +427,7 @@ class OrdersController extends Controller
         }
 
         // Update the total amount in the order
-        $order->total_amount = $totalAmount;
+        $order->total_amount = $totalAmount - $order->discount;
         // dd($order);
         // Save the updated order
         $order->save();

@@ -232,6 +232,8 @@ Route::middleware(['auth:staff', 'role:auditor'])->group(function () {
     Route::group(['prefix' => 'auditor'], function () {
 
         Route::get('distributions', [ProductsController::class, 'auditDistributions'])->name('audit.warehouse.products');
+        Route::get('sales-audit', [OrdersController::class, 'completedOrderAuditindex'])->name('audit.salesaudit');
+        Route::get('view-auditorder/{id}', [OrdersController::class, 'viewAuditSales'])->name('audit.sales.viewsales');
 
     });
 

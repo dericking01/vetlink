@@ -352,7 +352,7 @@ class StaffOrdersController extends Controller
         }
 
         // Update the total amount in the order
-        $order->total_amount = $totalAmount;
+        $order->total_amount = $totalAmount - $order->discount;
         // dd($order);
         // Save the updated order
         $order->save();

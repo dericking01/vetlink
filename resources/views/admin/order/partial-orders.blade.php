@@ -73,7 +73,7 @@
               </td>
               @else
               <td class="status text-center">
-                <span class="badge badge-subtle-warning">PARTIAL</span>
+                <span class="badge badge-subtle-warning">CREDIT</span>
               </td>
               @endif
               <td class="align-middle white-space-nowrap text-end">
