@@ -5,4 +5,4 @@ docker-compose build
 docker-compose up -d
 
 # Run migrations (if needed)
-docker-compose exec app php artisan migrate
+docker-compose exec laravel_app php artisan migrate

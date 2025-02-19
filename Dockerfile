@@ -14,13 +14,13 @@ RUN apt-get update && apt-get install -y \
     zip \
     jpegoptim optipng pngquant gifsicle \
     vim \
+    nano \
     unzip \
     git \
     curl \
     libzip-dev \
     libonig-dev \
     libxml2-dev \
-    supervisor \
     redis-tools
 
 # Enable GD with JPEG, PNG, and FreeType Support:
@@ -34,6 +34,9 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd xml intl
+
+# install procs package
+RUN apt update && apt install -y procps
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -51,9 +54,10 @@ RUN php artisan key:generate
 RUN php artisan horizon:publish
 
 # Set permissions for Laravel storage and bootstrap cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
+RUN apt-get update && apt-get install -y supervisor
 # Create supervisor log directory
 RUN mkdir -p /var/log/supervisor
 
@@ -63,5 +67,7 @@ COPY supervisor/laravel-worker.conf /etc/supervisor/conf.d/laravel-worker.conf
 # Expose port 9000 for PHP-FPM
 EXPOSE 9000
 
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 # Start Supervisor and PHP-FPM
 CMD ["supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
