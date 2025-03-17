@@ -51,6 +51,7 @@ class SalesReportExport implements FromCollection, WithHeadings, ShouldAutoSize,
         return [
             'Order ID',
             'Customer Name',
+            'Customer Phone',
             'Branch Name',
             'Product Name',
             'Quantity',
@@ -66,7 +67,9 @@ class SalesReportExport implements FromCollection, WithHeadings, ShouldAutoSize,
     public function map($item): array
     {
         $order = $item->order;
+        $agent = Agent::find($order->agent_id);
         $agentName = Agent::find($order->agent_id)->name ?? 'Unknown Agent';
+        $agentPhone = $agent->phone ?? 'No Phone';
         $branchName = Branch::find($order->branch_id)->branch_name ?? 'Unknown Branch';
          // Handle delivery as boolean
         $delivery = $order->isDelivered ? 'Delivered' : 'Not Delivered';
@@ -101,6 +104,7 @@ class SalesReportExport implements FromCollection, WithHeadings, ShouldAutoSize,
         return [
             $order->id,
             $agentName,
+            $agentPhone,
             $branchName,
             $productName,
             $item->quantity,
