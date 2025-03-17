@@ -197,7 +197,7 @@ class StaffOrdersController extends Controller
             }
 
             // get the price from the first related BranchProduct
-            $OrderedProduct = $branchProduct->branchProducts()->first();
+            $OrderedProduct = $branchProduct->branchProducts()->latest()->first();
             $price = $OrderedProduct->price;
         }
 

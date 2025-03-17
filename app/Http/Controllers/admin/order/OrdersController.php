@@ -275,7 +275,7 @@ class OrdersController extends Controller
                 return back();
             }
             // get the price from the first related BranchProduct
-            $OrderedProduct = $branchProduct->branchProducts()->first();
+            $OrderedProduct = $branchProduct->branchProducts()->latest()->first();
             $price = $OrderedProduct->price;
 
         }
