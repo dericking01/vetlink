@@ -17,6 +17,7 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         'App\Events\OrderCompleted' => [
             'App\Listeners\UpdateAgentPoints',
+            '\App\Listeners\SendOrderCompletionSms',
         ],
 
         \App\Events\ProductQuantityDeducted::class => [
