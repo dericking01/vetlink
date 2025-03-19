@@ -17,7 +17,8 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         'App\Events\OrderCompleted' => [
             'App\Listeners\UpdateAgentPoints',
-            '\App\Listeners\SendOrderCompletionSms',
+            'App\Listeners\SendOrderCompletionSms', // Removed leading backslash
+            'App\Listeners\SendPointsGainedSms', // Removed leading backslash
         ],
 
         \App\Events\ProductQuantityDeducted::class => [

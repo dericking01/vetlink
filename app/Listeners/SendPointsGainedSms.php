@@ -21,14 +21,14 @@ class SendPointsGainedSms implements ShouldQueue
 
     public function handle(OrderCompleted $event)
     {
-        sleep(10);
         $order = $event->order;
         $customerPhoneNumber = $order->agent->phone; // Customer's phone #
         // Extract the first name only (split by space and take the first part)
         $firstName = explode(' ', trim($order->agent->name))[0];
+        $formatedPoints = number_format($order->agent->points, 0, '.', ',');
 
         $Pointsmessage = "
-        Habari {$firstName}, Umejipatia pointi {$order->agent->points}
+        Habari {$firstName}, Umejipatia pointi {$formatedPoints}
         Karibu tena Dodoki Ltd, Uendelee kufurahia huduma zetu!
         ";
 
