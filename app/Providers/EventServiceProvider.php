@@ -21,6 +21,10 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\SendPointsGainedSms', // Removed leading backslash
         ],
 
+        \App\Events\OrderPartiallyPaid::class => [
+            \App\Listeners\SendPartialPaymentSms::class,
+        ],
+
         \App\Events\ProductQuantityDeducted::class => [
             \App\Listeners\DeductProductQuantity::class,
         ],
