@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin\reports;
 
+use App\Exports\BranchStockExport;
 use App\Exports\ProductDistributionExport;
 use App\Exports\StockReportExport;
 use App\Exports\SalesReportExport;
@@ -165,6 +166,13 @@ class ReportsController extends Controller
 
         // Return the Excel file as a download
         return Excel::download(new SalesReportExport($startDate, $endDate), 'Sales-Report.xlsx');
+    }
+
+    public function exportBranchStock(Request $request, $branchId)
+    {
+
+        // Return the Excel file as a download
+        return Excel::download(new BranchStockExport($branchId), 'Branch-Stock-Report.xlsx');
     }
 
     /**

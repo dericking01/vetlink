@@ -131,20 +131,20 @@ class UsersController extends Controller
     }
 
     public function viewBranchStock($id)
-{
-    // Find the branch by its ID and load the related stock from product_stock table
-    $branch = Branch::with([
-        'productStocks' => function ($query) {
-            $query->where('created_at', '!=', '2024-12-13 03:46:39');
-        },
-        'productStocks.adminProduct'
-        ])
-        ->where('id', $id)
-        ->firstOrFail();
+    {
+        // Find the branch by its ID and load the related stock from product_stock table
+        $branch = Branch::with([
+            'productStocks' => function ($query) {
+                $query->where('created_at', '!=', '2024-12-13 03:46:39');
+            },
+            'productStocks.adminProduct'
+            ])
+            ->where('id', $id)
+            ->firstOrFail();
 
-    // Pass the branch and its stock to the view
-    return view('admin.users.branch_stock', compact('branch'));
-}
+        // Pass the branch and its stock to the view
+        return view('admin.users.branch_stock', compact('branch'));
+    }
 
 
 
