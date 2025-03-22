@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin\reports;
 
+use App\Exports\AgentExport;
 use App\Exports\BranchStockExport;
 use App\Exports\ProductDistributionExport;
 use App\Exports\StockReportExport;
@@ -175,6 +176,10 @@ class ReportsController extends Controller
         return Excel::download(new BranchStockExport($branchId), 'Branch-Stock-Report.xlsx');
     }
 
+    public function exportAgents()
+    {
+        return Excel::download(new AgentExport(), 'Dodoki-Customers.xlsx');
+    }
     /**
      * Display the specified resource.
      */

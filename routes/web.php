@@ -169,6 +169,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/export-stock', [ReportsController::class, 'exportStock'])->name('export.stock-report');
             Route::get('/export-salesrpt', [ReportsController::class, 'exportSales'])->name('export.sales-report');
             Route::get('/export-branchstock/{branchId}', [ReportsController::class, 'exportBranchStock'])->name('export.branchstock');
+            Route::get('/export-agents', [ReportsController::class, 'exportAgents'])->name('export.agents');
 
         });
 
