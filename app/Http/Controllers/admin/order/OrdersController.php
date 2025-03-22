@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin\order;
 
 use App\Events\OrderCompleted;
+use App\Events\OrderPartiallyPaid;
 use App\Events\ProductQuantityDeducted;
 use App\Helpers\FileHelper;
 use App\Http\Controllers\Controller;
@@ -478,11 +479,15 @@ class OrdersController extends Controller
                 return back()->withInput();
             }
 
+        // Fetch the existing partial amount from the database
+        $previousPartialAmount = $order->partial_amt;
+        $newPartialAmount = $previousPartialAmount + $request->partial_amount;
+
         // Update the order with the new data
         $order->isDelivered = $request->isDelivered;
         $order->status = 'Partial';
         $order->branch_id = $request->branch;
-        $order->partial_amt =$request->partial_amount;
+        $order->partial_amt = $newPartialAmount;
 
         // Check if the partial amount is equal to the total amount
         if ($request->partial_amount == $order->total_amount) {
@@ -496,7 +501,12 @@ class OrdersController extends Controller
         // Save the updated order
         $order->save();
 
-        // Dispatch the OrderCompleted event if necessary
+        // Dispatch partial payment event
+        if ($newPartialAmount < $order->total_amount) {
+            event(new OrderPartiallyPaid($order, $request->partial_amount));
+        }
+
+        // If fully paid, process quantity deduction and dispatch OrderCompleted event
         if ($order->status === 'Completed' && !$order->is_quantity_deducted) {
             // Deduct product quantity
             event(new ProductQuantityDeducted($order->orderItems));
@@ -505,6 +515,25 @@ class OrdersController extends Controller
             // Dispatch the OrderCompleted event
             event(new OrderCompleted($order));
         }
+
+        // Check if Request Points equals Total amount
+        if ($request->PayPoint == $order->total_amount && !$order->is_quantity_deducted) { // Using == for comparison to avoid type issues
+            // Mark the order as completed
+            $order->status = 'Completed';
+            $order->save();
+
+            // Deduct product quantity
+            event(new ProductQuantityDeducted($order->orderItems));
+
+            // Mark quantity as deducted
+            $order->is_quantity_deducted = true;
+
+            // Dispatch the OrderCompleted event
+            event(new OrderCompleted($order));
+
+            Toastr::success('Order FULLY PAID successfully! ✔');
+        }
+        
         // save order to mark as quantity deducted
         $order->save();
         Toastr::success('Order successfully updated! ✔');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\staff\order;
 
 use App\Events\OrderCompleted;
+use App\Events\OrderPartiallyPaid;
 use App\Events\ProductQuantityDeducted;
 use App\Http\Controllers\Controller;
 use App\Models\AdminProduct;
@@ -401,11 +402,15 @@ class StaffOrdersController extends Controller
                 return back()->withInput();
             }
 
+        // Fetch the existing partial amount from the database
+        $previousPartialAmount = $order->partial_amt;
+        $newPartialAmount = $previousPartialAmount + $request->partial_amount;
+
         // Update the order with the new data
         $order->isDelivered = $request->isDelivered;
         $order->status = 'Partial';
         $order->branch_id = $request->branch;
-        $order->partial_amt =$request->partial_amount;
+        $order->partial_amt =$newPartialAmount;
 
         // Check if the partial amount is equal to the total amount
         if ($request->partial_amount == $order->total_amount) {
@@ -418,6 +423,11 @@ class StaffOrdersController extends Controller
 
         // Save the updated order
         $order->save();
+
+        // Dispatch partial payment event
+        if ($newPartialAmount < $order->total_amount) {
+            event(new OrderPartiallyPaid($order, $request->partial_amount));
+        }
 
         // Check if Request Points equals Total amount
         if ($request->PayPoint == $order->total_amount && !$order->is_quantity_deducted) { // Using == for comparison to avoid type issues
