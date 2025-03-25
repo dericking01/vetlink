@@ -412,6 +412,12 @@ class StaffOrdersController extends Controller
         $order->branch_id = $request->branch;
         $order->partial_amt =$newPartialAmount;
 
+        // Check if the newpartial amount is greater to the total amount
+        if ($newPartialAmount > $order->total_amount) {
+            Toastr::error('PARTIAL amount cannot be greater than orders Total amount!!');
+            return back()->withInput(); // Stops further execution
+        }
+
         // Check if the partial amount is equal to the total amount
         if ($request->partial_amount == $order->total_amount) {
             if ($request->isDelivered == 1) {
@@ -423,6 +429,15 @@ class StaffOrdersController extends Controller
 
         // Save the updated order
         $order->save();
+
+        // Update fully paid order status
+        if ($order->total_amt == $order->partial_amt) {
+            if ($request->isDelivered == 1) {
+                $order->status = 'Completed';
+            } else {
+                $order->status = 'Pending';
+            }
+        }
 
         // Dispatch partial payment event
         if ($newPartialAmount < $order->total_amount) {
