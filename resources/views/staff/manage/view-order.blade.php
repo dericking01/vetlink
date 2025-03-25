@@ -111,8 +111,12 @@
             <table class="table table-sm table-borderless fs--1 text-end">
                 <tbody>
                     <tr>
+                        <th class="text-600">DISCOUNT AMOUNT:</th>
+                        <td class="fw-semi-bold">Tsh {{ number_format($order->discount) }}</td>
+                    </tr>
+                    <tr>
                         <th class="text-900">TOTAL AMOUNT:</th>
-                        <td class="fw-semi-bold">Tsh {{ number_format($order->total_amount) }}</td>
+                        <td class="fw-semi-bold">Tsh {{ number_format($order->total_amount-$order->discount) }}</td>
                     </tr>
 
                 </tbody>
