@@ -28,6 +28,10 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\ProductQuantityDeducted::class => [
             \App\Listeners\DeductProductQuantity::class,
         ],
+
+        \App\Events\ProductQuantityRestored::class => [
+            \App\Listeners\RestoreProductQuantity::class,
+        ],
     ];
     /**
      * Register any events for your application.

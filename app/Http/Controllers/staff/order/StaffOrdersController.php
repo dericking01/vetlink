@@ -364,6 +364,16 @@ class StaffOrdersController extends Controller
             $agent->save();
         }
 
+        if ($order->status === 'Partial' && !$order->is_quantity_deducted) {
+            // dd($order->orderItems);
+            // Deduct product quantity
+            event(new ProductQuantityDeducted($order->orderItems));
+            // Mark quantity as deducted
+            $order->is_quantity_deducted = true;
+            // Dispatch the OrderCompleted event
+            event(new OrderPartiallyPaid($order, $request->partial_amount));
+        }
+
         // If the order is completed, dispatch the OrderCompleted event
         if ($order->status === 'Completed' && !$order->is_quantity_deducted) {
             // Deduct product quantity
@@ -473,13 +483,17 @@ class StaffOrdersController extends Controller
     {
         $orderId = $request->input('id'); // Assuming 'orderId' is the name of the input field containing the order ID
 
-        $order = Orders::find($orderId); // Use 'Order' instead of 'Orders'
+        $order = Orders::with('orderItems')->find($orderId);
         // dd($order);
 
         if ($order) {
             if ($order->isDelivered) {
                 Toastr::error('Cannot delete a delivered order.');
             } else {
+                
+                // Fire event before deleting the order
+                event(new ProductQuantityRestored($order->orderItems));
+
                 $order->delete();
                 Toastr::success('Order successfully deleted!');
             }
