@@ -137,7 +137,8 @@ class UsersController extends Controller
             'productStocks' => function ($query) {
                 $query->where('created_at', '!=', '2024-12-13 03:46:39');
             },
-            'productStocks.adminProduct'
+            'productStocks.adminProduct',
+            'productStocks.branchProduct' // Add this to eager load branch price
             ])
             ->where('id', $id)
             ->firstOrFail();

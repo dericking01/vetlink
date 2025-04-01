@@ -35,7 +35,9 @@ class ProductStock extends Model
     public function branchProducts()
     {
         return $this->hasMany(BranchProduct::class, 'admin_product_id', 'admin_product_id')
-                    ->where('branch_id', $this->branch_id);
+                    ->where(function ($query) {
+                        $query->where('branch_id', $this->branch_id);
+                    });
     }
 
     // Custom accessor to retrieve the price from the first BranchProduct
@@ -45,5 +47,16 @@ class ProductStock extends Model
         return $branchProduct ? $branchProduct->price : null;
     }
 
+    public function branchProduct()
+    {
+        return $this->hasOne(BranchProduct::class, 'admin_product_id', 'admin_product_id')
+                    ->where('branch_id', $this->branch_id);
+    }
+
+    // Accessor to fetch the price
+    public function getBranchPriceAttribute()
+    {
+        return optional($this->branchProduct)->price ?? 0;
+    }
 
 }

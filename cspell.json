@@ -1,6 +1,6 @@
 {
     "version": "0.2",
-    "ignorePaths": ["public", "resources", ".git", ".vscode"],
+    "ignorePaths": ["public", "resources", ".git", ".vscode", "app", "routes", ".gitignore"],
     "dictionaryDefinitions": [
       {
         "name": "custom",

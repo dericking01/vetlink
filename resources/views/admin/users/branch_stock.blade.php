@@ -58,7 +58,7 @@
                             <td>{{ $stock->adminProduct->name }}</td> <!-- Display Product Name -->
                             <td>{{ $stock->available_quantity }}</td> <!-- Display Available Quantity from product_stock -->
                             <td>{{ $stock->adminProduct->units }}</td> <!-- Display Units from adminProduct -->
-                            <td>{{ number_format($stock->adminProduct->price, 2) }}</td> <!-- Display Price -->
+                            <td>{{ number_format($stock->price, 2) }}</td> <!-- Display Price -->
                         </tr>
                     @endforeach
                 </tbody>

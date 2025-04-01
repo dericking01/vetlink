@@ -5,6 +5,7 @@ namespace App\Http\Controllers\staff\order;
 use App\Events\OrderCompleted;
 use App\Events\OrderPartiallyPaid;
 use App\Events\ProductQuantityDeducted;
+use App\Events\ProductQuantityRestored;
 use App\Http\Controllers\Controller;
 use App\Models\AdminProduct;
 use App\Models\Agent;
@@ -401,16 +402,16 @@ class StaffOrdersController extends Controller
         }
 
         // Check if  partial amount is provided
-            if (is_null($request->partial_amount) || $request->partial_amount === '') {
-                Toastr::error('Partial amount cannot be empty.');
-                return back()->withInput();
-            }
+        if (is_null($request->partial_amount) || $request->partial_amount === '') {
+            Toastr::error('Partial amount cannot be empty.');
+            return back()->withInput();
+        }
 
         // Check if partial amount is greater than total amount
-            if ($request->partial_amount > $order->total_amount) {
-                Toastr::error('Partial amount cannot be greater than the total amount.');
-                return back()->withInput();
-            }
+        if ($request->partial_amount > $order->total_amount) {
+            Toastr::error('Partial amount cannot be greater than the total amount.');
+            return back()->withInput();
+        }
 
         // Fetch the existing partial amount from the database
         $previousPartialAmount = $order->partial_amt;
@@ -429,8 +430,11 @@ class StaffOrdersController extends Controller
         }
 
         // Check if the partial amount is equal to the total amount
-        if ($request->partial_amount == $order->total_amount) {
-            if ($request->isDelivered == 1) {
+        if (
+            (int) $request->partial_amount === (int) $order->total_amount ||
+            (int) $newPartialAmount === (int) $order->total_amount
+        ) {
+            if ($request->isDelivered == 1 || $order->isDelivered == true) {
                 $order->status = 'Completed';
             } else {
                 $order->status = 'Pending';
@@ -440,18 +444,15 @@ class StaffOrdersController extends Controller
         // Save the updated order
         $order->save();
 
-        // Update fully paid order status
-        if ($order->total_amt == $order->partial_amt) {
-            if ($request->isDelivered == 1) {
-                $order->status = 'Completed';
-            } else {
-                $order->status = 'Pending';
-            }
-        }
-
         // Dispatch partial payment event
         if ($newPartialAmount < $order->total_amount) {
             event(new OrderPartiallyPaid($order, $request->partial_amount));
+        }
+
+        // If fully paid, process quantity deduction and dispatch OrderCompleted event
+        if ($order->status === 'Completed' && $order->is_quantity_deducted) {
+            // Dispatch the OrderCompleted event
+            event(new OrderCompleted($order));
         }
 
         // Check if Request Points equals Total amount
@@ -490,7 +491,7 @@ class StaffOrdersController extends Controller
             if ($order->isDelivered) {
                 Toastr::error('Cannot delete a delivered order.');
             } else {
-                
+
                 // Fire event before deleting the order
                 event(new ProductQuantityRestored($order->orderItems));
 

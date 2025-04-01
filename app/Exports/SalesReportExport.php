@@ -124,7 +124,7 @@ class SalesReportExport implements FromCollection, WithHeadings, ShouldAutoSize,
      */
     public function styles(Worksheet $sheet)
     {
-        $sheet->getStyle('A1:K1')->applyFromArray([
+        $sheet->getStyle('A1:L1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['argb' => Color::COLOR_BLACK],
