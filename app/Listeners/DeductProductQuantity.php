@@ -9,6 +9,7 @@ use App\Models\ProductStock;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class DeductProductQuantity
 {
@@ -20,37 +21,47 @@ class DeductProductQuantity
      */
     public function handle(ProductQuantityDeducted $event)
     {
-        foreach ($event->orderItems as $orderItem) {
-            // Retrieve the order that this order item belongs to
-            $order = $orderItem->order;
+        DB::beginTransaction();
+        try{
+            foreach ($event->orderItems as $orderItem) {
+                // Retrieve the order that this order item belongs to
+                $order = $orderItem->order;
+    
+                // Get the branch ID from the order
+                $branchId = $order->branch_id;
+    
+                // Retrieve the product ID (from the admin_products table)
+                $productId = $orderItem->deductable_id;
+    
+                // Find the specific product in the branch_products table
+                $branchProduct = ProductStock::where('branch_id', $branchId)
+                    ->where('admin_product_id', $productId)
+                    ->lockForUpdate()
+                    ->first();
+                // dd($orderItem->quantity);
+    
+                // If the branch product exists, deduct the quantity
+                if ($branchProduct) {
+                    $branchProduct->available_quantity -= $orderItem->quantity;
+    
+                    // Ensure the quantity doesn't go below zero
+                    if ($branchProduct->available_quantity < 0) {
+                        $branchProduct->available_quantity = 0;
+                    }
 
-            // Get the branch ID from the order
-            $branchId = $order->branch_id;
-
-            // Retrieve the product ID (from the admin_products table)
-            $productId = $orderItem->deductable_id;
-
-            // Find the specific product in the branch_products table
-            $branchProduct = ProductStock::where('branch_id', $branchId)
-                ->where('admin_product_id', $productId)
-                ->first();
-            // dd($orderItem->quantity);
-
-            // If the branch product exists, deduct the quantity
-            if ($branchProduct) {
-                $branchProduct->available_quantity -= $orderItem->quantity;
-
-                // Ensure the quantity doesn't go below zero
-                if ($branchProduct->available_quantity < 0) {
-                    $branchProduct->available_quantity = 0;
+    
+                    $branchProduct->save();
+                    Log::info("Deducted {$orderItem->quantity} from branch_id: {$branchId} for admin_product_id: {$productId}");
+                } else {
+                    // Handle if there's no stock for the product in the branch
+                    Log::warning("BranchProduct not found for branch_id: {$branchId} and admin_product_id: {$productId}");
                 }
-
-                $branchProduct->save();
-            } else {
-                // Handle if there's no stock for the product in the branch
-                Log::warning("BranchProduct not found for branch_id: {$branchId} and admin_product_id: {$productId}");
             }
+        }catch(\Exception $e){
+            DB::rollBack();
+            Log::error('Failed to deduct product quantity: ' . $e->getMessage());
         }
+       
     }
 
 }
