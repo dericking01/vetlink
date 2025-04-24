@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\ProductQuantityRestored;
 use App\Models\ProductStock;
+use App\Models\AdminProduct;
 use Illuminate\Support\Facades\Log;
 
 class RestoreProductQuantity
@@ -30,6 +31,15 @@ class RestoreProductQuantity
                 // Log a warning if no stock is found for the product
                 Log::warning("Stock entry not found for branch_id: {$branchId}, admin_product_id: {$productId}");
             }
+
+             // Restore to AdminProduct (global stock)
+             $adminProduct = AdminProduct::find($productId);
+             if ($adminProduct) {
+                 $adminProduct->quantity += $quantity;
+                 $adminProduct->save();
+             } else {
+                 Log::warning("Admin product not found for ID: {$productId}");
+             }
         }
     }
 }
