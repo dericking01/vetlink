@@ -20,11 +20,11 @@ class AdminSeeder extends Seeder
         $admins = [
             [
                 'name' => 'Derrick',
-                'email' => 'admin@gmail.com',
-                'phone' => '255715083985',
+                'email' => 'barakaurio@yahoo.com',
+                'phone' => '255750279003',
                 'role' => 'admin',
                 'email_verified_at' => now(),
-                'password' => Hash::make('12345678'),
+                'password' => Hash::make('LoginPass123'),
                 'remember_token' => Str::random(10),
                 'created_at' => now(),
                 'updated_at' => now(),

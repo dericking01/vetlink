@@ -39,6 +39,8 @@ class DeductProductQuantity
                     ->where('admin_product_id', $productId)
                     ->lockForUpdate()
                     ->first();
+
+                
                 // dd($orderItem->quantity);
     
                 // If the branch product exists, deduct the quantity
@@ -47,6 +49,7 @@ class DeductProductQuantity
     
                     // Ensure the quantity doesn't go below zero
                     if ($branchProduct->available_quantity < 0) {
+                        Log::warning("Reset branch product quantity with id {$productId} to zero(0) from {$branchProduct->available_quantity}");
                         $branchProduct->available_quantity = 0;
                     }
 
@@ -56,6 +59,28 @@ class DeductProductQuantity
                 } else {
                     // Handle if there's no stock for the product in the branch
                     Log::warning("BranchProduct not found for branch_id: {$branchId} and admin_product_id: {$productId}");
+                }
+
+
+
+                //Also deduct quantity from Warehouse level, globally
+                $warehouseProduct = AdminProduct::where('id',$productId)->lockForUpdate()->first();
+
+                //Check if the product exists in warehouse
+                if($warehouseProduct){
+                    $warehouseProduct->quantity -= $orderItem->quantity;
+
+                    //Ensure the quantity doesn't go below zero
+                    if($warehouseProduct->quantity < 0){
+                        Log::warning("Reset admin product quantity with id {$productId} to zero(0) from {$warehouseProduct->quantity}");
+                        $warehouseProduct->quantity = 0;
+                    }
+                    
+                    $warehouseProduct->save();
+                    Log::info("Deducted {$orderItem->quantity} from admin products with admin_product_id: {$productId}");
+
+                }else{
+                    Log::warning("AdminProduct not found for admin_product_id: {$productId}");
                 }
             }
             DB::commit();
