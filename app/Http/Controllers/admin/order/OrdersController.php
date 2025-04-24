@@ -452,7 +452,6 @@ class OrdersController extends Controller
 
         // If the order is completed, dispatch the OrderCompleted event
         if ($order->status === 'Completed' && !$order->is_quantity_deducted) {
-            // dd($order->orderItems);
             // Deduct product quantity
             event(new ProductQuantityDeducted($order->orderItems));
             // Mark quantity as deducted

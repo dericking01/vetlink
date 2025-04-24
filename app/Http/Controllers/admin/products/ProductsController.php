@@ -17,7 +17,8 @@ class ProductsController extends Controller
 {
     public function index()
     {
-        $products = AdminProduct::latest()->get();
+        // $products = AdminProduct::latest()->get(); old products
+        $products = ProductStock::latest()->get(); //new products
         $admins = Admin::latest()->get();
         $branches = Branch::latest()->where('status','active')->get();
 

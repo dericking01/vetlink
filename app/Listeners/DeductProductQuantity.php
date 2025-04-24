@@ -21,8 +21,9 @@ class DeductProductQuantity
      */
     public function handle(ProductQuantityDeducted $event)
     {
-        DB::beginTransaction();
         try{
+        DB::beginTransaction();
+
             foreach ($event->orderItems as $orderItem) {
                 // Retrieve the order that this order item belongs to
                 $order = $orderItem->order;
@@ -57,6 +58,7 @@ class DeductProductQuantity
                     Log::warning("BranchProduct not found for branch_id: {$branchId} and admin_product_id: {$productId}");
                 }
             }
+            DB::commit();
         }catch(\Exception $e){
             DB::rollBack();
             Log::error('Failed to deduct product quantity: ' . $e->getMessage());

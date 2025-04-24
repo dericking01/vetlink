@@ -12,7 +12,7 @@
         "laravel/framework": "^10.10",
         "laravel/horizon": "^5.30",
         "laravel/sanctum": "^3.2",
-        "laravel/telescope": "*",
+        "laravel/telescope": "^5.7",
         "laravel/tinker": "^2.8",
         "maatwebsite/excel": "^3.1"
     },
