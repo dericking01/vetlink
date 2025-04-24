@@ -217,42 +217,57 @@ class ProductsController extends Controller
             'quantity' => 'required|integer|min:1'
         ]);
 
-        // Find the distribution record
-        $distribution = BranchProduct::findOrFail($distributionId);
+        try{
+            DB:beginTransaction();
+       
 
-        // Retrieve the product from admin_products table
-        $product = AdminProduct::findOrFail($request->admin_product_id);
+            // Find the distribution record
+            $distribution = BranchProduct::findOrFail($distributionId);
 
-        // Get the original quantity from the distribution
-        $originalQuantity = $distribution->quantity;
+            // Retrieve the product from admin_products table
+            $product = AdminProduct::findOrFail($request->admin_product_id);
 
-        // Get the new quantity from the request
-        $newQuantity = $request->quantity;
+            // Get the original quantity from the distribution
+            $originalQuantity = $distribution->quantity;
 
-        // Calculate the difference between the old and new quantities
-        $quantityDifference = $newQuantity - $originalQuantity;
-        // Update the product's quantity in admin_products table
-        // If $quantityDifference > 0, decrease stock; if $quantityDifference < 0, increase stock
-        $product->quantity -= $quantityDifference;
-        $product->save();
+            // Get the new quantity from the request
+            $newQuantity = $request->quantity;
 
-        // Update the distribution with the new quantity
-        $distribution->quantity = $newQuantity;
-        $distribution->branch_id = $request->branch_id;
-        // dd($distribution);
-        $distribution->save();
+            // Calculate the difference between the old and new quantities
+            $quantityDifference = $newQuantity - $originalQuantity;
+            // Update the product's quantity in admin_products table
+            // If $quantityDifference > 0, decrease stock; if $quantityDifference < 0, increase stock
+        
 
-        // Now update the product_stock table
-        $stockHelper = ProductStock::where('admin_product_id', $product->id)
-        ->where('branch_id', $request->branch_id)
-        ->first();
+            //Two lines below affect the stock in AdminProduct
+            // $product->quantity -= $quantityDifference;
+            // $product->save();
 
-        if ($stockHelper) {
-            // If a record exists, adjust the available_quantity and total_quantity
-            $stockHelper->available_quantity += $quantityDifference; // Adjust available quantity
-            $stockHelper->total_quantity += $quantityDifference; // Adjust total quantity if necessary
-            // dd($stockHelper);
-            $stockHelper->save(); // Save changes to the product_stock table
+            // Update the distribution with the new quantity
+            $distribution->quantity = $newQuantity;
+            $distribution->branch_id = $request->branch_id;
+            // dd($distribution);
+            $distribution->save();
+
+            // Now update the product_stock table
+            $stockHelper = ProductStock::where('admin_product_id', $product->id)
+            ->where('branch_id', $request->branch_id)
+            ->first();
+
+            if ($stockHelper) {
+                // If a record exists, adjust the available_quantity and total_quantity
+                $stockHelper->available_quantity += $quantityDifference; // Adjust available quantity
+                $stockHelper->total_quantity += $quantityDifference; // Adjust total quantity if necessary
+                // dd($stockHelper);
+                $stockHelper->save(); // Save changes to the product_stock table
+            }
+
+            DB::commit();
+        }catch(\Exception $e){
+            DB::rollBack();
+            Log::error('Error updating distribution: ' . $e->getMessage());
+            Toastr::error('Something went wrong. Please try again.');
+            return redirect()->back()->withInput();
         }
 
         Toastr::success('Distribution updated and stock recalculated successfully!');
@@ -272,14 +287,19 @@ class ProductsController extends Controller
         $productStock->available_quantity -= $branchProduct->quantity;
         $productStock->save();
 
+        /**
+         * 
+         * Below three lines, affetch the adminproduct they add the quantities back but since its unchanged we comment them
+         */
+
         // Find the associated product from the admin_products table
-        $product = AdminProduct::findOrFail($branchProduct->admin_product_id);
+        // $product = AdminProduct::findOrFail($branchProduct->admin_product_id);
 
         // Add the distributed quantity back to the stock
-        $product->quantity += $branchProduct->quantity;
+        // $product->quantity += $branchProduct->quantity;
 
         // Save the updated product stock
-        $product->save();
+        // $product->save();
 
         // Now delete the distribution record
         $branchProduct->delete();
