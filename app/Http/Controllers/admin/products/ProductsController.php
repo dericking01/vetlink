@@ -12,6 +12,8 @@ use App\Models\ProductStock;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class ProductsController extends Controller
 {
@@ -147,49 +149,60 @@ class ProductsController extends Controller
 
         // Loop through selected branches and distribute the product
         foreach ($request->branches as $branchId) {
-            $quantity = $request->quantities[$branchId];
+            try{
+                DB::beginTransaction();
 
-            // Check if there's enough quantity in the warehouse (product's stock)
-            if ($product->quantity < $quantity) {
-                Toastr::error('Not enough quantity for ' . Branch::find($branchId)->branch_name);
-                return back()->withInput();
-            }
+                $quantity = $request->quantities[$branchId];
 
-            // Deduct the quantity from the product stock
-            $product->quantity -= $quantity;
-            $product->save();
+                // Check if there's enough quantity in the warehouse (product's stock)
+                if ($product->quantity < $quantity) {
+                    Toastr::error('Not enough quantity for ' . Branch::find($branchId)->branch_name);
+                    return back()->withInput();
+                }
 
-            // Create a record for distributed products (this might be a new model, depending on your setup)
-            BranchProduct::create([
-                'admin_product_id' => $product->id,
-                'branch_id' => $branchId,
-                'quantity' => $quantity,
-                'price' => $product->price,
-            ]);
+                // Deduct the quantity from the product stock
+                // $product->quantity -= $quantity; //maintain the product quantity in warehouse, as long as the product exists in warehouse or branches the quantity shouldn't be affected.
+                $product->save();
 
-            // Insert or update the product in the product_stock_helper table
-            $stockHelper = ProductStock::where('admin_product_id', $product->id)
-            ->where('branch_id', $branchId)
-            ->first();
-
-            if ($stockHelper) {
-                // If a record exists, update the available_quantity
-                $stockHelper->available_quantity += $quantity;
-                $stockHelper->total_quantity += $quantity; // Adjust if necessary for total tracking
-                $stockHelper->save();
-                // dd($stockHelper);
-
-            } else {
-                // If no record exists, create a new one
-                ProductStock::create([
-                'admin_product_id' => $product->id,
-                'branch_id' => $branchId,
-                'total_quantity' => $quantity,
-                'available_quantity' => $quantity,
+                // Create a record for distributed products (this might be a new model, depending on your setup)
+                BranchProduct::create([
+                    'admin_product_id' => $product->id,
+                    'branch_id' => $branchId,
+                    'quantity' => $quantity,
+                    'price' => $product->price,
                 ]);
-            }
 
-        }
+                // Insert or update the product in the product_stock_helper table
+                $stockHelper = ProductStock::where('admin_product_id', $product->id)
+                ->where('branch_id', $branchId)
+                ->first();
+
+                if ($stockHelper) {
+                    // If a record exists, update the available_quantity
+                    $stockHelper->available_quantity += $quantity;
+                    $stockHelper->total_quantity += $quantity; // Adjust if necessary for total tracking
+                    $stockHelper->save();
+                    // dd($stockHelper);
+
+                } else {
+                    // If no record exists, create a new one
+                    ProductStock::create([
+                    'admin_product_id' => $product->id,
+                    'branch_id' => $branchId,
+                    'total_quantity' => $quantity,
+                    'available_quantity' => $quantity,
+                    ]);
+                }
+
+                DB::commit();
+
+
+               
+            }catch(\Exception $e){
+                DB::rollBack();
+                Log::error('Failed to distribute products: ' . $e->getMessage());
+            }
+        }      
 
         Toastr::success('Product successfully distributed to branches.');
         return back();
