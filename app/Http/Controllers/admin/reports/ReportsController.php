@@ -62,10 +62,19 @@ class ReportsController extends Controller
             return back()->withErrors(['date_range' => 'Please select a valid date range.']);
         }
 
-        // Split the date range into start and end dates
-        [$startDate, $endDate] = explode(' to ', $dateRange);
+        
 
         try {
+
+            // Check if it contains "to", meaning it's a range
+            if (str_contains($dateRange, ' to ')) {
+                // Split the date range into start and end dates
+                [$startDate, $endDate] = explode(' to ', $dateRange);
+            }
+            else {
+                // It's a single date
+                $startDate = $endDate = $dateRange;
+            }
             // Convert each date individually to ensure format compatibility
             $startDate = Carbon::createFromFormat('d/m/y', trim($startDate))->startOfDay()->format('Y-m-d');
             $endDate = Carbon::createFromFormat('d/m/y', trim($endDate))->endOfDay()->format('Y-m-d');
@@ -111,10 +120,18 @@ class ReportsController extends Controller
             return back()->withErrors(['date_range' => 'Please select a valid date range.']);
         }
 
-        // Split the date range into start and end dates
-        [$startDate, $endDate] = explode(' to ', $dateRange);
 
         try {
+            // Check if it contains "to", meaning it's a range
+            if (str_contains($dateRange, ' to ')) {
+                // Split the date range into start and end dates
+                [$startDate, $endDate] = explode(' to ', $dateRange);
+            }
+            else {
+                // It's a single date
+                $startDate = $endDate = $dateRange;
+            }
+
             // Convert each date individually to ensure format compatibility
             $startDate = Carbon::createFromFormat('d/m/y', trim($startDate))->startOfDay()->format('Y-m-d');
             $endDate = Carbon::createFromFormat('d/m/y', trim($endDate))->endOfDay()->format('Y-m-d');
@@ -143,10 +160,18 @@ class ReportsController extends Controller
             return back()->withErrors(['date_range' => 'Please select a valid date range.']);
         }
 
-        // Split the date range into start and end dates
-        [$startDate, $endDate] = explode(' to ', $dateRange);
 
         try {
+
+             // Check if it contains "to", meaning it's a range
+             if (str_contains($dateRange, ' to ')) {
+                // Split the date range into start and end dates
+                [$startDate, $endDate] = explode(' to ', $dateRange);
+            }
+            else {
+                // It's a single date
+                $startDate = $endDate = $dateRange;
+            }
             // Convert each date individually to ensure format compatibility
             $startDate = Carbon::createFromFormat('d/m/y', trim($startDate))->startOfDay()->format('Y-m-d');
             $endDate = Carbon::createFromFormat('d/m/y', trim($endDate))->endOfDay()->format('Y-m-d');

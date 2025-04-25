@@ -36,7 +36,7 @@ class StockReportExport implements FromCollection, WithHeadings, WithStyles
                     'Product Name' => $item->adminProduct->name ?? 'N/A',
                     'Branch Name' => $item->branch->branch_name ?? 'N/A',
                     'Total Quantity' => $item->total_quantity,
-                    'Available Quantity' => $item->available_quantity,
+                    'Available Quantity' => strval($item->available_quantity),
                     'Price' => $item->price ? : 'N/A', // Use the accessor here
                     'Date Created' => Carbon::parse($item->created_at)->format('Y-m-d'),
                 ];
