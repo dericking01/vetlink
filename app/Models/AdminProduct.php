@@ -58,4 +58,13 @@ class AdminProduct extends Model
     {
         return $this->belongsTo(Branch::class);
     }
+
+    public function productStocks(){
+        return $this->hasMany(ProductStock::class, 'admin_product_id');
+    }
+
+    public function getWarehouseQuantityAttribute(){
+        $allocatedQuantity = $this->productStocks()->sum('available_quantity');
+        return $this->quantity - $allocatedQuantity;
+    }
 }

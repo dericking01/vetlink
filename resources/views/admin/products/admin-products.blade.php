@@ -47,7 +47,8 @@
               <!-- <th>Branch Name</th> -->
               <th>Product Name</th>
               <th>Price</th>
-              <th>Quantity</th>
+              <th>Total Quantity</th>
+              <th>Warehouse Quantity</th>
               <th>Status</th>
               {{-- <th>Description</th> --}}
               <th>Action</th>
@@ -88,6 +89,13 @@
                 <div class="d-flex align-items-center position-relative">
                     <div class="flex-1 ms-3">
                         <h6 class="mb-1 fw-semi-bold text-nowrap">{{ $product->quantity }}</h6>
+                    </div>
+                </div>
+              </td>
+              <td class="name">
+                <div class="d-flex align-items-center position-relative">
+                    <div class="flex-1 ms-3">
+                        <h6 class="mb-1 fw-semi-bold text-nowrap">{{ $product->warehouse_quantity }}</h6>
                     </div>
                 </div>
               </td>
