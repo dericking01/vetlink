@@ -23,13 +23,13 @@ class RestoreProductQuantity
 
             try{
                 DB::beginTransaction();
-
                 // Find the product stock entry
                 $branchProduct = ProductStock::where('branch_id', $branchId)
                 ->where('admin_product_id', $productId)
                 ->first();
 
                 if ($branchProduct) {
+                    Log::error("Restoring prouct stock for branch {$branchId}. Current qty: {$branchProduct->available_quantity} will add qty {$orderItem->quantity}");
                     $branchProduct->available_quantity += $orderItem->quantity;
                     $branchProduct->save();
                 } else {
@@ -40,7 +40,7 @@ class RestoreProductQuantity
                 // Restore to AdminProduct (global stock)
                 $adminProduct = AdminProduct::find($productId);
                 if ($adminProduct) {
-                    $adminProduct->quantity += $quantity;
+                    $adminProduct->quantity += $orderItem->quantity;;
                     $adminProduct->save();
                 } else {
                     Log::warning("Admin product not found for ID: {$productId}");

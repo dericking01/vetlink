@@ -90,6 +90,8 @@
                       <div class="dropdown-divider"></div>
                       <a class="dropdown-item text-success" href="#!" data-bs-toggle="modal" data-bs-target="#editPendingOrder{{ $order->id }}">Edit</a>
                       <div class="dropdown-divider"></div>
+                      <a class="dropdown-item text-warning" href="#!" data-bs-toggle="modal" data-bs-target="#updateParitalAmount{{ $order->id }}">Make Parital Payment</a>
+                      <div class="dropdown-divider"></div>
                       <a class="dropdown-item text-danger" href="#!" data-bs-toggle="modal" data-bs-target="#deletePendingOrder{{ $order->id }}">Delete</a>
                     </div>
                   </div>
@@ -119,6 +121,40 @@
                             <div class="modal-footer text-center">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn btn-danger">Delete</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Receive a partial payment amount -->
+
+            <div class="modal fade" id="updateParitalAmount{{ $order->id }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="{{ route('admin.partialOrder.receivepayment', ['id' => $order->id]) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <div class="modal-body">
+                                
+                                <div class="modal-text text-center mb-5">
+                                    <h2 class="text-info">Add a Partial Payment</h2>
+                                    <p>Adds a partial payment to the order</p>
+                                    
+                                </div>
+                                <div class="mx-auto">
+                                            <div class="mb-3" id="partialAmountField{{ $order->id }}" >
+                                                <label for="status">Partial Amount<span class="text-danger">*</span></label>
+                                                <input class="form-control" name="partial_amount" id="partial_amount{{ $order->id }}" type="number" placeholder="Partial amount" value="" />
+                                            </div>
+                                        </div>
+                            </div>
+                            <div class="modal-footer text-center">
+                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Close</button>
+                            <button class="btn btn-info" type="submit">Submit</button>
                             </div>
                         </form>
                     </div>
@@ -174,12 +210,12 @@
                                             <label for="status">Payment Status <span class="text-danger">*</span></label>
                                             <input class="form-control" name="amount" id="amount{{ $order->id }}" value="{{ $order->status === 'Partial' ? 'PARTIAL' : $order->status }}" readonly />
                                         </div>
-                                        <div class="col-md-6">
+                                        <!-- <div class="col-md-6">
                                             <div class="mb-3" id="partialAmountField{{ $order->id }}" >
                                                 <label for="status">Partial Amount<span class="text-danger">*</span></label>
                                                 <input class="form-control" name="partial_amount" id="partial_amount{{ $order->id }}" type="number" placeholder="Partial amount" value="{{ old('partial_amount', $order->partial_amt) }}" />
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>

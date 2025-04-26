@@ -122,6 +122,12 @@
                     <form action="{{ route('admin.pendingOrder.update', ['id' => $order->id]) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
+                        {{-- ORDER ITEMS --}}
+                                        @foreach ($order->orderItems as $item)
+                                        <div>
+                                            <input type="hidden" class="form-control" id="quantity{{ $item->id }}" name="quantities[{{ $item->id }}]" value="{{ $item->quantity }}" required>
+                                        </div>
+                                        @endforeach
                         <div class="modal-content position-relative">
                             <div class="position-absolute top-0 end-0 mt-2 me-2 z-1">
                                 <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"

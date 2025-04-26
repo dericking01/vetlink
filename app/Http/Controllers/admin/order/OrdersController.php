@@ -408,7 +408,27 @@ class OrdersController extends Controller
         // Update the order with the new data
         $order->isDelivered = $request->isDelivered;
         $order->status = $request->status;
-        $order->branch_id = $request->branch;
+        //$order->branch_id = $request->branch;
+         /**
+         * Updating on Branch change
+         */
+        if($order->branch_id !== $request->branch && $order->status === 'Completed'){
+            //Restore stock in the old branch
+            event(new ProductQuantityRestored($order->orderItems));
+
+
+             // Update the branch ID
+            $order->branch_id = $request->branch;
+            $order->save();
+
+            // 🔥 Important: Reload the orderItems AFTER changing the branch
+            $order->load('orderItems');
+
+
+            //Deduct stock in the new one
+            event(new ProductQuantityDeducted($order->orderItems));
+        }
+
         // $order->discount = $request->discount;
         $order->payment_method = $request->payment_method;
         $order->partial_amt = $request->status === 'Partial' ? $request->partial_amount : null;
@@ -462,6 +482,8 @@ class OrdersController extends Controller
         // save order to mark as quantity deducted
         $order->save();
 
+       
+
 
         Toastr::success('Order successfully updated! ✔');
         return back();
@@ -496,14 +518,34 @@ class OrdersController extends Controller
         // Update the order with the new data
         $order->isDelivered = $request->isDelivered;
         $order->status = 'Partial';
-        $order->branch_id = $request->branch;
-        $order->partial_amt = $newPartialAmount;
+        // $order->partial_amt = $newPartialAmount;
+
+        /**
+         * Updating on Branch change
+         */
+        if($order->branch_id !== $request->branch){
+            //Restore stock in the old branch
+            event(new ProductQuantityRestored($order->orderItems));
+
+
+             // Update the branch ID
+            $order->branch_id = $request->branch;
+            $order->save();
+
+            // 🔥 Important: Reload the orderItems AFTER changing the branch
+            $order->load('orderItems');
+
+
+            //Deduct stock in the new one
+            event(new ProductQuantityDeducted($order->orderItems));
+        }
+
 
         // Check if the newpartial amount is greater to the total amount
-        if ($newPartialAmount > $order->total_amount) {
-            Toastr::error('PARTIAL amount cannot be greater than orders Total amount!!');
-            return back()->withInput(); // Stops further execution
-        }
+        // if ($newPartialAmount > $order->total_amount) {
+        //     Toastr::error('PARTIAL amount cannot be greater than orders Total amount!!');
+        //     return back()->withInput(); // Stops further execution
+        // }
 
         // Check if the partial amount is equal to the total amount
         if (
@@ -521,9 +563,9 @@ class OrdersController extends Controller
         $order->save();
 
         // Dispatch partial payment event
-        if ($newPartialAmount < $order->total_amount) {
-            event(new OrderPartiallyPaid($order, $request->partial_amount));
-        }
+        // if ($newPartialAmount < $order->total_amount) {
+        //     event(new OrderPartiallyPaid($order, $request->partial_amount));
+        // }
 
         // If fully paid, process quantity deduction and dispatch OrderCompleted event
         if ($order->status === 'Completed' && $order->is_quantity_deducted) {
@@ -536,6 +578,91 @@ class OrdersController extends Controller
             // Mark the order as completed
             $order->status = 'Completed';
             $order->save();
+
+            // Deduct product quantity
+            event(new ProductQuantityDeducted($order->orderItems));
+
+            // Mark quantity as deducted
+            $order->is_quantity_deducted = true;
+
+            // Dispatch the OrderCompleted event
+            event(new OrderCompleted($order));
+
+            Toastr::success('Order FULLY PAID successfully! ✔');
+        }
+
+        // save order to mark as quantity deducted
+        $order->save();
+        Toastr::success('Order successfully updated! ✔');
+        return back();
+    }
+
+
+    public function partialRecievePayment(Request $request, $id)
+    {
+        // Find the existing Order record
+        $order = Orders::find($id);
+
+        if (!$order) {
+            Toastr::error('Order not found.');
+            return back();
+        }
+
+        // Check if  partial amount is provided
+        if (is_null($request->partial_amount) || $request->partial_amount === '') {
+            Toastr::error('Partial amount cannot be empty.');
+            return back()->withInput();
+        }
+
+        // Check if partial amount is greater than total amount
+        if ($request->partial_amount > $order->total_amount) {
+            Toastr::error('Partial amount cannot be greater than the total amount.');
+            return back()->withInput();
+        }
+
+        // Fetch the existing partial amount from the database
+        $previousPartialAmount = $order->partial_amt;
+        $newPartialAmount = $previousPartialAmount + $request->partial_amount;
+
+          // Check if the newpartial amount is greater to the total amount
+        if ($newPartialAmount > $order->total_amount) {
+        Toastr::error('PARTIAL amount cannot be greater than orders Total amount!!');
+        return back()->withInput(); // Stops further execution
+        }
+
+         // Check if the partial amount is equal to the total amount
+         if (
+            (int) $request->partial_amount === (int) $order->total_amount ||
+            (int) $newPartialAmount === (int) $order->total_amount
+        ) {
+            if ($request->isDelivered == 1 || $order->isDelivered == true) {
+                $order->status = 'Completed';
+            } else {
+                $order->status = 'Pending';
+            }
+        }
+
+         // Save the updated order
+        //  $order->save();
+        $order->partial_amt = $newPartialAmount;
+        $order->save();
+
+         // Dispatch partial payment event
+        if ($newPartialAmount < $order->total_amount) {
+            event(new OrderPartiallyPaid($order, $request->partial_amount));
+        }
+
+        // If fully paid, process quantity deduction and dispatch OrderCompleted event
+        if ($order->status === 'Completed' && $order->is_quantity_deducted) {
+            // Dispatch the OrderCompleted event
+            event(new OrderCompleted($order));
+        }
+
+         // Check if Request Points equals Total amount
+         if ($request->PayPoint == $order->total_amount && !$order->is_quantity_deducted) { // Using == for comparison to avoid type issues
+            // Mark the order as completed
+            $order->status = 'Completed';
+            // $order->save();
 
             // Deduct product quantity
             event(new ProductQuantityDeducted($order->orderItems));
