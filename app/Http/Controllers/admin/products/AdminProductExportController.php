@@ -8,6 +8,8 @@ use App\Imports\ProductsImport;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\DB;
+
 use Maatwebsite\Excel\Validators\ValidationException;
 
 class AdminProductExportController extends Controller
