@@ -43,6 +43,7 @@ class ProductsImport implements ToCollection, WithHeadingRow
             // Convert numeric values from string to int/float
             $quantity = is_numeric($row['quantity']) ? (int) $row['quantity'] : null;
             $price = is_numeric($row['price']) ? (float) $row['price'] : null;
+            $buying_price = is_numeric($row['buying_price']) ? (float) $row['buying_price'] : null;
 
             // Check for missing product name and log error
             if (empty($row['product_name'])) {
@@ -57,6 +58,7 @@ class ProductsImport implements ToCollection, WithHeadingRow
                 'units' => $row['units'], // set to null if empty
                 'expire_date' => $expireDate,
                 'price' => $price,
+                'buying_price' => $buying_price,
                 'description' => $row['description'],
                 'status' => !empty($row['status']) ? $row['status'] : 'active', // Default to 'active' if status is null or empty
                 'image' => null
