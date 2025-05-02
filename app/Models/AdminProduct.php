@@ -28,6 +28,7 @@ class AdminProduct extends Model
             'units',
             'expire_date',
             'price',
+            'buying_price',
             'description',
             'status',
             'image',

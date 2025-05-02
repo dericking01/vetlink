@@ -76,7 +76,7 @@ class ProductsImport implements ToCollection, WithHeadingRow
                     ]);
                     $existingProduct->save();
 
-                    $productBatch->product_id = $updatedProduct->id;
+                    $productBatch->product_id = $existingProduct->id;
                     $productBatch->admin_id = $adminId;
                     $productBatch->quantity = $quantity;
                     $productBatch->buying_price = $buying_price;
@@ -137,11 +137,6 @@ class ProductsImport implements ToCollection, WithHeadingRow
                 DB::rollBack();
                 Log::error('Failed to deduct product quantity: ' . $e->getMessage());
             }
-
-
-            
-
-            
         }
     }
 
