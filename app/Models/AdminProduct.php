@@ -68,4 +68,20 @@ class AdminProduct extends Model
         $allocatedQuantity = $this->productStocks()->sum('available_quantity');
         return $this->quantity - $allocatedQuantity;
     }
+    
+    // Relationship to ProductBatch
+    public function productBatches()
+    {
+        return $this->hasMany(ProductBatch::class);
+    }
+
+    // Function to get the earliest expiry date from ProductBatches
+    public function getEarliestExpiryDate()
+    {
+        return $this->productBatches()
+                    ->orderBy('expiry_date', 'asc') // Ordering by earliest expiry date
+                    ->first() // Get the first one (earliest)
+                    ->expiry_date ?? null; // Return the expiry date or null if no batches
+    }
+
 }
