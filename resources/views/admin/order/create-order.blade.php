@@ -16,7 +16,7 @@
     <div class="card-body bg-light">
       <div class="tab-content">
         <div class="tab-pane preview-tab-pane active show" role="tabpanel" aria-labelledby="tab-dom-9648ceb7-3c34-49c3-86b0-a7d8bbd5b553" id="dom-9648ceb7-3c34-49c3-86b0-a7d8bbd5b553">
-            <form action="{{ route('admin.storeOrder') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate="novalidate">
+            <form id="createOrderForm" action="{{ route('admin.storeOrder') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate="novalidate">
                 @csrf
                 <div class="mb-3">
                     <label for="organizerSingle2">Customer's Name</label>
@@ -82,7 +82,10 @@
                     </select>
                 </div>  --}}
 
-                <button class="btn btn-primary" type="submit">Confirm</button>
+                <button id="submitCreateOrderButton" class="btn btn-primary" type="submit">
+                <span class="default-text">Confirm</span>
+                <span class="loading-text" style="display:none;">Confirming...</span>
+                </button>
             </form>
 
         </div>
@@ -100,6 +103,19 @@
   </div>
 
 <script>
+     document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('createOrderForm');
+    const btn = document.getElementById('submitCreateOrderButton');
+
+    if (form) {
+        console.log("Form ready");
+        form.addEventListener('submit', function () {
+            btn.disabled = true;
+            btn.querySelector('.default-text').style.display = 'none';
+            btn.querySelector('.loading-text').style.display = 'inline';
+        });
+    }
+});
     // Script to add quantity inputs dynamically based on selected products
     document.getElementById('organizerMultiple2').addEventListener('change', function () {
     var selectedProducts = this.selectedOptions;

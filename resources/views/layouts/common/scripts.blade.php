@@ -23,7 +23,7 @@
 <script src="{{ asset('/') }}vendors/leaflet.tilelayer.colorfilter/leaflet-tilelayer-colorfilter.min.js"></script>
 <script src="{{ asset('/') }}vendors/fontawesome/all.min.js"></script>
 <script src="{{ asset('/') }}vendors/lodash/lodash.min.js"></script>
-<script src="../../../polyfill.io/v3/polyfill.min58be.js?features=window.scroll"></script>
+<!-- <script src="../../../polyfill.io/v3/polyfill.min58be.js?features=window.scroll"></script> -->
 <script src="{{ asset('/') }}vendors/list.js/list.min.js"></script>
 <script src="{{ asset('/') }}assets/js/theme.js"></script>
   <!-- toastr js -->
@@ -93,9 +93,12 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('paymentType').addEventListener('change', function() {
+        var paymentEl = document.getElementById("paymentType");
+        if(paymentEl){
+            paymentEl.addEventListener('change', function() {
             var issuerSelect = document.getElementById('issuer');
             issuerSelect.innerHTML = '';
+
 
             if (this.value == 'Bank') {
                 var banks = ['CRDB', 'NMB', 'NBC', 'Equity'];
@@ -115,5 +118,7 @@
                 });
             }
         });
+        }
+        
     });
 </script>

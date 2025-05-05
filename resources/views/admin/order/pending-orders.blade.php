@@ -131,7 +131,7 @@
             {{-- Edit Pending Orders Modal --}}
             <div class="modal fade" id="editPendingOrder{{ $order->id }}" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                    <form action="{{ route('admin.pendingOrder.update', ['id' => $order->id]) }}" method="POST" enctype="multipart/form-data">
+                    <form id="updateOrderForm" action="{{ route('admin.pendingOrder.update', ['id' => $order->id]) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="modal-content position-relative">
@@ -211,7 +211,10 @@
                             </div>
                             <div class="mt-3 modal-footer">
                                 <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Close</button>
-                                <button class="btn btn-info" type="submit">Submit</button>
+                                <button id="submitUpdateOrderButton" class="btn btn-info" type="submit">
+                                <span class="default-text">Submit</span>
+                                <span class="loading-text" style="display:none;">Submitting...</span>
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -244,6 +247,7 @@
 
     window.addEventListener('DOMContentLoaded', function() {
         console.log('DOM fully loaded and parsed');
+        
 
         @foreach ($orders as $order)
             console.log('Initial check for order ID:', {{ $order->id }});
@@ -291,15 +295,28 @@
         @endforeach
     });
 
-    document.querySelector('form').addEventListener('submit', function(event) {
-        @foreach ($orders as $order)
-            var partialAmountValue = document.querySelector('#partialAmountField{{ $order->id }} input').value;
-            var payPointAmountValue = document.querySelector('#PayPointAmountField{{ $order->id }} input').value;
+    // document.querySelector('form').addEventListener('submit', function(event) {
+    //     @foreach ($orders as $order)
+    //         var partialAmountValue = document.querySelector('#partialAmountField{{ $order->id }} input').value;
+    //         var payPointAmountValue = document.querySelector('#PayPointAmountField{{ $order->id }} input').value;
 
-            console.log('Partial amount for order ID {{ $order->id }}:', partialAmountValue);
-            console.log('Points amount for order ID {{ $order->id }}:', payPointAmountValue);
-        @endforeach
-    });
+    //         console.log('Partial amount for order ID {{ $order->id }}:', partialAmountValue);
+    //         console.log('Points amount for order ID {{ $order->id }}:', payPointAmountValue);
+    //     @endforeach
+    // });
+
+    document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('updateOrderForm');
+    const btn = document.getElementById('submitUpdateOrderButton');
+
+    if (form) {
+        form.addEventListener('submit', function () {
+            btn.disabled = true;
+            btn.querySelector('.default-text').style.display = 'none';
+            btn.querySelector('.loading-text').style.display = 'inline';
+        });
+    }
+});
 </script>
 
 

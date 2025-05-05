@@ -292,7 +292,7 @@
         navbarVertical.removeAttribute('style');
         navbarTopVertical.removeAttribute('style');
         navbarTop.remove(navbarTop);
-        navbarDoubleTop.remove(navbarDoubleTop);
+        if(navbarDoubleTop) navbarDoubleTop.remove(navbarDoubleTop);
         navbarTopCombo.remove(navbarTopCombo);
     }
 </script>

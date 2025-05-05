@@ -16,12 +16,12 @@
     href="{{ asset('/') }}assets/img/favicons/dodoki.png">
 <link rel="shortcut icon" type="image/x-icon" href="{{ asset('/') }}assets/img/favicons/favicon.ico">
 <link rel="manifest" href="{{ asset('/') }}assets/img/favicons/manifest.json">
-<meta name="msapplication-TileImage" content="assets/img/favicons/mstile-150x150.png">
-<link href="vendors/choices/choices.min.css" rel="stylesheet" />
+<meta name="msapplication-TileImage" content="{{ asset('/') }}assets/img/favicons/mstile-150x150.png">
+<link href="{{ asset('/') }}vendors/choices/choices.min.css" rel="stylesheet" />
 <meta name="theme-color" content="#ffffff">
 <script src="{{ asset('/') }}assets/js/config.js"></script>
 <script src="{{ asset('/') }}vendors/simplebar/simplebar.min.js"></script>
-<script src="vendors/choices/choices.min.js"></script>
+<script src="{{ asset('/') }}vendors/choices/choices.min.js"></script>
 
 <!-- ===============================================-->
 <!--    Stylesheets-->
