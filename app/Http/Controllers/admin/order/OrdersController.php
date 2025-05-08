@@ -223,7 +223,8 @@ class OrdersController extends Controller
 
     public function orderForm()
     {
-        $agents = Agent::where('status','active')->latest()->get();
+        // $agents = Agent::where('status','active')->latest()->get();     //used to only get active users
+        $agents = Agent::latest()->get();
         $products = AdminProduct::where('status','active')->latest()->get();
         $branches = Branch::latest()->where('status','active')->get();
         $prod = AdminProduct::latest()->get();
