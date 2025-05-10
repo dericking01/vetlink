@@ -59,4 +59,11 @@ class ProductStock extends Model
         return optional($this->branchProduct)->price ?? 0;
     }
 
+    // Optional: Shortcut accessor to get just the product name
+    public function getName()
+    {
+        return $this->adminProduct ? $this->adminProduct->name : null;
+    }
+
+
 }

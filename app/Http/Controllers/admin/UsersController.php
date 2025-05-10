@@ -5,14 +5,19 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Agent;
 use App\Models\Branch;
+use App\Models\Admin;
 use App\Models\BranchProduct;
+use App\Models\AdminProduct;
 use App\Models\MarketProduct;
 use App\Models\OrderItems;
+use App\Models\ProductStock;
 use App\Models\Orders;
 use App\Models\Product;
 use App\Models\Seller;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 // use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -45,7 +50,7 @@ class UsersController extends Controller
     public function branches()
     {
         $branches = Branch::latest()->get();
-        // dd($branches);
+     
 
         return view('admin.users.listbranches', compact('branches'));
     }
@@ -132,6 +137,17 @@ class UsersController extends Controller
 
     public function viewBranchStock($id)
     {
+        $productStocks = ProductStock::with('adminProduct:id,name')
+        ->where('branch_id', $id)
+        ->get(['id', 'available_quantity', 'admin_product_id']);
+        $branches = Branch::latest()->get();
+        $branchProducts = BranchProduct::with(['branch', 'adminProduct'])
+        ->where('created_at', '!=', '2024-12-13 03:46:39')
+        ->latest()
+        ->get();
+
+        $admins = Admin::latest()->get();
+
         // Find the branch by its ID and load the related stock from product_stock table
         $branch = Branch::with([
             'productStocks' => function ($query) {
@@ -144,7 +160,91 @@ class UsersController extends Controller
             ->firstOrFail();
 
         // Pass the branch and its stock to the view
-        return view('admin.users.branch_stock', compact('branch'));
+        return view('admin.users.branch_stock', compact('branch','branches','productStocks','branchProducts','admins'));
+    }
+
+    public function distributeBranchProducts(Request $request){
+        $this->validate($request, [
+            'product' => 'required|exists:admin_products,id', // Ensure the selected product exists
+            'branches' => 'required|array', // Ensure branches is an array
+            'branches.*' => 'exists:branches,id', // Ensure all selected branches exist
+            'quantities' => 'required|array', // Ensure quantities is an array
+            'quantities.*' => 'nullable|numeric|min:1', // Allow nullable and filter out empty quantities
+            'sourceBranchId' => 'required|exists:branches,id'
+        ]);
+
+        $sourceBranchId = $request->sourceBranchId;
+        $productId = $request->product;
+
+         // Filter out empty or null quantities
+         $quantities = array_filter($request->quantities, function ($quantity) {
+            return !is_null($quantity) && $quantity > 0;
+        });
+
+        if (count($quantities) != count($request->branches)) {
+            Toastr::error('All selected branches must have a valid quantity.');
+            return back()->withInput();
+        }
+
+
+
+
+        // $product = ProductStock::where('admin_product_id','=',$request->product); // Get the selected product
+
+        // Loop through selected branches and distribute the product
+        foreach ($request->branches as $targetBranchId) {
+            try{
+                DB::beginTransaction();
+
+                $quantity = $request->quantities[$targetBranchId];
+
+                // Check if there's enough quantity in the warehouse (product's stock)
+                // if ($product->quantity < $quantity) {
+                //     Toastr::error('Not enough quantity for ' . Branch::find($branchId)->branch_name);
+                //     return back()->withInput();
+                // }
+
+                //Get the productStock in source branch
+                $sourceStock = ProductStock::where('branch_id', $sourceBranchId)
+                    ->where('admin_product_id', $productId)
+                    ->lockForUpdate() // lock the row for concurrency safety
+                    ->firstOrFail();
+
+
+                // Check if source has enough stock
+                if ($sourceStock->available_quantity < $quantity) {
+                    Toastr::error('Not enough quantity for ' . Branch::find($sourceBranchId)->branch_name);
+                    return back()->withInput();
+                }
+
+                // Deduct from source
+                $sourceStock->available_quantity -= $quantity;
+                $sourceStock->save();
+
+                //Geth the target ProductStock in target branch
+                $targetStock = ProductStock::firstOrCreate(
+                    [
+                        'branch_id' => $targetBranchId,
+                        'admin_product_id' => $productId
+                    ],
+                    ['quantity' => 0]
+                );
+
+                // Add to target
+                $targetStock->available_quantity += $quantity;
+                $targetStock->save();
+
+
+                DB::commit();
+            }catch(\Exception $e){
+                DB::rollBack();
+                Log::error('Failed to distribute products: ' . $e->getMessage());
+            }
+        }  
+        
+        Toastr::success('Product successfully moved to the branch.');
+        return back();
+
     }
 
 
