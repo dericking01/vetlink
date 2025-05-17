@@ -148,6 +148,7 @@ class ProductsController extends Controller
         $product = AdminProduct::findOrFail($request->product); // Get the selected product
 
         // Loop through selected branches and distribute the product
+        $remainingQty = $product->getWarehouseQuantityAttribute();//$product->quantity;
         foreach ($request->branches as $branchId) {
             try{
                 DB::beginTransaction();
@@ -155,14 +156,14 @@ class ProductsController extends Controller
                 $quantity = $request->quantities[$branchId];
 
                 // Check if there's enough quantity in the warehouse (product's stock)
-                if ($product->quantity < $quantity) {
+                if ($remainingQty < $quantity) {
                     Toastr::error('Not enough quantity for ' . Branch::find($branchId)->branch_name);
                     return back()->withInput();
                 }
 
                 // Deduct the quantity from the product stock
                 // $product->quantity -= $quantity; //maintain the product quantity in warehouse, as long as the product exists in warehouse or branches the quantity shouldn't be affected.
-                $product->save();
+                // $product->save();
 
                 // Create a record for distributed products (this might be a new model, depending on your setup)
                 BranchProduct::create([
@@ -193,6 +194,7 @@ class ProductsController extends Controller
                     'available_quantity' => $quantity,
                     ]);
                 }
+                $remainingQty -= $quantity;
 
                 DB::commit();
 
