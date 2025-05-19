@@ -8,6 +8,7 @@ use App\Models\Admin;
 use App\Models\AdminProduct;
 use App\Models\Branch;
 use App\Models\BranchProduct;
+use App\Models\ProductBatch;
 use App\Models\ProductStock;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
@@ -49,6 +50,7 @@ class ProductsController extends Controller
             // 'image' => 'mimes:jpg,png|max:2048',
             'quantity' => 'required|numeric|min:1',
             'price' => 'required|numeric|min:0',
+            'buying_price' => 'required|numeric|min:0',
             'description' => 'required|string',
         ]);
 
@@ -65,14 +67,24 @@ class ProductsController extends Controller
         $product->name = $request->name;
         $product->branch_id = $request->branch;
         $product->price = $request->price;
+        $product->buying_price = $request->buying_price;
         $product->quantity = $request->quantity;
         $product->units = $request->units;
         $product->expire_date = $expire_date;
         $product->description = $request->description;
         $product->image = $img;
         $product->admin_id = $adminId;
-        // dd($product);
         $product->save();
+
+        ProductBatch::create([
+            'product_id' => $product->id,
+            'admin_id' => $adminId,
+            'quantity' => $product->quantity,
+            'buying_price' => $product->buying_price,
+            'expiry_date' => $expire_date
+        ]);
+
+
 
         Toastr::success('Product saved successfully!');
         return back();
