@@ -224,7 +224,7 @@
                                                 <label class="col-form-label" for="expire_date">Expire date <span class="text-danger">*</span>
                                                 </label>
                                                 <input class="form-control @error('expire_date') is-invalid @enderror" name="expire_date"
-                                                    id="expire_date" type="date" placeholder="Total product expire_date" value="{{ $product->expire_date }}" />
+                                                    id="expire_date" type="date" placeholder="Total product expire_date" value="{{ $product->getEarliestExpiryDate() }}" />
                                             </div>
                                         </div>
 

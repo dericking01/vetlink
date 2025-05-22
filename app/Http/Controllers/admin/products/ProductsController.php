@@ -99,6 +99,7 @@ class ProductsController extends Controller
             'name' => 'required',
             'quantity' => 'numeric|min:1',
             'price' => 'numeric|min:0',
+            'buying_price' => 'numeric|min:0'
             // 'description' => 'required|string',
         ]);
 
@@ -112,6 +113,7 @@ class ProductsController extends Controller
 
         $product->name = $request->name;
         $product->price = $request->price;
+        $product->buying_price = $request->buying_price;
         $product->quantity = $request->quantity;
         $product->units = $request->units;
         $product->expire_date = $request->expire_date;
@@ -122,6 +124,19 @@ class ProductsController extends Controller
         $product->branch_id = $request->branch;
         $product->save();
 
+        $currentEarliest = $product->productBatches()
+                                    ->orderBy('expiry_date', 'asc')
+                                    ->first();
+        if($currentEarliest != $request->expire_date){
+            ProductBatch::create([
+                'product_id' => $product->id,
+                'admin_id' => $adminId,
+                'quantity' => $product->quantity,
+                'buying_price' => $product->buying_price,
+                'expiry_date' => $request->expire_date
+            ]);
+        }
+      
         Toastr::success('Product updated successfully!');
         return back();
     }
