@@ -410,6 +410,7 @@ class OrdersController extends Controller
         // Update the order with the new data
         $order->isDelivered = $request->isDelivered;
         $order->status = $request->status;
+        $order->sale_date = $request->sale_date;
         //$order->branch_id = $request->branch;
          /**
          * Updating on Branch change
