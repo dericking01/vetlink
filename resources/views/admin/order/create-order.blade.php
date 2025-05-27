@@ -29,6 +29,13 @@
                     <div class="invalid-feedback">Please select one</div>
                 </div>
 
+                 <div class="mb-3">
+                                                <label class="col-form-label" for="expire_date">Sale date <span class="text-danger">*</span>
+                                                </label>
+                                                <input class="form-control @error('sale_date') is-invalid @enderror" name="sale_date"
+                                                    id="sale_date" type="date" placeholder="Date the sale was made" />
+                                            </div>
+
                 <div class="mb-3">
                     <label for="organizerMultiple2">Products</label>
                     <select class="form-select js-choice" id="organizerMultiple2" multiple="multiple" size="1" name="name[]" required="required" data-options='{"removeItemButton":true,"placeholder":true}'>

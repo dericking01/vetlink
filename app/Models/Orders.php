@@ -17,6 +17,7 @@ class Orders extends Model
         'branch_id',
         'discount',
         'payment_method',
+        'sale_date',
         'isDelivered',
         'status'
     ];
