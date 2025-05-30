@@ -25,14 +25,14 @@ class AdminDashboardController extends Controller
 
         // Retrieve the sum of total_amount where status is 'Completed'
         $totalCompletedAmount = Orders::where('status', 'Completed')
-                                        ->whereDate('created_at', Carbon::today())
+                                        ->whereDate('sale_date', Carbon::today())
                                         ->sum('total_amount');
 
         $totalSale = Orders::where('status', 'Completed')->sum('total_amount');
 
         // Retrieve daily sales data
         $dailySalesData = Orders::with('orderItems.productable')
-            ->selectRaw('DATE(orders.created_at) as date, SUM(order_items.quantity * order_items.price) as total_sales')
+            ->selectRaw('DATE(orders.sale_date) as date, SUM(order_items.quantity * order_items.price) as total_sales')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
             ->groupBy('date')
             ->orderBy('date')
@@ -45,7 +45,7 @@ class AdminDashboardController extends Controller
         // Retrieve monthly sales data
         // Retrieve monthly sales data
         $monthlySalesData = Orders::with('orderItems.productable')
-        ->selectRaw('DATE_FORMAT(orders.created_at, "%Y-%m") as month, SUM(order_items.quantity * order_items.price) as total_sales')
+        ->selectRaw('DATE_FORMAT(orders.sale_date, "%Y-%m") as month, SUM(order_items.quantity * order_items.price) as total_sales')
         ->join('order_items', 'orders.id', '=', 'order_items.order_id')
         ->groupBy('month')
         ->orderBy('month')
