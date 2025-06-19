@@ -33,7 +33,7 @@ class SalesReportExport implements FromCollection, WithHeadings, ShouldAutoSize,
     public function collection()
     {
         return OrderItems::whereHas('order', function ($query) {
-            $query->whereBetween('created_at', [$this->startDate, $this->endDate])
+            $query->whereBetween('sale_date', [$this->startDate, $this->endDate])
                   ->whereNull('deleted_at')
                   ->where('status', 'Completed'); // Fetch only completed orders
         })

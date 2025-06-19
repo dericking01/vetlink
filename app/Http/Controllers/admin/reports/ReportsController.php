@@ -24,7 +24,7 @@ class ReportsController extends Controller
     {
         // Retrieve sales data
         $salesData = Orders::with('orderItems.productable')
-            ->selectRaw('DATE(orders.created_at) as date, SUM(order_items.quantity * order_items.price) as total_sales')
+            ->selectRaw('DATE(orders.sale_date) as date, SUM(order_items.quantity * order_items.price) as total_sales')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
             ->groupBy('date')
             ->orderBy('date')
