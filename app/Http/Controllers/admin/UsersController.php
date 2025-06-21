@@ -426,8 +426,12 @@ class UsersController extends Controller
 
         $orders = Orders::where('agent_id', $id)->where('status', 'Completed')->with('orderItems')->get();
 
-        // dd($orders);
-        return view('admin.users.view-agent', compact('agent', 'orders'));
+        $totalPoints = 0;
+        foreach($orders as $order){
+            $totalPoints += $order->total_amount * 0.01;
+        }
+       
+        return view('admin.users.view-agent', compact('agent', 'orders','totalPoints'));
     }
 
     public function viewAgentCard($id)
