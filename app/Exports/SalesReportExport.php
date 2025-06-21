@@ -60,6 +60,7 @@ class SalesReportExport implements FromCollection, WithHeadings, ShouldAutoSize,
             'Total Amount',
             'Payment Method',
             'Delivery Status',
+            'Order Status',
             'Sale Date',
         ];
     }
@@ -113,6 +114,7 @@ class SalesReportExport implements FromCollection, WithHeadings, ShouldAutoSize,
             $totalAmount,
             $paymentMethod,
             $delivery,
+            $order->status,
             Carbon::parse($order->sale_date)->format('Y-m-d'),
         ];
     }
