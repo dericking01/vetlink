@@ -70,4 +70,11 @@ class Agent extends Model
         return $code;
     }
 
+    public function calculatePoints()
+{
+    return $this->order->sum(function ($order) {
+        return $order->total_amount * 0.01;
+    });
+}
+
 }

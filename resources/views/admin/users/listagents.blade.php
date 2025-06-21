@@ -68,7 +68,7 @@
                     {{ $agent->agent_id }}
                 </td>
                 <td class="phone align-middle white-space-nowrap py-2 text-center">
-                  {{ $agent->points }}
+                  {{ $agent->calculatePoints() }}
                 </td>
                 <td class="name align-middle white-space-nowrap py-2 text-center">
                   @if($agent->status == 'Active')
