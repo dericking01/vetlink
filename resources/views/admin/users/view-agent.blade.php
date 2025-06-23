@@ -68,6 +68,7 @@
                     <tr>
                         <th class="sort pe-1 align-middle white-space-nowrap" data-sort="phone">Sale Date</th>
                         <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Amount (Tshs)</th>
+                        <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Points Gained</th>
                         <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Status</th>
                         <th class="sort pe-1 align-middle white-space-nowrap text-center" data-sort="name">Delivered</th>
                         <th class="sort pe-1 align-middle white-space-nowrap text-center" data-sort="action">Action</th>
@@ -89,6 +90,9 @@
                             </td>
                             <td class="joined py-2">
                                 {{ number_format($order->total_amount) }}
+                            </td>
+                             <td class="joined py-2">
+                                {{ number_format($order->total_amount * 0.01) }}
                             </td>
                             <td class="joined py-2">
                                 <span class="badge badge-subtle-success">{{ $order->status }}</span>
