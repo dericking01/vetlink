@@ -50,7 +50,7 @@
                     {{ $order->agent->name }}
               </td>
               <td class="service_category">
-                    {{ $order->agent->points }}
+                    {{ $order->total_amount * 0.01 }}
               </td>
               <td class="service_category">{{ $order->branch->branch_name }}</td>
 
