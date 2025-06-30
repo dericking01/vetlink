@@ -72,7 +72,7 @@ class AdminProduct extends Model
     // Relationship to ProductBatch
     public function productBatches()
     {
-        return $this->hasMany(ProductBatch::class);
+        return $this->hasMany(ProductBatch::class,'product_id');
     }
 
     // Function to get the earliest expiry date from ProductBatches

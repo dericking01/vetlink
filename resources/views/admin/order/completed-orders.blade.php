@@ -28,8 +28,10 @@
               <th>Date</th>
               {{-- <th>Buyer</th> --}}
               <th>Customer</th>
+              <th>Points Gained</th>
               <th>Branch</th>
               <th>Amount</th>
+              <th>Sales Date</th>
               <th>Delivered</th>
               <th class="text-center" >Payment Status</th>
               <th>Action</th>
@@ -47,6 +49,9 @@
               <td class="service_category">
                     {{ $order->agent->name }}
               </td>
+              <td class="service_category">
+                    {{ $order->total_amount * 0.01 }}
+              </td>
               <td class="service_category">{{ $order->branch->branch_name }}</td>
               {{-- <td class="quantity">
                 @foreach ($order->orderItems as $orderItem)
@@ -55,6 +60,9 @@
               </td> --}}
               {{-- <td class="quantity">{{ $order->orderItems->quantity }}</td> --}}
               <td class="amount">{{ number_format ($order->total_amount, 2) }}</td>
+                <td class="amount text-center">
+                {{ $order->sale_date }}
+              </td>
               @if ($order->isDelivered)
               <td class="status text-center">
                 <span class="badge badge-subtle-success">YES</span>
@@ -64,6 +72,7 @@
                 <span class="badge badge-subtle-danger">NO</span>
               </td>
               @endif
+            
               <td class="status text-center">
                 <span class="badge badge-subtle-success">DONE</span>
               </td>

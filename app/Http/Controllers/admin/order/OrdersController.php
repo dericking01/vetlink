@@ -21,6 +21,7 @@ use App\Models\ServiceCategory;
 use Brian2694\Toastr\Facades\Toastr;
 use Brian2694\Toastr\Toastr as ToastrToastr;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class OrdersController extends Controller
 {
@@ -291,6 +292,7 @@ class OrdersController extends Controller
         $order->branch_id = $request->branch;
         $order->discount = $request->discount;
         $order->payment_method = $request->payment_method;
+        $order->sale_date = $request->filled('sale_date') ? $request->sale_date : Carbon::now()->toDateString();
         $order->isDelivered = false;
         // dd($order);
         $order->save();
@@ -409,6 +411,7 @@ class OrdersController extends Controller
         // Update the order with the new data
         $order->isDelivered = $request->isDelivered;
         $order->status = $request->status;
+        $order->sale_date = $request->sale_date;
         //$order->branch_id = $request->branch;
          /**
          * Updating on Branch change

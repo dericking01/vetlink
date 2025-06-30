@@ -85,7 +85,7 @@
 
                         <tr class="btn-reveal-trigger">
                             <td class="joined align-middle py-2">
-                                {{ date_format(date_create($order->created_at), 'd M, Y') }}
+                                {{ date_format(date_create($order->sale_date), 'd M, Y') }}
                             </td>
                             <td class="joined py-2">
                                 {{ number_format($order->total_amount) }}

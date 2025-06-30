@@ -25,7 +25,7 @@
           <thead class="bg-200 text-900">
             <tr>
               <th>SN.</th>
-              <th>Date</th>
+              <th>Sale Date</th>
               {{-- <th>Buyer</th> --}}
               <th>Customer</th>
               <th>Branch</th>
@@ -44,7 +44,7 @@
                 {{ ++$key }}
                 </a>
               </td>
-              <td class="date">{{ date_format(date_create($order->created_at), 'd M, Y') }}</td>
+              <td class="date">{{ date_format(date_create($order->sale_date), 'd M, Y') }}</td>
               <td class="service_category">
                     {{ $order->agent->name }}
               </td>

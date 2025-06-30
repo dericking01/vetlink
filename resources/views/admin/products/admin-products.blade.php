@@ -110,7 +110,7 @@
               </td> <td class="name">
                 <div class="d-flex align-items-center position-relative">
                     <div class="flex-1 ms-3">
-                        <h6 class="mb-1 fw-semi-bold text-nowrap">{{ $product->earliestExpiryDate }}</h6>
+                        <h6 class="mb-1 fw-semi-bold text-nowrap">{{ $product->getEarliestExpiryDate() }}</h6>
                     </div>
                 </div>
               </td>
@@ -224,7 +224,7 @@
                                                 <label class="col-form-label" for="expire_date">Expire date <span class="text-danger">*</span>
                                                 </label>
                                                 <input class="form-control @error('expire_date') is-invalid @enderror" name="expire_date"
-                                                    id="expire_date" type="text" placeholder="Total product expire_date" value="{{ $product->expire_date }}" />
+                                                    id="expire_date" type="date" placeholder="Total product expire_date" value="{{ $product->getEarliestExpiryDate() }}" />
                                             </div>
                                         </div>
 
@@ -234,6 +234,15 @@
                                                 </label>
                                                 <input class="form-control @error('price') is-invalid @enderror" name="price"
                                                     id="price" type="number" placeholder="Price of the product" value="{{ $product->price }}" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="mb-3">
+                                                <label class="col-form-label" for="price">Buying Price <span class="text-danger">*</span>
+                                                </label>
+                                                <input class="form-control @error('price') is-invalid @enderror" name="buying_price"
+                                                    id="price" type="number" placeholder="Buying Price of the product" value="{{ $product->buying_price }}" />
                                             </div>
                                         </div>
 
@@ -338,7 +347,7 @@
                                     <label class="col-form-label" for="name">Expire date <span class="text-danger">*</span>
                                     </label>
                                     <input class="form-control @error('name') is-invalid @enderror" name="expire_date" value="{{ old('name') }}" required=""
-                                        id="name" type="text" placeholder="Expire date of the product" />
+                                        id="name" type="date" placeholder="Expire date of the product" />
                                       @error('name')
                                           <div class="invalid-feedback">{{ $message }}</div>
                                       @enderror
@@ -346,10 +355,21 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="col-form-label" for="name">Price <span class="text-danger">*</span>
+                                    <label class="col-form-label" for="name">Selling Price <span class="text-danger">*</span>
                                     </label>
                                     <input class="form-control @error('name') is-invalid @enderror" name="price" value="{{ old('name') }}" required=""
                                         id="name" type="number" placeholder="Price of the product" />
+                                      @error('name')
+                                          <div class="invalid-feedback">{{ $message }}</div>
+                                      @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="col-form-label" for="name">Buying Price <span class="text-danger">*</span>
+                                    </label>
+                                    <input class="form-control @error('name') is-invalid @enderror" name="buying_price" value="{{ old('name') }}" required=""
+                                        id="name" type="number" placeholder="Buying Price of the product" />
                                       @error('name')
                                           <div class="invalid-feedback">{{ $message }}</div>
                                       @enderror

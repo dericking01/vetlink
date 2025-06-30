@@ -103,7 +103,7 @@ class StaffCustomerController extends Controller
         $orders = Orders::where('agent_id', $id)->where('status', 'Completed')->with('orderItems')->get();
 
         // dd($orders);
-        return view('staff.customers.view-agent', compact('agent', 'orders'));
+        //return view('staff.customers.view-agent', compact('agent', 'orders'));
     }
 
     public function viewAgentCard($id)
@@ -111,7 +111,7 @@ class StaffCustomerController extends Controller
         $agent = Agent::whereId($id)->first();
 
         $orders = Orders::where('agent_id', $id)->where('status', 'Completed')->with('orderItems')->get();
-
+       
         // dd($orders);
         return view('staff.customers.view-agent-card', compact('agent', 'orders'));
         // return view('admin.users.vd', compact('agent', 'orders'));

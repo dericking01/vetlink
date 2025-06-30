@@ -8,6 +8,7 @@ use App\Models\Admin;
 use App\Models\AdminProduct;
 use App\Models\Branch;
 use App\Models\BranchProduct;
+use App\Models\ProductBatch;
 use App\Models\ProductStock;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
@@ -49,6 +50,7 @@ class ProductsController extends Controller
             // 'image' => 'mimes:jpg,png|max:2048',
             'quantity' => 'required|numeric|min:1',
             'price' => 'required|numeric|min:0',
+            'buying_price' => 'required|numeric|min:0',
             'description' => 'required|string',
         ]);
 
@@ -65,14 +67,24 @@ class ProductsController extends Controller
         $product->name = $request->name;
         $product->branch_id = $request->branch;
         $product->price = $request->price;
+        $product->buying_price = $request->buying_price;
         $product->quantity = $request->quantity;
         $product->units = $request->units;
         $product->expire_date = $expire_date;
         $product->description = $request->description;
         $product->image = $img;
         $product->admin_id = $adminId;
-        // dd($product);
         $product->save();
+
+        ProductBatch::create([
+            'product_id' => $product->id,
+            'admin_id' => $adminId,
+            'quantity' => $product->quantity,
+            'buying_price' => $product->buying_price,
+            'expiry_date' => $expire_date
+        ]);
+
+
 
         Toastr::success('Product saved successfully!');
         return back();
@@ -87,6 +99,7 @@ class ProductsController extends Controller
             'name' => 'required',
             'quantity' => 'numeric|min:1',
             'price' => 'numeric|min:0',
+            'buying_price' => 'numeric|min:0'
             // 'description' => 'required|string',
         ]);
 
@@ -100,6 +113,7 @@ class ProductsController extends Controller
 
         $product->name = $request->name;
         $product->price = $request->price;
+        $product->buying_price = $request->buying_price;
         $product->quantity = $request->quantity;
         $product->units = $request->units;
         $product->expire_date = $request->expire_date;
@@ -110,6 +124,19 @@ class ProductsController extends Controller
         $product->branch_id = $request->branch;
         $product->save();
 
+        $currentEarliest = $product->productBatches()
+                                    ->orderBy('expiry_date', 'asc')
+                                    ->first();
+        if($currentEarliest != $request->expire_date){
+            ProductBatch::create([
+                'product_id' => $product->id,
+                'admin_id' => $adminId,
+                'quantity' => $product->quantity,
+                'buying_price' => $product->buying_price,
+                'expiry_date' => $request->expire_date
+            ]);
+        }
+      
         Toastr::success('Product updated successfully!');
         return back();
     }
@@ -148,6 +175,7 @@ class ProductsController extends Controller
         $product = AdminProduct::findOrFail($request->product); // Get the selected product
 
         // Loop through selected branches and distribute the product
+        $remainingQty = $product->getWarehouseQuantityAttribute();//$product->quantity;
         foreach ($request->branches as $branchId) {
             try{
                 DB::beginTransaction();
@@ -155,14 +183,14 @@ class ProductsController extends Controller
                 $quantity = $request->quantities[$branchId];
 
                 // Check if there's enough quantity in the warehouse (product's stock)
-                if ($product->quantity < $quantity) {
+                if ($remainingQty < $quantity) {
                     Toastr::error('Not enough quantity for ' . Branch::find($branchId)->branch_name);
                     return back()->withInput();
                 }
 
                 // Deduct the quantity from the product stock
                 // $product->quantity -= $quantity; //maintain the product quantity in warehouse, as long as the product exists in warehouse or branches the quantity shouldn't be affected.
-                $product->save();
+                // $product->save();
 
                 // Create a record for distributed products (this might be a new model, depending on your setup)
                 BranchProduct::create([
@@ -193,6 +221,7 @@ class ProductsController extends Controller
                     'available_quantity' => $quantity,
                     ]);
                 }
+                $remainingQty -= $quantity;
 
                 DB::commit();
 

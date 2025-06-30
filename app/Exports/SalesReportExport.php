@@ -33,9 +33,9 @@ class SalesReportExport implements FromCollection, WithHeadings, ShouldAutoSize,
     public function collection()
     {
         return OrderItems::whereHas('order', function ($query) {
-            $query->whereBetween('created_at', [$this->startDate, $this->endDate])
-                  ->whereNull('deleted_at')
-                  ->where('status', 'Completed'); // Fetch only completed orders
+            $query->whereBetween('sale_date', [$this->startDate, $this->endDate])
+                  ->whereNull('deleted_at');
+                  //->where('status', 'Completed'); // Fetch only completed orders, removed because  we want all the orders
         })
         ->with([
             'order', // Load order for agent_id and branch_id
@@ -60,7 +60,8 @@ class SalesReportExport implements FromCollection, WithHeadings, ShouldAutoSize,
             'Total Amount',
             'Payment Method',
             'Delivery Status',
-            'Order Date',
+            'Order Status',
+            'Sale Date',
         ];
     }
 
@@ -99,7 +100,8 @@ class SalesReportExport implements FromCollection, WithHeadings, ShouldAutoSize,
 
 
         // Calculate total amount
-        $totalAmount = ($item->price * $item->quantity) - $order->discount;
+        // $totalAmount = ($item->price * $item->quantity) - $order->discount;
+        $totalAmount = $order->total_amount;
 
         return [
             $order->id,
@@ -113,7 +115,8 @@ class SalesReportExport implements FromCollection, WithHeadings, ShouldAutoSize,
             $totalAmount,
             $paymentMethod,
             $delivery,
-            Carbon::parse($order->created_at)->format('Y-m-d'),
+            $order->status,
+            Carbon::parse($order->sale_date)->format('Y-m-d'),
         ];
     }
 

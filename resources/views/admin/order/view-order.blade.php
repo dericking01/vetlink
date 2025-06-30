@@ -6,7 +6,7 @@
     <!--/.bg-holder-->
     <div class="card-body position-relative">
       <h5>Order Details: #00{{$order->id}} </h5>
-      <p class="fs--1">{{ date_format(date_create($order->created_at), 'F j, Y, g:i A') }}</p>
+      <p class="fs--1">{{ date_format(date_create($order->sale_date), 'F j, Y, g:i A') }}</p>
       <div class="d-flex align-items-center">
         <strong class="me-2">Payment Status:</strong>
         @if ($order->status == 'Pending')

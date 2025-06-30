@@ -23,7 +23,7 @@
         </div>
         <div class="col-md-6 col-lg-4 mb-4 mb-lg-0">
           <h5 class="mb-3 fs-0">Points Details</h5>
-          <h4 class="mb-2">{{ $agent->points }}</h4>
+          <h4 class="mb-2">{{ $totalPoints }}</h4>
           <!-- <p class="mb-0 fs--1"> <strong>Promo Code: </strong><small class="badge fw-semi-bold rounded-pill badge-subtle-primary">{{ $agent->promo_code }}</small></p> -->
           <p class="mb-0 fs--1"> <strong>Joined Date: </strong><small class="badge fw-semi-bold rounded-pill badge-subtle-primary">{{ $agent->created_at }}</small></p>
           <p class="mb-0 fs--1"> <strong>Status:</strong>
@@ -45,7 +45,7 @@
               <a href="{{ route('agent.view-agent_card', $agent->id) }}">
                 <p class="mb-2 fs--1"> {{$agent->agent_id}} </p>
               </a>
-              <h4 class="mb-2 text-success">Tsh {{ number_format($agent->points) }}/=</h4>
+              <h4 class="mb-2 text-success">Tsh {{ number_format($totalPoints) }}/=</h4>
             </div>
           </div>
         </div>
@@ -66,8 +66,9 @@
             <table class="table data-table table-bordered table-striped fs--1 mb-0">
                 <thead class="bg-200 text-900">
                     <tr>
-                        <th class="sort pe-1 align-middle white-space-nowrap" data-sort="phone">Date</th>
+                        <th class="sort pe-1 align-middle white-space-nowrap" data-sort="phone">Sale Date</th>
                         <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Amount (Tshs)</th>
+                        <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Points Gained</th>
                         <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Status</th>
                         <th class="sort pe-1 align-middle white-space-nowrap text-center" data-sort="name">Delivered</th>
                         <th class="sort pe-1 align-middle white-space-nowrap text-center" data-sort="action">Action</th>
@@ -85,10 +86,13 @@
 
                         <tr class="btn-reveal-trigger">
                             <td class="joined align-middle py-2">
-                                {{ date_format(date_create($order->created_at), 'd M, Y') }}
+                                {{ date_format(date_create($order->sale_date), 'd M, Y') }}
                             </td>
                             <td class="joined py-2">
                                 {{ number_format($order->total_amount) }}
+                            </td>
+                             <td class="joined py-2">
+                                {{ number_format($order->total_amount * 0.01) }}
                             </td>
                             <td class="joined py-2">
                                 <span class="badge badge-subtle-success">{{ $order->status }}</span>
