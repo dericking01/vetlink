@@ -424,7 +424,8 @@ class UsersController extends Controller
     {
         $agent = Agent::whereId($id)->first();
 
-        $orders = Orders::where('agent_id', $id)->where('status', 'Completed')->with('orderItems')->get();
+        // $orders = Orders::where('agent_id', $id)->where('status', 'Completed')->with('orderItems')->get(); //original: filteres completed orders
+        $orders = $agent->orders;
 
         $totalPoints = 0;
         foreach($orders as $order){
@@ -440,7 +441,6 @@ class UsersController extends Controller
 
         $orders = Orders::where('agent_id', $id)->where('status', 'Completed')->with('orderItems')->get();
 
-        // dd($orders);
         return view('admin.users.view-agent-card', compact('agent', 'orders'));
         // return view('admin.users.vd', compact('agent', 'orders'));
     }
