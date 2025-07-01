@@ -199,7 +199,7 @@ class ProductsController extends Controller
                     'branch_id' => $branchId,
                     'quantity' => $quantity,
                     'price' => $product->price,
-                    'distribution_date' => $request->filled('distribution_date') ? $request->distribution_date : Carbon::now
+                    'distribution_date' => $request->filled('distribution_date') ? $request->distribution_date : Carbon::now()
                 ]);
 
                 // Insert or update the product in the product_stock_helper table
