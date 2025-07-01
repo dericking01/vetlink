@@ -26,6 +26,12 @@
                         <span class="d-none d-sm-inline-block ms-1">Add Product</span>
                 </button>
             </a>
+             <a class="font-sans-serif" href="#!" data-bs-toggle="modal" data-bs-target="#addstock">
+                <button class="btn btn-falcon-default btn-sm" type="button">
+                    <svg class="svg-inline--fa fa-plus fa-w-14" data-fa-transform="shrink-3 down-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="" style="transform-origin: 0.4375em 0.625em;"><g transform="translate(224 256)"><g transform="translate(0, 64)  scale(0.8125, 0.8125)  rotate(0 0 0)"><path fill="currentColor" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" transform="translate(-224 -256)"></path></g></g></svg><!-- <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span> Font Awesome fontawesome.com -->
+                        <span class="d-none d-sm-inline-block ms-1">Add Stock</span>
+                </button>
+            </a>
             <a class="font-sans-serif" href="{{ route('admin.products.export') }}">
                 <button class="btn btn-falcon-default btn-sm" type="button"><svg class="svg-inline--fa fa-external-link-alt fa-w-16" data-fa-transform="shrink-3 down-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="external-link-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" style="transform-origin: 0.5em 0.625em;"><g transform="translate(256 256)"><g transform="translate(0, 64)  scale(0.8125, 0.8125)  rotate(0 0 0)"><path fill="currentColor" d="M432,320H400a16,16,0,0,0-16,16V448H64V128H208a16,16,0,0,0,16-16V80a16,16,0,0,0-16-16H48A48,48,0,0,0,0,112V464a48,48,0,0,0,48,48H400a48,48,0,0,0,48-48V336A16,16,0,0,0,432,320ZM488,0h-128c-21.37,0-32.05,25.91-17,41l35.73,35.73L135,320.37a24,24,0,0,0,0,34L157.67,377a24,24,0,0,0,34,0L435.28,133.32,471,169c15,15,41,4.5,41-17V24A24,24,0,0,0,488,0Z" transform="translate(-256 -256)"></path></g></g></svg><!-- <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span> Font Awesome fontawesome.com -->
                     <span class="d-none d-sm-inline-block ms-1">Export</span>
@@ -426,6 +432,71 @@
 </div>
 
 
+<div class="modal fade" id="addstock" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <form action="{{ route('admin.products.addStock') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate="novalidate">
+            @csrf
+            <div class="modal-content position-relative">
+                <div class="position-absolute top-0 end-0 mt-2 me-2 z-1">
+                    <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                        data-bs-dismiss="modal" aria-label="Close" onclick="event.preventDefault();"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="rounded-top-3 py-3 ps-4 pe-6 bg-light">
+                        <h4 class="mb-1" id="modalExampleDemoLabel">Add stock </h4>
+                    </div>
+                    <div class="p-4 pb-0">
+                        <div class="row">
+                            <div class="col-md-12">
+                                 <div class="mb-3">
+                                    <label for="organizerMultiple2">Products</label>
+                                    <select class="form-select js-choice" id="organizerMultiple2" multiple="multiple" size="1" name="name[]" required="required" data-options='{"removeItemButton":true,"placeholder":true}'>
+                                    <option value="">Select Product...</option>
+                                        @foreach ($products as $prod)
+                                            <option value="{{ $prod->id }}" {{ old('name') == $prod->id ? 'selected' : '' }}>{{ $prod->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <div class="invalid-feedback">Please select one or multiple</div>
+                                </div>
+
+                                <div id="quantityInputs"></div>
+
+                                <div id="buyingPriceInputs"></div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="col-form-label" for="name">Units <span class="text-danger">*</span>
+                                    </label>
+                                    <input class="form-control @error('name') is-invalid @enderror" name="units" value="{{ old('name') }}" required=""
+                                        id="name" type="text" placeholder="Units of the product" />
+                                      @error('name')
+                                          <div class="invalid-feedback">{{ $message }}</div>
+                                      @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="col-form-label" for="name">Stocking date <span class="text-danger">*</span>
+                                    </label>
+                                    <input class="form-control @error('name') is-invalid @enderror" name="stocking_date" value="{{ old('name') }}" required=""
+                                        id="name" type="date" placeholder="Stocking date of the products" />
+                                      @error('name')
+                                          <div class="invalid-feedback">{{ $message }}</div>
+                                      @enderror
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-info" type="submit">Submit </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="modal fade" id="addBULKproduct" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <form action="{{ route('admin.products.import') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate="novalidate">
@@ -481,5 +552,61 @@
             fileSizeError.style.display = 'none';
         }
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('createOrderForm');
+    const btn = document.getElementById('submitCreateOrderButton');
+
+    if (form) {
+        console.log("Form ready");
+        form.addEventListener('submit', function () {
+            btn.disabled = true;
+            btn.querySelector('.default-text').style.display = 'none';
+            btn.querySelector('.loading-text').style.display = 'inline';
+        });
+    }
+
+
+     // Script to add quantity inputs dynamically based on selected products
+    document.getElementById('organizerMultiple2').addEventListener('change', function () {
+    var selectedProducts = this.selectedOptions;
+    var quantityInputsDiv = document.getElementById('quantityInputs');
+    var buyingPriceInputsDiv = document.getElementById('buyingPriceInputs');
+    quantityInputsDiv.innerHTML = 'QUANTITIES <br /><br />'; // Clear previous quantity inputs
+    buyingPriceInputsDiv.innerHTML = 'BUYING PRICES<br /><br />';
+
+    // Create quantity input for each selected product
+    for (var i = 0; i < selectedProducts.length; i++) {
+        var productId = selectedProducts[i].value; // Get the product ID
+        var productName = selectedProducts[i].text;
+
+        var quantityLabel = document.createElement('label');
+        quantityLabel.innerHTML = 'Quantity for ' + productName + ': ';
+
+        var buyingPriceLabel = document.createElement('label');
+        buyingPriceLabel.innerHTML = 'Buying price for ' + productName + ": ";
+
+        var quantityInput = document.createElement('input');
+        quantityInput.setAttribute('type', 'number');
+        quantityInput.setAttribute('name', 'quantity[' + productId + ']'); // Use product ID as key
+        quantityInput.setAttribute('placeholder', 'Enter quantity for ' + productName);
+        quantityInput.setAttribute('class', 'form-control mb-3');
+
+        quantityInputsDiv.appendChild(quantityLabel);
+        quantityInputsDiv.appendChild(quantityInput);
+
+        var buyingPriceInput = document.createElement('input');
+        buyingPriceInput.setAttribute('type', 'number');
+        buyingPriceInput.setAttribute('name', 'buying_price[' + productId + ']'); // Use product ID as key
+        buyingPriceInput.setAttribute('placeholder', 'Enter buying price for ' + productName);
+        buyingPriceInput.setAttribute('class', 'form-control mb-3');
+
+        buyingPriceInputsDiv.appendChild(buyingPriceLabel);
+        buyingPriceInputsDiv.appendChild(buyingPriceInput);
+    }
+    });
+});
+   
+
 </script>
 

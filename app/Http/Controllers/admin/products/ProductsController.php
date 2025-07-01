@@ -91,6 +91,48 @@ class ProductsController extends Controller
         return back();
     }
 
+    public function addStock(Request $request){
+        $this->validate($request, [
+            'name' => 'required|array',
+            'quantity' => 'required|array',
+            'buying_price' => 'required|array'
+        ]);
+
+        $adminId = auth('admin')->user()->id;
+
+
+        foreach ($request->name as $productId) {
+            // Retrieve the product
+            $product = AdminProduct::find($productId);
+
+            if (!$product) {
+                Toastr::warning("Product with ID {$productId} not found.");
+                return back();
+            }
+
+            // Get the quantity for this product
+            $quantity = $request->quantity[$productId];
+            $buying_price = $request->buying_price[$productId];
+
+            $product->quantity += $quantity;
+            $product->save();
+
+            $productBatch = new ProductBatch();
+            $productBatch->product_id = $product->id;
+            $productBatch->admin_id = $adminId;
+            $productBatch->quantity = $quantity;
+            $productBatch->buying_price = $buying_price;
+            $productBatch->stocking_date = $request->filled('stocking_date') ? $request->stocking_date : Carbon::now();
+            $productBatch->expiry_date = null;
+            $productBatch->save();
+
+           
+        }
+
+         Toastr::success('Products stocks have been updated successfully!');
+        return back();
+    }
+
     public function update(Request $request, $id)
     {
 

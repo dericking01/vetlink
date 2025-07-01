@@ -143,6 +143,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('product-details/{id}',[ProductsController::class, 'details'])->name('admin.products.details');
             Route::get('export-admin-products', [AdminProductExportController::class, 'export'])->name('admin.products.export');
             Route::post('import-products', [AdminProductExportController::class, 'import'])->name('admin.products.import');
+            Route::post('add-stock', [ProductsController::class, 'addStock'])->name('admin.products.addStock');
         });
 
 
