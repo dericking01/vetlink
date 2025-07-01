@@ -15,6 +15,7 @@ class BranchProduct extends Model
         'admin_product_id',
         'quantity',
         'price',
+        'distribution_date'
     ];
 
     public function branch()

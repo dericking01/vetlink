@@ -14,6 +14,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 
 class ProductsController extends Controller
@@ -198,6 +199,7 @@ class ProductsController extends Controller
                     'branch_id' => $branchId,
                     'quantity' => $quantity,
                     'price' => $product->price,
+                    'distribution_date' => $request->filled('distribution_date') ? $request->distribution_date : Carbon::now
                 ]);
 
                 // Insert or update the product in the product_stock_helper table
@@ -243,11 +245,11 @@ class ProductsController extends Controller
         $this->validate($request, [
             'admin_product_id' => 'required|exists:admin_products,id',
             'branch_id' => 'required|exists:branches,id',
-            'quantity' => 'required|integer|min:1'
+            'quantity' => 'required|numeric|min:1'
         ]);
 
         try{
-            DB:beginTransaction();
+            DB::beginTransaction();
        
 
             // Find the distribution record
@@ -275,6 +277,7 @@ class ProductsController extends Controller
             // Update the distribution with the new quantity
             $distribution->quantity = $newQuantity;
             $distribution->branch_id = $request->branch_id;
+            $distribution->distribution_date = $request->distribution_date;
             // dd($distribution);
             $distribution->save();
 

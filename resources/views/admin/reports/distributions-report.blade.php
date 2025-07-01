@@ -31,7 +31,7 @@
 
                 <thead class="thead-dark">
                     <tr>
-                        <th>Date</th>
+                        <th>Distribution Date</th>
                         <th>To Branch</th>
                         <th>Product Name</th>
                         <th>Quantity Distributed</th>
@@ -43,7 +43,7 @@
                 <tbody>
                     @foreach($distributions as $distribution)
                         <tr>
-                            <td class="date">{{ date_format(date_create($distribution->created_at), 'd M, Y') }}</td>
+                            <td class="date">{{ date_format(date_create($distribution->distribution_date), 'd M, Y') }}</td>
                             <td>{{ $distribution->branch->branch_name }}</td>
                             <td>{{ $distribution->adminProduct->name }}</td>
                             <td>{{ $distribution->quantity }}</td>
