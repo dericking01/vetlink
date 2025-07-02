@@ -175,6 +175,8 @@ class UsersController extends Controller
 
         $sourceBranchId = $request->sourceBranchId;
         $productId = $request->product;
+        $adminProduct = AdminProduct::find($productId);
+        $distributionDate = $request->distribution_date;
 
          // Filter out empty or null quantities
          $quantities = array_filter($request->quantities, function ($quantity) {
@@ -233,6 +235,16 @@ class UsersController extends Controller
                 // Add to target
                 $targetStock->available_quantity += $quantity;
                 $targetStock->save();
+
+
+                $branchProduct = new BranchProduct();
+                $branchProduct->branch_id = $targetBranchId;
+                $branchProduct->admin_product_id = $productId;
+                $branchProduct->quantity = $quantity;
+                $branchProduct->price = $adminProduct->price;
+                $branchProduct->distribution_date = $request->filled('distribution_date') ? $distributionDate : Carbon::now();
+                $branchProduct->source_branch_id = $sourceBranchId;
+                $branchProduct->save();
 
 
                 DB::commit();

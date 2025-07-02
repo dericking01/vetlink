@@ -32,6 +32,7 @@
                 <thead class="thead-dark">
                     <tr>
                         <th>Distribution Date</th>
+                        <th>From</th>
                         <th>To Branch</th>
                         <th>Product Name</th>
                         <th>Quantity Distributed</th>
@@ -44,6 +45,13 @@
                     @foreach($distributions as $distribution)
                         <tr>
                             <td class="date">{{ date_format(date_create($distribution->distribution_date), 'd M, Y') }}</td>
+                            <td>
+                                @if($distribution->sourceBranch)
+                                    {{ $distribution->sourceBranch->branch_name }}
+                                @else
+                                    Warehouse
+                                @endif
+                            </td>
                             <td>{{ $distribution->branch->branch_name }}</td>
                             <td>{{ $distribution->adminProduct->name }}</td>
                             <td>{{ $distribution->quantity }}</td>
