@@ -44,7 +44,7 @@
                 <tbody>
                     @foreach($distributions as $distribution)
                         <tr>
-                            <td class="date">{{ date_format(date_create($distribution->distribution_date), 'd M, Y') }}</td>
+                            <td class="date">{{ $distribution->distribution_date ? date_format(date_create($distribution->distribution_date), 'd M, Y') : 'N/A' }}</td>
                             <td>
                                 @if($distribution->sourceBranch)
                                     {{ $distribution->sourceBranch->branch_name }}
