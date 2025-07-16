@@ -493,6 +493,25 @@ class OrdersController extends Controller
         return back();
     }
 
+
+    public function updateOrderItem(Request $request, $id){
+        $orderItem = OrderItems::find($id);
+
+        if(!$orderItem){
+            Toastr::error('Order item not found');
+            return back();
+        }
+
+        $orderItem->quantity = $request->quantity;
+        $orderItem->price = $request->price;
+        $orderItem->amount = $request->quantity * $request->price;
+        
+        $orderItem->save();
+
+        Toastr::success('Order item successfully update! ✔');
+        return back();
+    }
+
     public function updatePartialOrder(Request $request, $id)
     {
         // Find the existing Order record
@@ -695,15 +714,15 @@ class OrdersController extends Controller
         // dd($order);
 
         if ($order) {
-            if ($order->isDelivered) {
-                Toastr::error('Cannot delete a delivered order.');
-            } else {
+            //if ($order->isDelivered) {
+                //Toastr::error('Cannot delete a delivered order.');
+            //} else {
                 // Fire event before deleting the order
                 event(new ProductQuantityRestored($order->orderItems));
 
                 $order->delete();
                 Toastr::success('Order successfully deleted!');
-            }
+            //}
         } else {
             Toastr::error('Order not found or already deleted.');
         }

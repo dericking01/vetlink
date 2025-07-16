@@ -77,6 +77,7 @@
               <th class="border-0 text-end">Price</th>
               {{-- <th class="border-0 text-end">Commission</th> --}}
               <th class="border-0 text-end">Amount</th>
+              <th class="border-0 text-end">Action</th>
             </tr>
           </thead>
             <tbody>
@@ -101,8 +102,77 @@
                         <td class="align-middle text-center">{{ $product['quantity'] }}</td>
                         <td class="align-middle text-end">{{ number_format($product['price'], 2) }}</td>
                         <td class="align-middle text-end">{{ number_format($amount, 2) }}</td>
+                         <td class="align-middle white-space-nowrap text-end">
+                <div class="dropstart font-sans-serif position-static d-inline-block">
+                    <button class="btn btn-link text-600 btn-sm dropdown-toggle
+                      btn-reveal float-end" type="button" id="dropdown-simple-pagination-table-item-1"
+                      data-bs-toggle="dropdown" data-boundary="window"
+                      aria-haspopup="true" aria-expanded="false" data-bs-reference="parent">
+                        <span class="fas fa-ellipsis-h fs--1"></span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end border py-2"
+                      aria-labelledby="dropdown-simple-pagination-table-item-1">
+                      <a class="dropdown-item text-success" href="#!" data-bs-toggle="modal" data-bs-target="#editPendingOrder{{ $order->id }}">Edit</a>
+                    </div>
+                  </div>
+              </td>
                     </tr>
 
+
+
+                     {{-- Edit Pending Orders Modal --}}
+            <div class="modal fade" id="editPendingOrder{{ $order->id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                    <form action="{{ route('admin.order.orderitem.update', ['id' => $order->id]) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        {{-- ORDER ITEMS --}}
+                                        @foreach ($order->orderItems as $item)
+                                        <div>
+                                            <input type="hidden" class="form-control" id="quantity{{ $item->id }}" name="quantities[{{ $item->id }}]" value="{{ $item->quantity }}" required>
+                                        </div>
+                                        @endforeach
+                        <div class="modal-content position-relative">
+                            <div class="position-absolute top-0 end-0 mt-2 me-2 z-1">
+                                <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                                    data-bs-dismiss="modal" aria-label="Close" onclick="event.preventDefault();"></button>
+                            </div>
+                            <div class="modal-body p-0">
+                                <div class="rounded-top-3 py-3 ps-4 pe-6 bg-light">
+                                    <h4 class="mb-1" id="modalExampleDemoLabel">Edit Order Item </h4>
+                                </div>
+                                <div class="p-4 pb-0">
+                                    <div class="row">
+                                        <div class="col">
+
+                                            <div class="mb-3">
+                                                <label class="col-form-label" for="qauntity">Quantity <span class="text-danger"></span></label>
+                                                <input class="form-control " name="qauntity" id="qauntity"
+                                                    type="number" placeholder="Quantity" value="{{ $item->quantity }}" readonly/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+
+                                            <div class="mb-3">
+                                                <label class="col-form-label" for="price">Price <span class="text-danger"></span></label>
+                                                <input class="form-control " name="price" id="price"
+                                                    type="number" placeholder="Price" value="{{ $item->price }}" readonly/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="mt-3 modal-footer">
+                                <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Close</button>
+                                <button class="btn btn-info" type="submit">Submit </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
                 @endforeach
             </tbody>
 

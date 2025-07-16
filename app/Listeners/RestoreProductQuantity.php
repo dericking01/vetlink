@@ -16,16 +16,18 @@ class RestoreProductQuantity
      */
     public function handle(ProductQuantityRestored $event)
     {
+        DB::beginTransaction();
+
         foreach ($event->orderItems as $orderItem) {
             $order = $orderItem->order;
             $branchId = $order->branch_id;
             $productId = $orderItem->deductable_id;
 
             try{
-                DB::beginTransaction();
                 // Find the product stock entry
                 $branchProduct = ProductStock::where('branch_id', $branchId)
                 ->where('admin_product_id', $productId)
+                ->lockForUpdate()
                 ->first();
 
                 if ($branchProduct) {

@@ -15,5 +15,6 @@ class ProductBatch extends Model
         'quantity',
         'buying_price',
         'expiry_date',
+        'stocking_date'
     ];
 }

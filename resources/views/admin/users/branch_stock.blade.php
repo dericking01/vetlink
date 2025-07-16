@@ -123,6 +123,15 @@
                                 @endforeach
                             </div>
 
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="col-form-label" for="distribution_date">Distribution date <span class="text-danger">*</span>
+                                    </label>
+                                    <input class="form-control @error('distribution_date') is-invalid @enderror" name="distribution_date"
+                                        id="distribution_date" type="date" placeholder="Date the sale was made" />
+                                </div>
+                            </div>
+
 
                         </div>
                     </div>

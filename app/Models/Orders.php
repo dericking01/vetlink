@@ -27,6 +27,11 @@ class Orders extends Model
         return $this->hasMany(OrderItems::class, 'order_id');
     }
 
+    public function getTotalOrderAmount()
+{
+    return $this->orderItems()->sum('amount');
+}
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

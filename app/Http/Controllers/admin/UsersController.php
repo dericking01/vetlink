@@ -175,6 +175,8 @@ class UsersController extends Controller
 
         $sourceBranchId = $request->sourceBranchId;
         $productId = $request->product;
+        $adminProduct = AdminProduct::find($productId);
+        $distributionDate = $request->distribution_date;
 
          // Filter out empty or null quantities
          $quantities = array_filter($request->quantities, function ($quantity) {
@@ -233,6 +235,16 @@ class UsersController extends Controller
                 // Add to target
                 $targetStock->available_quantity += $quantity;
                 $targetStock->save();
+
+
+                $branchProduct = new BranchProduct();
+                $branchProduct->branch_id = $targetBranchId;
+                $branchProduct->admin_product_id = $productId;
+                $branchProduct->quantity = $quantity;
+                $branchProduct->price = $adminProduct->price;
+                $branchProduct->distribution_date = $request->filled('distribution_date') ? $distributionDate : Carbon::now();
+                $branchProduct->source_branch_id = $sourceBranchId;
+                $branchProduct->save();
 
 
                 DB::commit();
@@ -424,7 +436,8 @@ class UsersController extends Controller
     {
         $agent = Agent::whereId($id)->first();
 
-        $orders = Orders::where('agent_id', $id)->where('status', 'Completed')->with('orderItems')->get();
+        // $orders = Orders::where('agent_id', $id)->where('status', 'Completed')->with('orderItems')->get(); //original: filteres completed orders
+        $orders = $agent->orders;
 
         $totalPoints = 0;
         foreach($orders as $order){
@@ -440,7 +453,6 @@ class UsersController extends Controller
 
         $orders = Orders::where('agent_id', $id)->where('status', 'Completed')->with('orderItems')->get();
 
-        // dd($orders);
         return view('admin.users.view-agent-card', compact('agent', 'orders'));
         // return view('admin.users.vd', compact('agent', 'orders'));
     }

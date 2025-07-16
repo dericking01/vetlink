@@ -14,6 +14,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 
 class ProductsController extends Controller
@@ -87,6 +88,48 @@ class ProductsController extends Controller
 
 
         Toastr::success('Product saved successfully!');
+        return back();
+    }
+
+    public function addStock(Request $request){
+        $this->validate($request, [
+            'name' => 'required|array',
+            'quantity' => 'required|array',
+            'buying_price' => 'required|array'
+        ]);
+
+        $adminId = auth('admin')->user()->id;
+
+
+        foreach ($request->name as $productId) {
+            // Retrieve the product
+            $product = AdminProduct::find($productId);
+
+            if (!$product) {
+                Toastr::warning("Product with ID {$productId} not found.");
+                return back();
+            }
+
+            // Get the quantity for this product
+            $quantity = $request->quantity[$productId];
+            $buying_price = $request->buying_price[$productId];
+
+            $product->quantity += $quantity;
+            $product->save();
+
+            $productBatch = new ProductBatch();
+            $productBatch->product_id = $product->id;
+            $productBatch->admin_id = $adminId;
+            $productBatch->quantity = $quantity;
+            $productBatch->buying_price = $buying_price;
+            $productBatch->stocking_date = $request->filled('stocking_date') ? $request->stocking_date : Carbon::now();
+            $productBatch->expiry_date = null;
+            $productBatch->save();
+
+           
+        }
+
+         Toastr::success('Products stocks have been updated successfully!');
         return back();
     }
 
@@ -198,6 +241,7 @@ class ProductsController extends Controller
                     'branch_id' => $branchId,
                     'quantity' => $quantity,
                     'price' => $product->price,
+                    'distribution_date' => $request->filled('distribution_date') ? $request->distribution_date : Carbon::now()
                 ]);
 
                 // Insert or update the product in the product_stock_helper table
@@ -243,11 +287,11 @@ class ProductsController extends Controller
         $this->validate($request, [
             'admin_product_id' => 'required|exists:admin_products,id',
             'branch_id' => 'required|exists:branches,id',
-            'quantity' => 'required|integer|min:1'
+            'quantity' => 'required|numeric|min:1'
         ]);
 
         try{
-            DB:beginTransaction();
+            DB::beginTransaction();
        
 
             // Find the distribution record
@@ -275,6 +319,7 @@ class ProductsController extends Controller
             // Update the distribution with the new quantity
             $distribution->quantity = $newQuantity;
             $distribution->branch_id = $request->branch_id;
+            $distribution->distribution_date = $request->distribution_date;
             // dd($distribution);
             $distribution->save();
 

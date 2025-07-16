@@ -34,7 +34,7 @@
           <thead class="bg-200 text-900">
             <tr>
               <th>SN.</th>
-              <th>Date</th>
+              <th>Distribution Date</th>
               <th>Product Name</th>
               <th>Branch Name</th>
               <th>Price</th>
@@ -46,7 +46,7 @@
             @foreach ($branchProducts  as $key => $branchProduct)
             <tr>
               <td class="sn">{{ ++$key }}</td>
-              <td class="date">{{ date_format(date_create($branchProduct->created_at), 'd M, Y') }}</td>
+              <td class="date">{{ date_format(date_create($branchProduct->distribution_date), 'd M, Y') }}</td>
               <td class="name">
                 <div class="d-flex align-items-center position-relative">
                     {{-- <img class="rounded-1 border border-200" src="{{ asset('upload/catalog/'.$product->image) }}" width="60" alt=""> --}}
@@ -153,7 +153,7 @@
                                             <div class="mb-3">
                                                 <label class="col-form-label" for="quantity">Quantity <span class="text-danger">*</span>
                                                 </label>
-                                                <input class="form-control @error('quantity') is-invalid @enderror" name="quantity"
+                                                <input class="form-control @error('quantity') is-invalid @enderror" name="quantity" step="1"
                                                     id="quantity" type="number" placeholder="Total product quantity" value="{{ $branchProduct->quantity }}" />
                                             </div>
                                         </div>
@@ -171,7 +171,16 @@
                                         </div>
 
                                     </div>
+
+                                    <div class="mb-3">
+                                    <label class="col-form-label" for="distribution_date">Distribution date <span class="text-danger">*</span>
+                                        </label>
+                                    <input class="form-control @error('distribution_date') is-invalid @enderror" name="distribution_date"
+                                    id="distribution_date" type="date" placeholder="Date the distribution was made" value="{{ $branchProduct->distribution_date }}" />
                                 </div>
+                                </div>
+
+                                
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Close</button>
@@ -241,7 +250,12 @@
                                 @endforeach
                             </div>
 
-
+                            <div class="mb-3">
+                                <label class="col-form-label" for="distribution_date">Distribution date <span class="text-danger">*</span>
+                                </label>
+                                <input class="form-control @error('distribution_date') is-invalid @enderror" name="distribution_date"
+                                    id="distribution_date" type="date" placeholder="Date the distribution was made" />
+                            </div>
                         </div>
                     </div>
                 </div>

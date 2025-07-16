@@ -32,10 +32,11 @@ class ProductDistributionExport implements FromCollection, WithHeadings, WithSty
         ->map(function ($item) {
             return [
                 'Product Name' => $item->adminProduct->name ?? 'N/A',
+                'From' => $item->sourceBranch->branch_name ?? 'WAREHOUSE',
                 'Branch Name' => $item->branch->branch_name ?? 'N/A',
                 'quantity' => $item->quantity,
                 'price' => $item->price,
-                'created_at' => Carbon::parse($item->created_at)->format('Y-m-d'),
+                'created_at' => Carbon::parse($item->distribution_date)->format('Y-m-d'),
             ];
         });
     }
@@ -45,6 +46,7 @@ class ProductDistributionExport implements FromCollection, WithHeadings, WithSty
     {
         return [
             'Product',
+            'From',
             'Branch',
             'Quantity Distributed',
             'Unit Price',
