@@ -493,6 +493,25 @@ class OrdersController extends Controller
         return back();
     }
 
+
+    public function updateOrderItem(Request $request, $id){
+        $orderItem = OrderItems::find($id);
+
+        if(!$orderItem){
+            Toastr::error('Order item not found');
+            return back();
+        }
+
+        $orderItem->quantity = $request->quantity;
+        $orderItem->price = $request->price;
+        $orderItem->amount = $request->quantity * $request->price;
+        
+        $orderItem->save();
+
+        Toastr::success('Order item successfully update! ✔');
+        return back();
+    }
+
     public function updatePartialOrder(Request $request, $id)
     {
         // Find the existing Order record
