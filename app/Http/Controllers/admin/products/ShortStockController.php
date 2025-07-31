@@ -17,31 +17,32 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 
-class ProductsController extends Controller
+class ShortStockController extends Controller
 {
     public function index()
     {
+
+
         $products = AdminProduct::latest()->get();
         $admins = Admin::latest()->get();
-        $branches = Branch::where('status','active')
-                        ->where('branch_name', '!=', 'SHORT STOCK')->latest()->get();
+        $branches = Branch::latest()->where('status','active')->get();
 
-        return view('admin.products.admin-products', compact('products','admins','branches'));
+        $branchProducts = BranchProduct::whereHas('branch', function($query){
+            $query->where('branch_name', 'SHORT STOCK');
+        })
+        ->latest()
+        ->get();
+
+        return view('admin.products.short-stock', compact('products','admins','branches', 'branchProducts'));
     }
 
     public function warehouseIndex()
     {
         $products = AdminProduct::latest()->get();
         $admins = Admin::latest()->get();
-        $branches = Branch::latest()->where('status','active')->where('branch_name', '!=', 'SHORT STOCK')->get();
-        // $branchProducts = BranchProduct::with(['branch', 'adminProduct'])
-        // ->where('created_at', '!=', '2024-12-13 03:46:39')
-        // ->latest()
-        // ->get();
-
-        $branchProducts = BranchProduct::whereHas('branch', function($query){
-            $query->where('branch_name', '!=', 'SHORT STOCK');
-        })
+        $branches = Branch::latest()->where('status','active')->get();
+        $branchProducts = BranchProduct::with(['branch', 'adminProduct'])
+        ->where('created_at', '!=', '2024-12-13 03:46:39')
         ->latest()
         ->get();
 
@@ -274,12 +275,6 @@ class ProductsController extends Controller
                 }
                 $remainingQty -= $quantity;
 
-                // Subtract short stock quantity
-                if(Branch::find($branchId)->branch_name == 'SHORT STOCK'){
-                    $product->quantity -= $quantity;
-                    $product->save();
-                }
-
                 DB::commit();
 
 
@@ -372,15 +367,7 @@ class ProductsController extends Controller
         // Return the quantity back to the stock
         $productStock->total_quantity -= $branchProduct->quantity;
         $productStock->available_quantity -= $branchProduct->quantity;
-        
-        // Return the stock to warehouse
-        $product = AdminProduct::findOrFail($branchProduct->admin_product_id); // Get the selected product
-        $product->quantity += $branchProduct->quantity;
-
-        // Save changes
         $productStock->save();
-        $product->save();
-
 
         /**
          * 

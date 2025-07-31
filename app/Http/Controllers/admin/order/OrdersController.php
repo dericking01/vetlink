@@ -351,6 +351,15 @@ class OrdersController extends Controller
             return back();
         }
 
+        //handle stockwhen order is cancelled
+        if($request->status === 'Cancelled'){
+            //should return stock
+            event(new ProductQuantityRestored($order->orderItems));
+
+            $order->is_quantity_deducted  = false;
+        }
+
+
         // Check if the status is Partial and partial amount is provided
         if ($request->status === 'Partial') {
             if (is_null($request->partial_amount) || $request->partial_amount === '') {
@@ -462,6 +471,22 @@ class OrdersController extends Controller
         if ($request->status === 'PayPoint') {
             $agent->points -= $request->PayPoint;
             $agent->save();
+        }
+
+
+        //handle when updating from cancelled status to other  it should deduct products
+        if ($request->status !== 'Cancelled' && !$order->is_quantity_deducted) {
+            if ($request->status === 'Completed') {
+                event(new ProductQuantityDeducted($order->orderItems));
+                $order->is_quantity_deducted = true;
+                event(new OrderCompleted($order));
+            }
+
+            if ($request->status === 'Partial') {
+                event(new ProductQuantityDeducted($order->orderItems));
+                $order->is_quantity_deducted = true;
+                event(new OrderPartiallyPaid($order, $request->partial_amount));
+            }
         }
 
         if ($order->status === 'Partial' && !$order->is_quantity_deducted) {
@@ -718,7 +743,9 @@ class OrdersController extends Controller
                 //Toastr::error('Cannot delete a delivered order.');
             //} else {
                 // Fire event before deleting the order
-                event(new ProductQuantityRestored($order->orderItems));
+                if($order->status !== 'Cancelled'){
+                    event(new ProductQuantityRestored($order->orderItems));
+                }
 
                 $order->delete();
                 Toastr::success('Order successfully deleted!');
