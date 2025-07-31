@@ -11,6 +11,7 @@ use App\Http\Controllers\admin\products\ProductsController;
 use App\Http\Controllers\admin\products\SabProductsController;
 use App\Http\Controllers\admin\AdminsController;
 use App\Http\Controllers\admin\products\AdminProductExportController;
+use App\Http\Controllers\admin\products\ShortStockController;
 use App\Http\Controllers\admin\reports\ReportsController;
 use App\Http\Controllers\admin\StaffsController;
 use App\Http\Controllers\admin\transactions\TransactionsController;
@@ -144,6 +145,22 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('export-admin-products', [AdminProductExportController::class, 'export'])->name('admin.products.export');
             Route::post('import-products', [AdminProductExportController::class, 'import'])->name('admin.products.import');
             Route::post('add-stock', [ProductsController::class, 'addStock'])->name('admin.products.addStock');
+        });
+
+        //  short stock
+        Route::group(['prefix' => 'short-stock'], function () {
+            Route::get('list', [ShortStockController::class, 'index'])->name('admin.shortstock.list');
+            // Route::get('warehouse', [ShortStockController::class, 'warehouseIndex'])->name('admin.warehouse.products');
+            // Route::post('distribute-product', [ShortStockController::class, 'distributeProduct'])->name('admin.products.distributeProduct');
+            // Route::put('update-distribution/{id}', [ShortStockController::class, 'updateDistribution'])->name('admin.distribution.update');
+            // Route::delete('destroy-distribution', [ShortStockController::class, 'destroyDistribution'])->name('admin.distribution.destroy');
+            // Route::post('store', [ShortStockController::class, 'store'])->name('admin.products.store');
+            // Route::put('update/{id}', [ShortStockController::class, 'update'])->name('admin.products.update');
+            // Route::delete('destroy', [ShortStockController::class, 'destroy'])->name('admin.products.destroy');
+            // Route::get('product-details/{id}',[ShortStockController::class, 'details'])->name('admin.products.details');
+            // Route::get('export-admin-products', [AdminProductExportController::class, 'export'])->name('admin.products.export');
+            // Route::post('import-products', [AdminProductExportController::class, 'import'])->name('admin.products.import');
+            // Route::post('add-stock', [ShortStockController::class, 'addStock'])->name('admin.products.addStock');
         });
 
 

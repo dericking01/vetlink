@@ -64,8 +64,15 @@ class AdminProduct extends Model
         return $this->hasMany(ProductStock::class, 'admin_product_id');
     }
 
+    // Short stock
+    public function shortStocks(){
+        return $this->hasMany(ShortStock::class, 'admin_product_id');
+    }
+
     public function getWarehouseQuantityAttribute(){
-        $allocatedQuantity = $this->productStocks()->sum('available_quantity');
+        $allocatedQuantity = $this->productStocks()->whereHas('branch', function($query){
+            $query->where('branch_name', '!=', 'SHORT STOCK');
+        })->sum('available_quantity');
         return $this->quantity - $allocatedQuantity;
     }
     

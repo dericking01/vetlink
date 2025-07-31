@@ -223,6 +223,14 @@ class UsersController extends Controller
                 $sourceStock->available_quantity -= $quantity;
                 $sourceStock->save();
 
+                // Deduct from Warehouse if sent to short stock
+                // Subtract short stock quantity
+                if(Branch::find($targetBranchId)->branch_name == 'SHORT STOCK'){
+                    $product = AdminProduct::findOrFail($productId); // Get the selected product
+                    $product->quantity -= $quantity;
+                    $product->save();
+                }
+
                 //Geth the target ProductStock in target branch
                 $targetStock = ProductStock::firstOrCreate(
                     [
@@ -437,7 +445,7 @@ class UsersController extends Controller
         $agent = Agent::whereId($id)->first();
 
         // $orders = Orders::where('agent_id', $id)->where('status', 'Completed')->with('orderItems')->get(); //original: filteres completed orders
-        $orders = $agent->orders;
+        $orders = $agent->order;
 
         $totalPoints = 0;
         foreach($orders as $order){

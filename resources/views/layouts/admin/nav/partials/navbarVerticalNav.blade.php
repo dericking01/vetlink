@@ -118,6 +118,11 @@
             class="fas fa-home"></span></span><span
         class="nav-link-text ps-1">Warehouse</span></div>
     </a><!-- more inner pages-->
+    <a class="nav-link @if(request()->routeIs('admin.shortstock.list')) active @endif" href="{{ route('admin.shortstock.list') }}">
+        <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+            class="fas fa-home"></span></span><span
+        class="nav-link-text ps-1">Short Stock</span></div>
+    </a><!-- more inner pages-->
 
 </li>
 
