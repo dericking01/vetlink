@@ -145,11 +145,11 @@
                                     <div class="row">
                                         <div class="col">
 
-                                            <div class="mb-3">
+                                            <!-- <div class="mb-3">
                                                 <label class="col-form-label" for="qauntity">Quantity <span class="text-danger"></span></label>
                                                 <input class="form-control " name="qauntity" id="qauntity"
                                                     type="number" placeholder="Quantity" value="{{ $item->quantity }}" readonly/>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </div>
                                     <div class="row">

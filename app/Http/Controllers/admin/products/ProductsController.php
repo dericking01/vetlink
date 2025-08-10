@@ -119,7 +119,7 @@ class ProductsController extends Controller
 
             // Get the quantity for this product
             $quantity = $request->quantity[$productId];
-            $buying_price = $request->buying_price[$productId];
+            $buying_price = $request->buying_price[$productId] === null ? 0 : $request->buying_price[$productId];
 
             $product->quantity += $quantity;
             $product->save();
