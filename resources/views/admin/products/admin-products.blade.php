@@ -462,6 +462,10 @@
                                 <div id="quantityInputs"></div>
 
                                 <div id="buyingPriceInputs"></div>
+
+
+                                <div id="sellingPriceInputs"></div>
+
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
@@ -572,8 +576,12 @@
     var selectedProducts = this.selectedOptions;
     var quantityInputsDiv = document.getElementById('quantityInputs');
     var buyingPriceInputsDiv = document.getElementById('buyingPriceInputs');
+    var sellingPriceInputsDiv = document.getElementById('sellingPriceInputs');
+
     quantityInputsDiv.innerHTML = 'QUANTITIES <br /><br />'; // Clear previous quantity inputs
     buyingPriceInputsDiv.innerHTML = 'BUYING PRICES<br /><br />';
+    sellingPriceInputsDiv.innerHTML = 'SELLING PRICES<br /><br />';
+
 
     // Create quantity input for each selected product
     for (var i = 0; i < selectedProducts.length; i++) {
@@ -585,6 +593,9 @@
 
         var buyingPriceLabel = document.createElement('label');
         buyingPriceLabel.innerHTML = 'Buying price for ' + productName + ": ";
+
+         var sellingPriceLabel = document.createElement('label');
+        sellingPriceLabel.innerHTML = 'Selling price for ' + productName + ": ";
 
         var quantityInput = document.createElement('input');
         quantityInput.setAttribute('type', 'number');
@@ -603,6 +614,16 @@
 
         buyingPriceInputsDiv.appendChild(buyingPriceLabel);
         buyingPriceInputsDiv.appendChild(buyingPriceInput);
+
+
+        var sellingPriceInput = document.createElement('input');
+        sellingPriceInput.setAttribute('type', 'number');
+        sellingPriceInput.setAttribute('name', 'selling_price[' + productId + ']'); // Use product ID as key
+        sellingPriceInput.setAttribute('placeholder', 'Enter selling price for ' + productName);
+        sellingPriceInput.setAttribute('class', 'form-control mb-3');
+
+        sellingPriceInputsDiv.appendChild(sellingPriceLabel);
+        sellingPriceInputsDiv.appendChild(sellingPriceInput);
     }
     });
 });

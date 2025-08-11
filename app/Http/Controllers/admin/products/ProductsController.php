@@ -99,7 +99,8 @@ class ProductsController extends Controller
         $this->validate($request, [
             'name' => 'required|array',
             'quantity' => 'required|array',
-            'buying_price' => 'required|array'
+            'buying_price' => 'required|array',
+            'selling_price' => 'required|array'
         ]);
 
         $adminId = auth('admin')->user()->id;
@@ -117,8 +118,13 @@ class ProductsController extends Controller
             // Get the quantity for this product
             $quantity = $request->quantity[$productId];
             $buying_price = $request->buying_price[$productId] === null ? 0 : $request->buying_price[$productId];
+            $selling_price = $request->selling_price[$productId] === null ? 0 : $request->selling_price[$productId];
+
 
             $product->quantity += $quantity;
+            $product->buying_price = $buying_price;
+            $product->price = $selling_price;
+
             $product->save();
 
             $productBatch = new ProductBatch();
