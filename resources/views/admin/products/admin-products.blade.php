@@ -466,6 +466,9 @@
 
                                 <div id="sellingPriceInputs"></div>
 
+                                <div id="expiryDateInputs"></div>
+
+
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
@@ -577,10 +580,13 @@
     var quantityInputsDiv = document.getElementById('quantityInputs');
     var buyingPriceInputsDiv = document.getElementById('buyingPriceInputs');
     var sellingPriceInputsDiv = document.getElementById('sellingPriceInputs');
+    var expiryDateInputsDiv = document.getElementById('expiryDateInputs');
 
     quantityInputsDiv.innerHTML = 'QUANTITIES <br /><br />'; // Clear previous quantity inputs
     buyingPriceInputsDiv.innerHTML = 'BUYING PRICES<br /><br />';
     sellingPriceInputsDiv.innerHTML = 'SELLING PRICES<br /><br />';
+    expiryDateInputsDiv.innerHTML = 'EXPIRY DATES<br /><br />';
+
 
 
     // Create quantity input for each selected product
@@ -596,6 +602,9 @@
 
          var sellingPriceLabel = document.createElement('label');
         sellingPriceLabel.innerHTML = 'Selling price for ' + productName + ": ";
+
+        var expiryDateLabel = document.createElement('label');
+        expiryDateLabel.innerHTML = 'Expiry date for ' + productName + ": ";
 
         var quantityInput = document.createElement('input');
         quantityInput.setAttribute('type', 'number');
@@ -624,6 +633,16 @@
 
         sellingPriceInputsDiv.appendChild(sellingPriceLabel);
         sellingPriceInputsDiv.appendChild(sellingPriceInput);
+
+
+          var expiryDateInput = document.createElement('input');
+        expiryDateInput.setAttribute('type', 'date');
+        expiryDateInput.setAttribute('name', 'expiry_date[' + productId + ']'); // Use product ID as key
+        expiryDateInput.setAttribute('placeholder', 'Enter expiry date for ' + productName);
+        expiryDateInput.setAttribute('class', 'form-control mb-3');
+
+        expiryDateInputsDiv.appendChild(expiryDateLabel);
+        expiryDateInputsDiv.appendChild(expiryDateInput);
     }
     });
 });

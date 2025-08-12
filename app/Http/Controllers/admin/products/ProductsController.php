@@ -119,6 +119,8 @@ class ProductsController extends Controller
             $quantity = $request->quantity[$productId];
             $buying_price = $request->buying_price[$productId] === null ? 0 : $request->buying_price[$productId];
             $selling_price = $request->selling_price[$productId] === null ? 0 : $request->selling_price[$productId];
+            $expiry_date = $request->expiry_date[$productId];
+
 
 
             $product->quantity += $quantity;
@@ -133,7 +135,7 @@ class ProductsController extends Controller
             $productBatch->quantity = $quantity;
             $productBatch->buying_price = $buying_price;
             $productBatch->stocking_date = $request->filled('stocking_date') ? $request->stocking_date : Carbon::now();
-            $productBatch->expiry_date = null;
+            $productBatch->expiry_date = $expiry_date;
             $productBatch->save();
 
            
