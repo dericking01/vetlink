@@ -255,18 +255,152 @@ class StaffOrdersController extends Controller
 
     }
 
+    // public function updateOrder(Request $request, $id)
+    // {
+    //     // do not allow user
+    //     Toastr::error("Sorry. Staff cannot update orders at the moment, only admins. By Tech");
+    //     return back();
+    //     //  Find the existing order record
+    //     $order = Orders::where('id', $id)->first();
+    //     // $order = Orders::find($request->id);
+
+    //     // Find the existing Order record
+    //     // $order = Orders::findOrFail($id);
+    //     //  dd($order);
+    //     if (!$order) {
+    //         Toastr::error('Order not found.');
+    //         return back();
+    //     }
+
+    //     // Fetch the associated Agent
+    //     $agent = $order->agent;
+
+    //     if (!$agent) {
+    //         Toastr::error('Agent not found.');
+    //         return back();
+    //     }
+
+    //     // Check if the status is Partial and partial amount is provided
+    //     if ($request->status === 'Partial') {
+    //         if (is_null($request->partial_amount) || $request->partial_amount === '') {
+    //             Toastr::error('Partial amount cannot be empty.');
+    //             return back()->withInput();
+    //         }
+
+    //         // Check if partial amount is greater than total amount
+    //         if ($request->partial_amount > $order->total_amount) {
+    //             Toastr::error('Partial amount cannot be greater than the total amount.');
+    //             return back()->withInput();
+    //         }
+    //     }
+
+    //     // Check if the status is PayPoint and payPoint amount is provided
+    //     if ($request->status === 'PayPoint') {
+    //         if (is_null($request->PayPoint) || $request->PayPoint === '') {
+    //             Toastr::error('Points amount cannot be empty.');
+    //             return back()->withInput();
+    //         }
+
+    //         // Check if point amount is greater than total amount
+    //         if ($request->PayPoint > $order->total_amount) {
+    //             Toastr::error('Points amount cannot be greater than the total amount.');
+    //             return back()->withInput();
+    //         }
+
+    //         // Check if the agent has enough points
+    //         if ($request->PayPoint > $agent->points) {
+    //             // $toastr = resolve('toastr');
+    //             // $toastr->info('Sorry, Not enough points!!!');
+
+    //             Toastr::info('Sorry, Not enough points!!!');
+    //             return back()->withInput();
+    //         }
+
+    //         // Check if Request Points equals Total amount
+    //         if ($request->PayPoint == $order->total_amount && !$order->is_quantity_deducted) { // Using == for comparison to avoid type issues
+    //             // Mark the order as completed
+    //             $order->status = 'Completed';
+    //             $order->save();
+
+    //             // Deduct product quantity
+    //             event(new ProductQuantityDeducted($order->orderItems));
+    //             // Mark quantity as deducted
+    //             $order->is_quantity_deducted = true;
+    //             // save order to mark as quantity deducted
+    //             $order->save();
+
+    //             // Dispatch the OrderCompleted event
+    //             event(new OrderCompleted($order));
+
+    //             Toastr::success('Order FULLY PAID successfully! ✔');
+    //         }
+
+    //     }
+
+    //     // Update the record with the new data
+    //     $order->isDelivered = $request->isDelivered;
+    //     $order->status = $request->status;
+    //     $order->branch_id = $request->branch;
+    //     $order->payment_method = $request->payment_method;
+    //     $order->partial_amt = $request->status === 'Partial' ? $request->partial_amount : null;
+    //     $order->PayPoint = $request->status === 'PayPoint' ? $request->PayPoint : null;
+    //     // dd($order);
+    //     // Update the quantities of the order items
+    //     $totalAmount = 0;
+
+    //     foreach ($request->quantities as $orderItemId => $quantity) {
+    //         $orderItem = OrderItems::findOrFail($orderItemId);
+
+    //         // Update the quantity of each order item
+    //         $orderItem->quantity = $quantity;
+    //         $orderItem->save();
+
+    //         // Recalculate the total amount
+    //         $totalAmount += $quantity * $orderItem->price;
+    //     }
+
+    //     // Update the total amount in the order
+    //     $order->total_amount = $totalAmount - $order->discount;
+    //     // dd($order);
+    //     // Save the updated order
+    //     $order->save();
+
+    //     // Deduct the used points from the agent's total points if PayPoint was used
+    //     if ($request->status === 'PayPoint') {
+    //         $agent->points -= $request->PayPoint;
+    //         $agent->save();
+    //     }
+
+    //     if ($order->status === 'Partial' && !$order->is_quantity_deducted) {
+    //         // dd($order->orderItems);
+    //         // Deduct product quantity
+    //         event(new ProductQuantityDeducted($order->orderItems));
+    //         // Mark quantity as deducted
+    //         $order->is_quantity_deducted = true;
+    //         // Dispatch the OrderCompleted event
+    //         event(new OrderPartiallyPaid($order, $request->partial_amount));
+    //     }
+
+    //     // If the order is completed, dispatch the OrderCompleted event
+    //     if ($order->status === 'Completed' && !$order->is_quantity_deducted) {
+    //         // Deduct product quantity
+    //         event(new ProductQuantityDeducted($order->orderItems));
+    //         // Mark quantity as deducted
+    //         $order->is_quantity_deducted = true;
+    //         // Dispatch the OrderCompleted event
+    //         event(new OrderCompleted($order));
+    //     }
+    //     // save order to mark as quantity deducted
+    //     $order->save();
+
+    //     Toastr::success('Order successfully updated! ✔');
+    //     return back();
+    // }
     public function updateOrder(Request $request, $id)
     {
-        // do not allow user
-        Toastr::error("Sorry. Staff cannot update orders at the moment, only admins. By Tech");
-        return back();
-        //  Find the existing order record
-        $order = Orders::where('id', $id)->first();
-        // $order = Orders::find($request->id);
-
         // Find the existing Order record
-        // $order = Orders::findOrFail($id);
-        //  dd($order);
+        $order = Orders::find($id);
+
         if (!$order) {
             Toastr::error('Order not found.');
             return back();
@@ -279,6 +413,15 @@ class StaffOrdersController extends Controller
             Toastr::error('Agent not found.');
             return back();
         }
+
+        //handle stockwhen order is cancelled
+        if($request->status === 'Cancelled'){
+            //should return stock
+            event(new ProductQuantityRestored($order->orderItems));
+
+            $order->is_quantity_deducted  = false;
+        }
+
 
         // Check if the status is Partial and partial amount is provided
         if ($request->status === 'Partial') {
@@ -336,15 +479,37 @@ class StaffOrdersController extends Controller
             }
 
         }
-
-        // Update the record with the new data
+        // dd($order);
+        // Update the order with the new data
         $order->isDelivered = $request->isDelivered;
         $order->status = $request->status;
-        $order->branch_id = $request->branch;
+        $order->sale_date = $request->sale_date;
+        //$order->branch_id = $request->branch;
+         /**
+         * Updating on Branch change
+         */
+        if($order->branch_id !== $request->branch && $order->status === 'Completed'){
+            //Restore stock in the old branch
+            event(new ProductQuantityRestored($order->orderItems));
+
+
+             // Update the branch ID
+            $order->branch_id = $request->branch;
+            $order->save();
+
+            // 🔥 Important: Reload the orderItems AFTER changing the branch
+            $order->load('orderItems');
+
+
+            //Deduct stock in the new one
+            event(new ProductQuantityDeducted($order->orderItems));
+        }
+
+        // $order->discount = $request->discount;
         $order->payment_method = $request->payment_method;
         $order->partial_amt = $request->status === 'Partial' ? $request->partial_amount : null;
         $order->PayPoint = $request->status === 'PayPoint' ? $request->PayPoint : null;
-        // dd($order);
+
         // Update the quantities of the order items
         $totalAmount = 0;
 
@@ -371,6 +536,22 @@ class StaffOrdersController extends Controller
             $agent->save();
         }
 
+
+        //handle when updating from cancelled status to other  it should deduct products
+        if ($request->status !== 'Cancelled' && !$order->is_quantity_deducted) {
+            if ($request->status === 'Completed') {
+                event(new ProductQuantityDeducted($order->orderItems));
+                $order->is_quantity_deducted = true;
+                event(new OrderCompleted($order));
+            }
+
+            if ($request->status === 'Partial') {
+                event(new ProductQuantityDeducted($order->orderItems));
+                $order->is_quantity_deducted = true;
+                event(new OrderPartiallyPaid($order, $request->partial_amount));
+            }
+        }
+
         if ($order->status === 'Partial' && !$order->is_quantity_deducted) {
             // dd($order->orderItems);
             // Deduct product quantity
@@ -392,6 +573,9 @@ class StaffOrdersController extends Controller
         }
         // save order to mark as quantity deducted
         $order->save();
+
+       
+
 
         Toastr::success('Order successfully updated! ✔');
         return back();
