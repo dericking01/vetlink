@@ -16,6 +16,8 @@ use App\Models\Orders;
 use App\Models\ProductStock;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+
 
 class StaffOrdersController extends Controller
 {
@@ -212,6 +214,7 @@ class StaffOrdersController extends Controller
         $order->branch_id = $request->branch;
         $order->discount = $request->discount;
         $order->payment_method = $request->payment_method;
+        $order->sale_date = $request->filled('sale_date') ? $request->sale_date : Carbon::now()->toDateString();
         $order->isDelivered = false;
         // dd($order);
         $order->save();
@@ -254,6 +257,9 @@ class StaffOrdersController extends Controller
 
     public function updateOrder(Request $request, $id)
     {
+        // do not allow user
+        Toastr::error("Sorry. Staff cannot update orders at the moment, only admins. By Tech");
+        return back();
         //  Find the existing order record
         $order = Orders::where('id', $id)->first();
         // $order = Orders::find($request->id);
