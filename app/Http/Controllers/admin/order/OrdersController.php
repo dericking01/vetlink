@@ -294,6 +294,7 @@ class OrdersController extends Controller
         $order->payment_method = $request->payment_method;
         $order->sale_date = $request->filled('sale_date') ? $request->sale_date : Carbon::now()->toDateString();
         $order->isDelivered = false;
+        $order->amount = 0;
         // dd($order);
         $order->save();
 

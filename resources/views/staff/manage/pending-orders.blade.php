@@ -31,6 +31,7 @@
               <th>Points</th>
               <th>Branch</th>
               <th>Amount</th>
+              <th>Sales Date</th>
               <th>Delivered</th>
               <th class="text-center" >Payment Status</th>
               <th>Action</th>
@@ -60,6 +61,7 @@
               </td> --}}
               {{-- <td class="quantity">{{ $order->orderItems->quantity }}</td> --}}
               <td class="amount">{{ number_format ($order->total_amount, 2) }}</td>
+              <td class="amount">{{ $order->sale_date }}</td>
               @if ($order->isDelivered)
               <td class="status text-center">
                 <span class="badge badge-subtle-success">YES</span>
@@ -221,13 +223,23 @@
                                                 <input class="form-control" name="partial_amount" id="partial_amount{{ $order->id }}" type="number" placeholder="Partial amount" value="{{ old('partial_amount', $order->partial_amt) }}" />
                                             </div>
                                         </div>
+                                            <div class="mb-3">
+                                                <label class="col-form-label" for="expire_date">Sale date <span class="text-danger">*</span>
+                                                </label>
+                                                <input class="form-control @error('sale_date') is-invalid @enderror" name="sale_date"
+                                                    id="sale_date" type="date" placeholder="Date the sale was made" value="{{ old('sale_date', $order->sale_date) }}" />
+                                            </div>
 
                                     </div>
                                 </div>
                             </div>
                             <div class="mt-3 modal-footer">
                                 <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Close</button>
-                                <button class="btn btn-info" type="submit">Submit </button>
+                                <button  id="submitUpdateOrderButton" class="btn btn-info" type="submit">
+                                    <span class="default-text">Submit</span>
+                                    <span class="loading-text" style="display:none;">Submitting...</span>
+                                </button>
+
                             </div>
                         </div>
                     </form>
@@ -272,5 +284,18 @@
             var partialAmountValue = document.querySelector('#partialAmountField{{ $order->id }} input').value;
             console.log('Partial amount for order ID {{ $order->id }}:', partialAmountValue);
         @endforeach
+    });
+
+     document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('updateOrderForm');
+        const btn = document.getElementById('submitUpdateOrderButton');
+
+        if (form) {
+            form.addEventListener('submit', function () {
+                btn.disabled = true;
+                btn.querySelector('.default-text').style.display = 'none';
+                btn.querySelector('.loading-text').style.display = 'inline';
+            });
+        }
     });
 </script>

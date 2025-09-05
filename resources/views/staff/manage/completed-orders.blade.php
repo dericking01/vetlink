@@ -30,6 +30,7 @@
               <th>Customer</th>
               <th>Branch</th>
               <th>Amount</th>
+              <th>Sales Date</th>
               <th>Delivered</th>
               <th class="text-center" >Payment Status</th>
               <th>Action</th>
@@ -55,6 +56,9 @@
               </td> --}}
               {{-- <td class="quantity">{{ $order->orderItems->quantity }}</td> --}}
               <td class="amount">{{ number_format ($order->total_amount, 2) }}</td>
+                <td class="amount text-center">
+                {{ $order->sale_date }}
+              </td>
               @if ($order->isDelivered)
               <td class="status text-center">
                 <span class="badge badge-subtle-success">YES</span>
