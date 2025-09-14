@@ -511,21 +511,21 @@ class StaffOrdersController extends Controller
         $order->PayPoint = $request->status === 'PayPoint' ? $request->PayPoint : null;
 
         // Update the quantities of the order items
-        $totalAmount = 0;
+        // $totalAmount = 0;
 
-        foreach ($request->quantities as $orderItemId => $quantity) {
-            $orderItem = OrderItems::findOrFail($orderItemId);
+        // foreach ($request->quantities as $orderItemId => $quantity) {
+        //     $orderItem = OrderItems::findOrFail($orderItemId);
 
-            // Update the quantity of each order item
-            $orderItem->quantity = $quantity;
-            $orderItem->save();
+        //     // Update the quantity of each order item
+        //     $orderItem->quantity = $quantity;
+        //     $orderItem->save();
 
-            // Recalculate the total amount
-            $totalAmount += $quantity * $orderItem->price;
-        }
+        //     // Recalculate the total amount
+        //     $totalAmount += $quantity * $orderItem->price;
+        // }
 
         // Update the total amount in the order
-        $order->total_amount = $totalAmount - $order->discount;
+        // $order->total_amount = $totalAmount - $order->discount;
         // dd($order);
         // Save the updated order
         $order->save();

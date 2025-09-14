@@ -189,6 +189,13 @@
                                           {{-- </div> --}}
                                         </div>
 
+                                         <div class="mb-3">
+                                                <label class="col-form-label" for="expire_date">Sale date <span class="text-danger">*</span>
+                                                </label>
+                                                <input class="form-control @error('sale_date') is-invalid @enderror" name="sale_date"
+                                                    id="sale_date" type="date" placeholder="Date the sale was made" value="{{ old('sale_date', $order->sale_date) }}" />
+                                            </div>
+
                                     </div>
                                 </div>
                             </div>
