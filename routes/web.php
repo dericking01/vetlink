@@ -273,6 +273,9 @@ Route::get('/error', function () {
     abort(500);
 });
 
+Route::get('/login-redirect', function() {
+    return redirect()->route('staff.login');
+})->name('login');
 
 
 // Routes accessible only to regular staff
